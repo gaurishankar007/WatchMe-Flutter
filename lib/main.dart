@@ -1,4 +1,5 @@
 import 'package:assignment/screens/home.dart';
+import 'package:assignment/screens/registration/register_user.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class _WatchMeState extends State<WatchMe> {
       //   '': ,
       // },
       title: "WatchMe Social Media App",
-      home: Home()      
+      home: RegisterUser()      
     );
   }
 }
