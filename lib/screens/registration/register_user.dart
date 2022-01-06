@@ -130,7 +130,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   ElevatedButton(
                     onPressed: () {
