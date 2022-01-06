@@ -11,7 +11,7 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
-  String email = "", newPassword = "", confirmPassword = "";
+  String email = "", newPassword = "";
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +26,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: Column(
                 children: [
                   Text(
-                    "Password Reset",
+                    "Generate Reset Link",
                     style: TextStyle(
                       fontSize: 25,
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      email = value!;
+                    onChanged: (value) {
+                      email = value;
                     },
                     keyboardType: TextInputType.emailAddress,
                     validator: MultiValidator([
@@ -46,19 +46,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ]),
                     decoration: InputDecoration(
                       labelText: "Email",
-                      hintText: "Enter your email.....",
-                      helperText: "Useful for reseting password.",
+                      hintText: "Enter your account email.....",
+                      helperText: "Wrong email won't reset your password.",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      newPassword = value!;
+                    onChanged: (value) {
+                      newPassword = value;
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Password is required!"),
@@ -73,8 +73,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ]),
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Password",
-                      hintText: "Enter a password.....",
+                      labelText: "New Password",
+                      hintText: "Enter a new password.....",
                       helperText: "Excludes white spaces around the password.",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -85,75 +85,40 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     height: 20,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      confirmPassword = value!;
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Password is required!"),
-                    ]),
+                    validator: (value) =>
+                        MatchValidator(errorText: "Password did not match.")
+                            .validateMatch(value!, newPassword),
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Password",
-                      hintText: "Enter your password.....",
+                      labelText: "Confirm Password",
+                      hintText: "Enter the password again.....",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    width: double.maxFinite,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Forgot password?",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(
-                    height: 5,
+                    height: 25,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        MotionToast.success(
-                          title: "Login Success :)",
-                          description: "",
-                          toastDuration: Duration(seconds: 3),
-                        ).show(context);
+                        Navigator.pushNamed(context, "/ResetPassword");
                       } else {
                         MotionToast.error(
-                          title: "Login Failed :(",
+                          title: "Submit Failed :(",
                           description: "",
                           toastDuration: Duration(seconds: 3),
                         ).show(context);
                       }
                     },
                     child: Text(
-                      "Login",
+                      "Submit",
                       style: TextStyle(
                         fontSize: 15,
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/RegisterUser");
-                    },
-                    child: Text(
-                      "Create an account",
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

@@ -33,7 +33,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   TextFormField(
                     onSaved: (value) {
@@ -130,7 +130,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
                   ElevatedButton(
                     onPressed: () {

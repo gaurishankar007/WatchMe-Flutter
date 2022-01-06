@@ -1,5 +1,7 @@
 import 'package:assignment/screens/home.dart';
+import 'package:assignment/screens/login/forgot_password.dart';
 import 'package:assignment/screens/login/login.dart';
+import 'package:assignment/screens/login/reset_password.dart';
 import 'package:assignment/screens/registration/register_user.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +24,9 @@ class _WatchMeState extends State<WatchMe> {
       routes: {
         '/': (context)=> LoginUser(),
         '/RegisterUser': (context)=> RegisterUser(),
-        'Home': (context)=> Home(),
+        '/ForgotPassword':(context)=> ForgotPassword(),
+        '/ResetPassword':(context)=> ResetPassword(),
+        '/Home': (context)=> Home(),
       },
       title: "WatchMe Social Media App",
     );

@@ -32,14 +32,15 @@ class _LoginUserState extends State<LoginUser> {
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
                   TextFormField(
                     onSaved: (value) {
                       username = value!;
                     },
                     validator: MultiValidator([
-                      RequiredValidator(errorText: "Username is required!"),
+                      RequiredValidator(
+                          errorText: "Username or Email is required!"),
                     ]),
                     decoration: InputDecoration(
                       labelText: "Username/Email",
@@ -76,7 +77,9 @@ class _LoginUserState extends State<LoginUser> {
                     alignment: Alignment.topLeft,
                     width: double.maxFinite,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/ForgotPassword");
+                      },
                       child: Text(
                         "Forgot password?",
                         style: TextStyle(
@@ -92,11 +95,7 @@ class _LoginUserState extends State<LoginUser> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        MotionToast.success(
-                          title: "Login Success :)",
-                          description: "",
-                          toastDuration: Duration(seconds: 3),
-                        ).show(context);
+                        Navigator.pushNamed(context, "/Home");
                       } else {
                         MotionToast.error(
                           title: "Login Failed :(",
