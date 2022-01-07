@@ -15,13 +15,13 @@ class _RegisterUserState extends State<RegisterUser> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    final _screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(screenWidth * 0.10),
+            padding: EdgeInsets.all(_screenWidth * 0.10),
             child: Form(
               key: _formKey,
               child: Column(
@@ -45,18 +45,16 @@ class _RegisterUserState extends State<RegisterUser> {
                           errorText: "Provide at least 3 characters!"),
                       MaxLengthValidator(15,
                           errorText: "Provide at most 15 characters!"),
-                      PatternValidator(r'^[a-zA-Z0-9]+$', errorText: "Special characters and white spaces not allowed!")
+                      PatternValidator(r'^[a-zA-Z0-9]+$',
+                          errorText:
+                              "Special characters and white spaces not allowed!")
                     ]),
                     decoration: InputDecoration(
                       labelText: "Username",
                       hintText: "Enter a username.....",
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(
-                            style: BorderStyle.solid,
-                            color: Colors.purple,
-                            width: 3,
-                          )),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -119,7 +117,8 @@ class _RegisterUserState extends State<RegisterUser> {
                     keyboardType: TextInputType.number,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Phone number is required!"),
-                      PatternValidator(r'^(?:[+0]9)?[0-9]{10}$', errorText: "Invalid phone number!")
+                      PatternValidator(r'^(?:[+0]9)?[0-9]{10}$',
+                          errorText: "Invalid phone number!")
                     ]),
                     decoration: InputDecoration(
                       labelText: "Phone Number",
@@ -138,8 +137,7 @@ class _RegisterUserState extends State<RegisterUser> {
                         _formKey.currentState!.save();
                         MotionToast.success(
                           title: "Account created :)",
-                          description:
-                              "You created your 'WatchMe' account.",
+                          description: "You created your 'WatchMe' account.",
                           toastDuration: Duration(seconds: 3),
                         ).show(context);
                       } else {

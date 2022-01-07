@@ -3,7 +3,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({ Key? key }) : super(key: key);
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
   _ResetPasswordState createState() => _ResetPasswordState();
@@ -35,7 +35,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 5,
                   ),
                   Text(
-                    "The password reset link is sent to your account email. Copy the link and paste here.",
+                    "The password reset link is sent to your account's email. Copy the link and paste here.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15,
@@ -48,10 +48,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                     onChanged: (value) {
                       link = value;
                     },
-                    keyboardType: TextInputType.emailAddress,
                     validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: "Reset link is required!"),
+                      RequiredValidator(errorText: "Reset link is required!"),
                     ]),
                     decoration: InputDecoration(
                       labelText: "Reset Link",
@@ -68,7 +66,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
+                        Navigator.pushNamed(context, "/Login");
                       } else {
                         MotionToast.error(
                           title: "Submit Failed :(",

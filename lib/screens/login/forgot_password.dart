@@ -95,7 +95,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
+                    ), 
                   ),
                   SizedBox(
                     height: 25,
