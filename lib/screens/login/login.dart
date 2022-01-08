@@ -46,7 +46,7 @@ class _LoginUserState extends State<LoginUser> {
                       labelText: "Username/Email",
                       hintText: "Enter your username or email.....",
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
                             style: BorderStyle.solid,
                             color: Colors.purple,
@@ -69,7 +69,7 @@ class _LoginUserState extends State<LoginUser> {
                       labelText: "Password",
                       hintText: "Enter your password.....",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),

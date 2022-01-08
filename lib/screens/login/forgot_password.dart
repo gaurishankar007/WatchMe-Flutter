@@ -49,7 +49,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       hintText: "Enter your account email.....",
                       helperText: "Wrong email won't reset your password.",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -75,9 +75,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     decoration: InputDecoration(
                       labelText: "New Password",
                       hintText: "Enter a new password.....",
-                      helperText: "Excludes white spaces around the password.",
+                      helperText: "Excludes whitespaces around the password.",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -93,7 +93,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       labelText: "Confirm Password",
                       hintText: "Enter the password again.....",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ), 
                   ),

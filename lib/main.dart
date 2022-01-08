@@ -3,6 +3,7 @@ import 'package:assignment/screens/login/forgot_password.dart';
 import 'package:assignment/screens/login/login.dart';
 import 'package:assignment/screens/login/reset_password.dart';
 import 'package:assignment/screens/registration/address.dart';
+import 'package:assignment/screens/registration/biograph.dart';
 import 'package:assignment/screens/registration/cover_pic.dart';
 import 'package:assignment/screens/registration/personal_info.dart';
 import 'package:assignment/screens/registration/profile_pic.dart';

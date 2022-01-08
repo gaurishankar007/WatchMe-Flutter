@@ -56,7 +56,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       hintText: "Enter the password reset link.....",
                       helperText: "Only correct link will reset your password.",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),

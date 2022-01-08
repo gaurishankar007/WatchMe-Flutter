@@ -53,7 +53,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       labelText: "Username",
                       hintText: "Enter a username.....",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -79,9 +79,9 @@ class _RegisterUserState extends State<RegisterUser> {
                     decoration: InputDecoration(
                       labelText: "Password",
                       hintText: "Enter a password.....",
-                      helperText: "Excludes white spaces around the password.",
+                      helperText: "Excludes whitespaces around the password.",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -103,7 +103,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       hintText: "Enter your email.....",
                       helperText: "Useful for reseting password.",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -124,7 +124,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       labelText: "Phone Number",
                       hintText: "Enter your phone number.....",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
