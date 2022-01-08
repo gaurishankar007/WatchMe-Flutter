@@ -27,6 +27,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                 children: [
                   Text(
                     "Add Profile Picture",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),

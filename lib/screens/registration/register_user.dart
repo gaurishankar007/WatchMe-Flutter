@@ -28,6 +28,7 @@ class _RegisterUserState extends State<RegisterUser> {
                 children: [
                   Text(
                     "Welcome to WatchMe",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),

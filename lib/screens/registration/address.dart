@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class Address extends StatefulWidget {
@@ -11,7 +12,14 @@ class Address extends StatefulWidget {
 
 class _AddressState extends State<Address> {
   final _formKey = GlobalKey<FormState>();
-  String country = "", state="", city="", street="";
+  String pCountry = "Afganistan",
+      pState = "",
+      pCity = "",
+      pStreet = "",
+      tCountry = "Afganistan",
+      tState = "",
+      tCity = "",
+      tStreet = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +35,82 @@ class _AddressState extends State<Address> {
                 children: [
                   Text(
                     "Add Address",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
+                  ),
+                  Text(
+                    "Temporary",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [                      
+                      Text(
+                        "Country:",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.black,
+                              side: BorderSide(),
+                              padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              showCountryPicker(
+                                context: context,
+                                showPhoneCode: true,
+                                onSelect: (Country country) {
+                                  setState(() {
+                                    String countryName = "";
+                                    List<String> countryDetail = country.displayName.split(" ");
+                                    for (int i = 0; i < countryDetail.length; i++) {
+                                      if(i<(countryDetail.length-2)) {
+                                        countryName += countryDetail[i]+ " ";
+                                      }
+                                    }
+                                    tCountry = countryName.trim();
+                                  });
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  pCountry,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   TextFormField(
                     onSaved: (value) {
-                      state = value!.trim();
+                      tState = value!.trim();
                     },
                     textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
@@ -51,11 +125,11 @@ class _AddressState extends State<Address> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   TextFormField(
                     onSaved: (value) {
-                      city = value!.trim();
+                      tCity = value!.trim();
                     },
                     textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
@@ -70,11 +144,133 @@ class _AddressState extends State<Address> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   TextFormField(
                     onSaved: (value) {
-                      street = value!.trim();
+                      tStreet = value!.trim();
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Street  is required!"),
+                    ]),
+                    decoration: InputDecoration(
+                      labelText: "Street",
+                      hintText: "Enter street here.....",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Permanent",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [                      
+                      Text(
+                        "Country:",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.black,
+                              side: BorderSide(),
+                              padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              showCountryPicker(
+                                context: context,
+                                showPhoneCode: true,
+                                onSelect: (Country country) {
+                                  setState(() {
+                                    String countryName = "";
+                                    List<String> countryDetail = country.displayName.split(" ");
+                                    for (int i = 0; i < countryDetail.length; i++) {
+                                      if(i<(countryDetail.length-2)) {
+                                        countryName += countryDetail[i]+ " ";
+                                      }
+                                    }
+                                    pCountry = countryName.trim();
+                                  });
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  pCountry,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pState = value!.trim();
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "State  is required!"),
+                    ]),
+                    decoration: InputDecoration(
+                      labelText: "State",
+                      hintText: "Enter state here.....",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pCity = value!.trim();
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "City  is required!"),
+                    ]),
+                    decoration: InputDecoration(
+                      labelText: "City",
+                      hintText: "Enter city here.....",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pStreet = value!.trim();
                     },
                     textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([

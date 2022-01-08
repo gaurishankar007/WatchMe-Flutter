@@ -31,6 +31,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 children: [
                   Text(
                     "Add Personal Information",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),
@@ -203,7 +204,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "//AddAddress");
+                          Navigator.pushNamed(context, "/AddAddress");
                         },
                         child: Text(
                           "Skip",
@@ -216,7 +217,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            Navigator.pushNamed(context, "//AddAddress");
+                            Navigator.pushNamed(context, "/AddAddress");
                           } else {
                             MotionToast.error(
                               title: "Submit Failed :(",

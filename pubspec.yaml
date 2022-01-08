@@ -37,6 +37,7 @@ dependencies:
   form_field_validator: ^1.1.0
   motion_toast: ^2.0.0
   flutter_holo_date_picker: ^1.0.1+2
+  country_picker: ^2.0.9
 
 dev_dependencies:
   flutter_test:

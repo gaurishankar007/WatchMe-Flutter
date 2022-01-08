@@ -27,6 +27,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 children: [
                   Text(
                     "Reset Password",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),

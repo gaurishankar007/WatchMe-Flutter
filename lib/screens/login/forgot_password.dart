@@ -27,6 +27,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 children: [
                   Text(
                     "Generate Reset Link",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),

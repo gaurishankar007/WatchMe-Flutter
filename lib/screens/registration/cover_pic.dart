@@ -27,6 +27,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                 children: [
                   Text(
                     "Add Cover Picture",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                     ),
