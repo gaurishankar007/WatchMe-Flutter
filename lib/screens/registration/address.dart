@@ -89,7 +89,7 @@ class _AddressState extends State<Address> {
                             child: Row(
                               children: [
                                 Text(
-                                  pCountry,
+                                  tCountry,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 14,

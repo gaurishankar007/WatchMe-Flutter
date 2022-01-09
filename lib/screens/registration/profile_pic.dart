@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:form_field_validator/form_field_validator.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class AddProfilePicture extends StatefulWidget {
@@ -11,7 +14,8 @@ class AddProfilePicture extends StatefulWidget {
 
 class _AddProfilePictureState extends State<AddProfilePicture> {
   final _formKey = GlobalKey<FormState>();
-  String profilePicture = "";
+  String profilePicture = "defaultProfile.png";
+  String profilePicturePath = "images/defaultProfile.png";
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +39,50 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    onSaved: (value) {
-                      profilePicture = value!;
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: "Profile picture not selected!"),
-                    ]),
-                    decoration: InputDecoration(
-                      labelText: "Profile Picture",
-                      hintText: "Select a profile picture.....",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  (profilePicture == "defaultProfile.png")
+                      ? CircleAvatar(
+                          radius: 75,
+                          backgroundImage: AssetImage(profilePicturePath),
+                        )
+                      : CircleAvatar(
+                          radius: 75,
+                          backgroundImage: FileImage(File(profilePicture)),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          final picProfile =
+                              await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            type: FileType.image,
+                            // allowedExtensions: ['png', 'jpg'], // Error
+                          );
+                          if (picProfile == null) {
+                            return;
+                          }
+
+                          final pickedProfile = picProfile.files.first;
+                          // OpenFile.open(pickedProfile.path);
+                          setState(() {
+                            profilePicture = pickedProfile.name;
+                            profilePicturePath = pickedProfile.path!;
+                          });
+                        },
+                        child: Text("Select Profile Picture"),
                       ),
-                    ),
+                      Text(
+                        profilePicture,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(),
+                      )
+                    ],
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
