@@ -46,7 +46,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                         )
                       : CircleAvatar(
                           radius: 75,
-                          backgroundImage: FileImage(File(profilePicture)),
+                          backgroundImage: FileImage(File(profilePicturePath)),
                         ),
                   SizedBox(
                     height: 20,
@@ -58,8 +58,8 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                           final picProfile =
                               await FilePicker.platform.pickFiles(
                             allowMultiple: false,
-                            type: FileType.image,
-                            // allowedExtensions: ['png', 'jpg'], // Error
+                            type: FileType.custom,
+                            allowedExtensions: ['png', 'jpg'], 
                           );
                           if (picProfile == null) {
                             return;

@@ -1,9 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class AddCoverPicture extends StatefulWidget {
-  const AddCoverPicture({ Key? key }) : super(key: key);
+  const AddCoverPicture({Key? key}) : super(key: key);
 
   @override
   _AddCoverPictureState createState() => _AddCoverPictureState();
@@ -11,7 +14,8 @@ class AddCoverPicture extends StatefulWidget {
 
 class _AddCoverPictureState extends State<AddCoverPicture> {
   final _formKey = GlobalKey<FormState>();
-  String coverPicture = "";
+  String coverPicture = "defaultCover.jpg";
+  String coverPicturePath = "images/defaultCover.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -35,31 +39,68 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    onSaved: (value) {
-                      coverPicture = value!;
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: "Cover picture not selected!"),
-                    ]),
-                    decoration: InputDecoration(
-                      labelText: "Cover Picture",
-                      hintText: "Select a Cover picture.....",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  (coverPicture == "defaultCover.jpg")
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image(
+                            height: 150,
+                            width: _screenWidth*.90,
+                            fit: BoxFit.cover,
+                            image: AssetImage(coverPicturePath),
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image(
+                            height: 150,
+                            width: _screenWidth*.90,
+                            fit: BoxFit.cover,
+                            image: FileImage(File(coverPicturePath)),
+                          ),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          final picProfile =
+                              await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            type: FileType.custom,
+                            allowedExtensions: ['png', 'jpg'], 
+                          );
+                          if (picProfile == null) {
+                            return;
+                          }
+
+                          final pickedProfile = picProfile.files.first;
+                          // OpenFile.open(pickedProfile.path);
+                          setState(() {
+                            coverPicture = pickedProfile.name;
+                            coverPicturePath = pickedProfile.path!;
+                          });
+                        },
+                        child: Text("Select Cover Picture"),
                       ),
-                    ),
+                      Text(
+                        coverPicture,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(),
+                      )
+                    ],
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "/AddPersonalInformation");
+                          Navigator.pushNamed(
+                              context, "/AddPersonalInformation");
                         },
                         child: Text(
                           "Skip",
