@@ -28,6 +28,9 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
         backgroundColor:
             ref.watch(themeController) ? Colors.black : Colors.white,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: ref.watch(themeController) ? Colors.white : Colors.black,
+          ),
           backgroundColor:
               ref.watch(themeController) ? Colors.black : Colors.white,
           title: Text(
@@ -44,153 +47,151 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
           shadowColor: ref.watch(themeController) ? Colors.white : Colors.black,
         ),
         body: SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: _screenWidth * 0.03,
-                left: _screenWidth * 0.10,
-                right: _screenWidth * 0.10,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Text(
-                      "Add Profile Picture",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: ref.watch(themeController)
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 30,
-                        fontFamily: "Kalam-Bold",
-                      ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: _screenWidth * 0.03,
+              left: _screenWidth * 0.10,
+              right: _screenWidth * 0.10,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Text(
+                    "Add Profile Picture",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: ref.watch(themeController)
+                          ? Colors.white
+                          : Colors.black,
+                      fontSize: 25,
+                      fontFamily: "Kalam-Bold",
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    (profilePicture == "defaultProfile.png")
-                        ? CircleAvatar(
-                            radius: 100,
-                            backgroundImage: AssetImage(profilePicturePath),
-                          )
-                        : CircleAvatar(
-                            radius: 100,
-                            backgroundImage:
-                                FileImage(File(profilePicturePath)),
-                          ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            final picProfile =
-                                await FilePicker.platform.pickFiles(
-                              allowMultiple: false,
-                              type: FileType.custom,
-                              allowedExtensions: ['png', 'jpg'],
-                            );
-                            if (picProfile == null) {
-                              return;
-                            }
-
-                            final pickedProfile = picProfile.files.first;
-                            setState(() {
-                              profilePicture = pickedProfile.name;
-                              profilePicturePath = pickedProfile.path!;
-                            });
-                          },
-                          child: Text(
-                            "Select Profile Picture",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: "Kalam-Bold",
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          profilePicture,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: ref.watch(themeController)
-                                ? Colors.white
-                                : Colors.black,
-                            fontSize: 15,
-                            fontFamily: "Kalam-Regular",
-                          ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  (profilePicture == "defaultProfile.png")
+                      ? CircleAvatar(
+                          radius: 100,
+                          backgroundImage: AssetImage(profilePicturePath),
                         )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/AddCover");
-                          },
-                          child: Text(
-                            "Skip",
-                            style: TextStyle(
-                              color: Colors.deepPurpleAccent[700],
-                              fontSize: 20,
-                              fontFamily: "Kalam-Bold",
-                            ),
+                      : CircleAvatar(
+                          radius: 100,
+                          backgroundImage:
+                              FileImage(File(profilePicturePath)),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          final picProfile =
+                              await FilePicker.platform.pickFiles(
+                            allowMultiple: false,
+                            type: FileType.custom,
+                            allowedExtensions: ['png', 'jpg'],
+                          );
+                          if (picProfile == null) {
+                            return;
+                          }
+
+                          final pickedProfile = picProfile.files.first;
+                          setState(() {
+                            profilePicture = pickedProfile.name;
+                            profilePicturePath = pickedProfile.path!;
+                          });
+                        },
+                        child: Text(
+                          "Select Profile Picture",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: "Kalam-Bold",
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                            } else {
-                              MotionToast.error(
-                                title: "Submit Failed :(",
-                                description: "",
-                                toastDuration: Duration(seconds: 3),
-                              ).show(context);
-                            }
-                          },
-                          child: Text(
-                            "Next",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: "Kalam-Bold",
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurpleAccent[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        ref.watch(themeController)
-                            ? ref.read(themeController.notifier).lightTheme()
-                            : ref.read(themeController.notifier).darkTheme();
-                      },
-                      child: ref.watch(themeController)
-                          ? Text("Light Theme")
-                          : Text("Dark Theme"),
-                    ),
-                  ],
-                ),
+                      ),
+                      Text(
+                        profilePicture,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: ref.watch(themeController)
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 15,
+                          fontFamily: "Kalam-Regular",
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/AddCover");
+                        },
+                        child: Text(
+                          "Skip",
+                          style: TextStyle(
+                            color: Colors.deepPurpleAccent[700],
+                            fontSize: 20,
+                            fontFamily: "Kalam-Bold",
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                          } else {
+                            MotionToast.error(
+                              title: "Submit Failed :(",
+                              description: "",
+                              toastDuration: Duration(seconds: 3),
+                            ).show(context);
+                          }
+                        },
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: "Kalam-Bold",
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurpleAccent[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.watch(themeController)
+                          ? ref.read(themeController.notifier).lightTheme()
+                          : ref.read(themeController.notifier).darkTheme();
+                    },
+                    child: ref.watch(themeController)
+                        ? Text("Light Theme")
+                        : Text("Dark Theme"),
+                  ),
+                ],
               ),
             ),
           ),

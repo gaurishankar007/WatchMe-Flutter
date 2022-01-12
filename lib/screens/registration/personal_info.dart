@@ -1,5 +1,7 @@
+import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class PersonalInformation extends StatefulWidget {
@@ -10,6 +12,8 @@ class PersonalInformation extends StatefulWidget {
 }
 
 class _PersonalInformationState extends State<PersonalInformation> {
+  final themeController =
+      StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
   String firstName = "",
       lastName = "",
@@ -20,11 +24,36 @@ class _PersonalInformationState extends State<PersonalInformation> {
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return Consumer(builder: (context, ref, child) {
+      return Scaffold(
+        backgroundColor:
+            ref.watch(themeController) ? Colors.black : Colors.white,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: ref.watch(themeController) ? Colors.white : Colors.black,
+          ),
+          backgroundColor:
+              ref.watch(themeController) ? Colors.black : Colors.white,
+          title: Text(
+            "WatchMe",
+            style: TextStyle(
+              color: ref.watch(themeController) ? Colors.white : Colors.black,
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+              fontFamily: "Rochester-Regular",
+            ),
+          ),
+          centerTitle: true,
+          elevation: 2,
+          shadowColor: ref.watch(themeController) ? Colors.white : Colors.black,
+        ),
+        body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(_screenWidth * 0.10),
+            padding: EdgeInsets.only(
+              top: _screenWidth * 0.03,
+              left: _screenWidth * 0.10,
+              right: _screenWidth * 0.10,
+            ),
             child: Form(
               key: _formKey,
               child: Column(
@@ -33,11 +62,15 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     "Add Personal Information",
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      color: ref.watch(themeController)
+                          ? Colors.white
+                          : Colors.black,
                       fontSize: 25,
+                      fontFamily: "Kalam-Bold",
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
                   TextFormField(
                     onSaved: (value) {
@@ -56,9 +89,45 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     },
                     decoration: InputDecoration(
                       labelText: "First Name",
+                      labelStyle: TextStyle(
+                        color: ref.watch(themeController)
+                            ? Colors.white
+                            : Colors.black,
+                        fontFamily: "Kalam-Bold",
+                      ),
                       hintText: "Enter your first name.....",
+                      hintStyle: TextStyle(
+                        color: ref.watch(themeController)
+                            ? Colors.white
+                            : Colors.black,
+                        fontFamily: "Kalam-Bold",
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: ref.watch(themeController)
+                              ? Colors.white
+                              : Colors.black,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: ref.watch(themeController)
+                              ? Colors.white
+                              : Colors.black,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -84,9 +153,45 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     },
                     decoration: InputDecoration(
                       labelText: "Last Name",
+                      labelStyle: TextStyle(
+                        color: ref.watch(themeController)
+                            ? Colors.white
+                            : Colors.black,
+                        fontFamily: "Kalam-Bold",
+                      ),
                       hintText: "Enter your last name.....",
+                      hintStyle: TextStyle(
+                        color: ref.watch(themeController)
+                            ? Colors.white
+                            : Colors.black,
+                        fontFamily: "Kalam-Bold",
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: ref.watch(themeController)
+                              ? Colors.white
+                              : Colors.black,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: ref.watch(themeController)
+                              ? Colors.white
+                              : Colors.black,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -209,7 +314,9 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         child: Text(
                           "Skip",
                           style: TextStyle(
-                            fontSize: 15,
+                            color: Colors.deepPurpleAccent[700],
+                            fontSize: 20,
+                            fontFamily: "Kalam-Bold",
                           ),
                         ),
                       ),
@@ -230,17 +337,27 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           "Next",
                           style: TextStyle(
                             fontSize: 15,
+                            fontFamily: "Kalam-Bold",
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurpleAccent[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
