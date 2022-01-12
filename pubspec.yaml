@@ -40,6 +40,8 @@ dependencies:
   country_picker: ^2.0.9
   file_picker: ^4.3.1
   open_file: ^3.2.1
+  shared_preferences: ^2.0.12
+  flutter_riverpod: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -78,22 +80,22 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-fonts:
-    - family: FuzzyBubbles-Bold
+  fonts:    
+    - family: Kalam-Bold
       fonts:
-        - asset: fonts/FuzzyBubbles-Bold.ttf
-    
-    - family: FuzzyBubbles-Regular
-      fonts:
-        - asset: fonts/FuzzyBubbles-Regular.ttf
+        - asset: fonts/Kalam-Bold.ttf
 
-    - family: PinyonScript-Regular
+    - family: Kalam-Light
       fonts:
-        - asset: fonts/PinyonScript-Regular.ttf
+        - asset: fonts/Kalam-Light.ttf
 
-    - family: Pacifico-Regular
+    - family: Kalam-Regular
       fonts:
-        - asset: fonts/Pacifico-Regular.ttf
+        - asset: fonts/Kalam-Regular.ttf
+          
+    - family: Rochester-Regular
+      fonts:
+        - asset: fonts/Rochester-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
