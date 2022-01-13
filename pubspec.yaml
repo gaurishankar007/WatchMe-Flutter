@@ -81,21 +81,21 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:    
-    - family: Kalam-Bold
+    - family: Laila-Bold
       fonts:
-        - asset: fonts/Kalam-Bold.ttf
+        - asset: fonts/Laila-Bold.ttf   
 
-    - family: Kalam-Light
+    - family: Laila-Medium
       fonts:
-        - asset: fonts/Kalam-Light.ttf
+        - asset: fonts/Laila-Medium.ttf
 
-    - family: Kalam-Regular
+    - family: Laila-Regular
       fonts:
-        - asset: fonts/Kalam-Regular.ttf
+        - asset: fonts/Laila-Regular.ttf
           
-    - family: Rochester-Regular
+    - family: BerkshireSwash-Regular
       fonts:
-        - asset: fonts/Rochester-Regular.ttf
+        - asset: fonts/BerkshireSwash-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -25,27 +25,28 @@ class _PersonalInformationState extends State<PersonalInformation> {
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
+      Color backColor =
+          ref.watch(themeController) ? Colors.black : Colors.white;
+      Color textColor =
+          ref.watch(themeController) ? Colors.white : Colors.black87;
       return Scaffold(
-        backgroundColor:
-            ref.watch(themeController) ? Colors.black : Colors.white,
+        backgroundColor: backColor,
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: ref.watch(themeController) ? Colors.white : Colors.black,
+            color: textColor,
           ),
-          backgroundColor:
-              ref.watch(themeController) ? Colors.black : Colors.white,
+          backgroundColor: backColor,
           title: Text(
             "WatchMe",
             style: TextStyle(
-              color: ref.watch(themeController) ? Colors.white : Colors.black,
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Rochester-Regular",
+              color: textColor,
+              fontSize: 30,
+              fontFamily: "BerkshireSwash-Regular",
             ),
           ),
           centerTitle: true,
           elevation: 2,
-          shadowColor: ref.watch(themeController) ? Colors.white : Colors.black,
+          shadowColor: textColor,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -62,11 +63,9 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     "Add Personal Information",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: ref.watch(themeController)
-                          ? Colors.white
-                          : Colors.black,
+                      color: textColor,
                       fontSize: 25,
-                      fontFamily: "Kalam-Bold",
+                      fontFamily: "Laila-Bold",
                     ),
                   ),
                   SizedBox(
@@ -87,20 +86,18 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       }
                       return null;
                     },
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "First Name",
                       labelStyle: TextStyle(
-                        color: ref.watch(themeController)
-                            ? Colors.white
-                            : Colors.black,
-                        fontFamily: "Kalam-Bold",
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
                       ),
                       hintText: "Enter your first name.....",
                       hintStyle: TextStyle(
-                        color: ref.watch(themeController)
-                            ? Colors.white
-                            : Colors.black,
-                        fontFamily: "Kalam-Bold",
+                        color: textColor,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -112,9 +109,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: ref.watch(themeController)
-                              ? Colors.white
-                              : Colors.black,
+                          color: textColor,
                           width: 2,
                           style: BorderStyle.solid,
                         ),
@@ -122,9 +117,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: ref.watch(themeController)
-                              ? Colors.white
-                              : Colors.black,
+                          color: textColor,
                           width: 2,
                           style: BorderStyle.solid,
                         ),
@@ -151,20 +144,18 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       }
                       return null;
                     },
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "Last Name",
                       labelStyle: TextStyle(
-                        color: ref.watch(themeController)
-                            ? Colors.white
-                            : Colors.black,
-                        fontFamily: "Kalam-Bold",
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
                       ),
                       hintText: "Enter your last name.....",
                       hintStyle: TextStyle(
-                        color: ref.watch(themeController)
-                            ? Colors.white
-                            : Colors.black,
-                        fontFamily: "Kalam-Bold",
+                        color: textColor,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -176,9 +167,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: ref.watch(themeController)
-                              ? Colors.white
-                              : Colors.black,
+                          color: textColor,
                           width: 2,
                           style: BorderStyle.solid,
                         ),
@@ -186,9 +175,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
-                          color: ref.watch(themeController)
-                              ? Colors.white
-                              : Colors.black,
+                          color: textColor,
                           width: 2,
                           style: BorderStyle.solid,
                         ),
@@ -204,12 +191,16 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       Text(
                         "Gender:",
                         style: TextStyle(
+                          color: textColor,
                           fontSize: 17,
+                          fontFamily: "Laila-Bold",
                         ),
                       ),
                       Row(
                         children: [
                           Radio(
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => textColor),
                             value: "Male",
                             groupValue: gender,
                             onChanged: (String? value) => setState(() {
@@ -219,10 +210,13 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           Text(
                             "Male",
                             style: TextStyle(
+                              color: textColor,
                               fontSize: 15,
                             ),
                           ),
                           Radio(
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => textColor),
                             value: "Female",
                             groupValue: gender,
                             onChanged: (String? value) => setState(() {
@@ -232,10 +226,13 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           Text(
                             "Female",
                             style: TextStyle(
+                              color: textColor,
                               fontSize: 15,
                             ),
                           ),
                           Radio(
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => textColor),
                             value: "Other",
                             groupValue: gender,
                             onChanged: (String? value) => setState(() {
@@ -245,6 +242,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           Text(
                             "Other",
                             style: TextStyle(
+                              color: textColor,
                               fontSize: 15,
                             ),
                           )
@@ -261,8 +259,9 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       Text(
                         "Birthday:",
                         style: TextStyle(
-                          fontSize: 17,
-                        ),
+                            color: textColor,
+                            fontSize: 17,
+                            fontFamily: "Laila-Bold"),
                       ),
                       DatePickerWidget(
                         dateFormat: "yyyy-MMMM-dd",
@@ -284,7 +283,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     ],
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 20,
                   ),
                   TextFormField(
                     maxLines: 5,
@@ -292,12 +291,45 @@ class _PersonalInformationState extends State<PersonalInformation> {
                       biography = value!.trim();
                     },
                     textCapitalization: TextCapitalization.sentences,
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "Biography",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter your biography here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       helperText: "Optional",
+                      helperStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -316,7 +348,6 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           style: TextStyle(
                             color: Colors.deepPurpleAccent[700],
                             fontSize: 20,
-                            fontFamily: "Kalam-Bold",
                           ),
                         ),
                       ),
@@ -337,7 +368,6 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           "Next",
                           style: TextStyle(
                             fontSize: 15,
-                            fontFamily: "Kalam-Bold",
                           ),
                         ),
                         style: ElevatedButton.styleFrom(

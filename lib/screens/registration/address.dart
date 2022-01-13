@@ -1,4 +1,6 @@
+import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -11,6 +13,8 @@ class Address extends StatefulWidget {
 }
 
 class _AddressState extends State<Address> {
+  final themeController =
+      StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
   String pCountry = "Afganistan",
       pState = "",
@@ -24,11 +28,37 @@ class _AddressState extends State<Address> {
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return Consumer(builder: (context, ref, child) {
+      Color backColor =
+          ref.watch(themeController) ? Colors.black : Colors.white;
+      Color textColor =
+          ref.watch(themeController) ? Colors.white : Colors.black87;
+      return Scaffold(
+        backgroundColor: backColor,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: textColor,
+          ),
+          backgroundColor: backColor,
+          title: Text(
+            "WatchMe",
+            style: TextStyle(
+              color: textColor,
+              fontSize: 30,
+              fontFamily: "BerkshireSwash-Regular",
+            ),
+          ),
+          centerTitle: true,
+          elevation: 2,
+          shadowColor: textColor,
+        ),
+        body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(_screenWidth * 0.10),
+            padding: EdgeInsets.only(
+              top: _screenWidth * 0.03,
+              left: _screenWidth * 0.10,
+              right: _screenWidth * 0.10,
+            ),
             child: Form(
               key: _formKey,
               child: Column(
@@ -37,7 +67,9 @@ class _AddressState extends State<Address> {
                     "Add Address",
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      color: textColor,
                       fontSize: 25,
+                      fontFamily: "Laila-Bold",
                     ),
                   ),
                   SizedBox(
@@ -47,25 +79,31 @@ class _AddressState extends State<Address> {
                     "Temporary",
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      color: textColor,
                       fontSize: 20,
+                      fontFamily: "Laila-Bold",
                       decoration: TextDecoration.underline,
                     ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [                      
+                    children: [
                       Text(
                         "Country:",
                         style: TextStyle(
-                          fontSize: 18,
+                          color: textColor,
+                          fontSize: 15,
+                          fontFamily: "Laila-Bold",
                         ),
                       ),
                       Row(
                         children: [
                           TextButton(
                             style: TextButton.styleFrom(
-                              primary: Colors.black,
-                              side: BorderSide(),
+                              primary: textColor,
+                              side: BorderSide(
+                                color: textColor,
+                              ),
                               padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
                             ),
                             onPressed: () {
@@ -75,10 +113,13 @@ class _AddressState extends State<Address> {
                                 onSelect: (Country country) {
                                   setState(() {
                                     String countryName = "";
-                                    List<String> countryDetail = country.displayName.split(" ");
-                                    for (int i = 0; i < countryDetail.length; i++) {
-                                      if(i<(countryDetail.length-2)) {
-                                        countryName += countryDetail[i]+ " ";
+                                    List<String> countryDetail =
+                                        country.displayName.split(" ");
+                                    for (int i = 0;
+                                        i < countryDetail.length;
+                                        i++) {
+                                      if (i < (countryDetail.length - 2)) {
+                                        countryName += countryDetail[i] + " ";
                                       }
                                     }
                                     tCountry = countryName.trim();
@@ -92,7 +133,7 @@ class _AddressState extends State<Address> {
                                   tCountry,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                   ),
                                 ),
                                 Icon(
@@ -112,15 +153,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       tState = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "State",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter state here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -131,15 +201,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       tCity = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "City",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter city here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -150,15 +249,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       tStreet = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "Street",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter street here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -169,13 +297,15 @@ class _AddressState extends State<Address> {
                     "Permanent",
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      color: textColor,
                       fontSize: 20,
+                      fontFamily: "Laila-Bold",
                       decoration: TextDecoration.underline,
                     ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [                      
+                    children: [
                       Text(
                         "Country:",
                         style: TextStyle(
@@ -186,8 +316,10 @@ class _AddressState extends State<Address> {
                         children: [
                           TextButton(
                             style: TextButton.styleFrom(
-                              primary: Colors.black,
-                              side: BorderSide(),
+                              primary: textColor,
+                              side: BorderSide(
+                                color: textColor,
+                              ),
                               padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
                             ),
                             onPressed: () {
@@ -197,10 +329,13 @@ class _AddressState extends State<Address> {
                                 onSelect: (Country country) {
                                   setState(() {
                                     String countryName = "";
-                                    List<String> countryDetail = country.displayName.split(" ");
-                                    for (int i = 0; i < countryDetail.length; i++) {
-                                      if(i<(countryDetail.length-2)) {
-                                        countryName += countryDetail[i]+ " ";
+                                    List<String> countryDetail =
+                                        country.displayName.split(" ");
+                                    for (int i = 0;
+                                        i < countryDetail.length;
+                                        i++) {
+                                      if (i < (countryDetail.length - 2)) {
+                                        countryName += countryDetail[i] + " ";
                                       }
                                     }
                                     pCountry = countryName.trim();
@@ -214,7 +349,7 @@ class _AddressState extends State<Address> {
                                   pCountry,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                   ),
                                 ),
                                 Icon(
@@ -234,15 +369,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       pState = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "State",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter state here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -253,15 +417,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       pCity = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "City",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter city here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -272,15 +465,44 @@ class _AddressState extends State<Address> {
                     onSaved: (value) {
                       pStreet = value!.trim();
                     },
-                    textCapitalization: TextCapitalization.sentences,
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
                     ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
                     decoration: InputDecoration(
                       labelText: "Street",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
                       hintText: "Enter street here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
                       ),
                     ),
                   ),
@@ -297,7 +519,8 @@ class _AddressState extends State<Address> {
                         child: Text(
                           "Skip",
                           style: TextStyle(
-                            fontSize: 15,
+                            color: Colors.deepPurpleAccent[700],
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -320,15 +543,24 @@ class _AddressState extends State<Address> {
                             fontSize: 15,
                           ),
                         ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurpleAccent[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -16,7 +16,6 @@ class AddProfilePicture extends StatefulWidget {
 class _AddProfilePictureState extends State<AddProfilePicture> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  final _formKey = GlobalKey<FormState>();
   String profilePicture = "defaultProfile.png";
   String profilePicturePath = "images/defaultProfile.png";
 
@@ -24,27 +23,28 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
+      Color backColor =
+          ref.watch(themeController) ? Colors.black : Colors.white;
+      Color textColor =
+          ref.watch(themeController) ? Colors.white : Colors.black87;
       return Scaffold(
-        backgroundColor:
-            ref.watch(themeController) ? Colors.black : Colors.white,
+        backgroundColor: backColor,
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: ref.watch(themeController) ? Colors.white : Colors.black,
+            color: textColor,
           ),
-          backgroundColor:
-              ref.watch(themeController) ? Colors.black : Colors.white,
+          backgroundColor: backColor,
           title: Text(
             "WatchMe",
             style: TextStyle(
-              color: ref.watch(themeController) ? Colors.white : Colors.black,
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Rochester-Regular",
+              color: textColor,
+              fontSize: 30,
+              fontFamily: "BerkshireSwash-Regular",
             ),
           ),
           centerTitle: true,
           elevation: 2,
-          shadowColor: ref.watch(themeController) ? Colors.white : Colors.black,
+          shadowColor: textColor,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -53,146 +53,125 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
               left: _screenWidth * 0.10,
               right: _screenWidth * 0.10,
             ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Text(
-                    "Add Profile Picture",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ref.watch(themeController)
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 25,
-                      fontFamily: "Kalam-Bold",
-                    ),
+            child: Column(
+              children: [
+                Text(
+                  "Add Profile Picture",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 25,
+                    fontFamily: "Laila-Bold",
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  (profilePicture == "defaultProfile.png")
-                      ? CircleAvatar(
-                          radius: 100,
-                          backgroundImage: AssetImage(profilePicturePath),
-                        )
-                      : CircleAvatar(
-                          radius: 100,
-                          backgroundImage:
-                              FileImage(File(profilePicturePath)),
-                        ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          final picProfile =
-                              await FilePicker.platform.pickFiles(
-                            allowMultiple: false,
-                            type: FileType.custom,
-                            allowedExtensions: ['png', 'jpg'],
-                          );
-                          if (picProfile == null) {
-                            return;
-                          }
-
-                          final pickedProfile = picProfile.files.first;
-                          setState(() {
-                            profilePicture = pickedProfile.name;
-                            profilePicturePath = pickedProfile.path!;
-                          });
-                        },
-                        child: Text(
-                          "Select Profile Picture",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: "Kalam-Bold",
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        profilePicture,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: ref.watch(themeController)
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 15,
-                          fontFamily: "Kalam-Regular",
-                        ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                (profilePicture == "defaultProfile.png")
+                    ? CircleAvatar(
+                        radius: 100,
+                        backgroundImage: AssetImage(profilePicturePath),
                       )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/AddCover");
-                        },
-                        child: Text(
-                          "Skip",
-                          style: TextStyle(
-                            color: Colors.deepPurpleAccent[700],
-                            fontSize: 20,
-                            fontFamily: "Kalam-Bold",
-                          ),
+                    : CircleAvatar(
+                        radius: 100,
+                        backgroundImage: FileImage(File(profilePicturePath)),
+                      ),
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final picProfile =
+                            await FilePicker.platform.pickFiles(
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: ['png', 'jpg'],
+                        );
+                        if (picProfile == null) {
+                          return;
+                        }
+
+                        final pickedProfile = picProfile.files.first;
+                        setState(() {
+                          profilePicture = pickedProfile.name;
+                          profilePicturePath = pickedProfile.path!;
+                        });
+                      },
+                      child: Text(
+                        "Select Profile Picture",
+                        style: TextStyle(
+                          fontSize: 15,
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                          } else {
-                            MotionToast.error(
-                              title: "Submit Failed :(",
-                              description: "",
-                              toastDuration: Duration(seconds: 3),
-                            ).show(context);
-                          }
-                        },
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: "Kalam-Bold",
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.watch(themeController)
-                          ? ref.read(themeController.notifier).lightTheme()
-                          : ref.read(themeController.notifier).darkTheme();
-                    },
-                    child: ref.watch(themeController)
-                        ? Text("Light Theme")
-                        : Text("Dark Theme"),
-                  ),
-                ],
-              ),
+                    ),
+                    Text(
+                      profilePicture,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color:textColor,
+                        fontSize: 15,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/AddCover");
+                      },
+                      child: Text(
+                        "Skip",
+                        style: TextStyle(
+                          color: Colors.deepPurpleAccent[700],
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                      },
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.watch(themeController)
+                        ? ref.read(themeController.notifier).lightTheme()
+                        : ref.read(themeController.notifier).darkTheme();
+                  },
+                  child: ref.watch(themeController)
+                      ? Text("Light Theme")
+                      : Text("Dark Theme"),
+                ),
+              ],
             ),
           ),
         ),

@@ -25,7 +25,10 @@ class _WatchMeState extends State<WatchMe> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/AddProfile',
+      theme: ThemeData(
+        fontFamily: "Laila-Medium",
+      ),
+      initialRoute: '/Login',
       routes: {
         '/Login': (context) => LoginUser(),
         '/RegisterUser': (context) => RegisterUser(),
