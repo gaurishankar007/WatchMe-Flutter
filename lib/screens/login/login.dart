@@ -41,8 +41,13 @@ class _LoginUserState extends State<LoginUser> {
             ),
           ),
           centerTitle: true,
-          elevation: 2,
-          shadowColor: textColor,
+          shape: Border(
+            bottom: BorderSide(
+              color: textColor,
+              width: .1,
+            ),
+          ),
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Padding(

@@ -89,7 +89,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
-                      helperText: "Wrong email won't reset your password",
+                      helperText: "Wrong email won't reset your password.",
                       helperStyle: TextStyle(
                         color: textColor,
                       ),

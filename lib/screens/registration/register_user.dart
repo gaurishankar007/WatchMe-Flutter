@@ -41,8 +41,13 @@ class _RegisterUserState extends State<RegisterUser> {
             ),
           ),
           centerTitle: true,
-          elevation: 2,
-          shadowColor: textColor,
+          shape: Border(
+            bottom: BorderSide(
+              color: textColor,
+              width: .1,
+            ),
+          ),
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -293,11 +298,7 @@ class _RegisterUserState extends State<RegisterUser> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        MotionToast.success(
-                          title: "Account created :)",
-                          description: "You created your 'WatchMe' account.",
-                          toastDuration: Duration(seconds: 3),
-                        ).show(context);
+                        Navigator.pushNamed(context, "/AddProfile");
                       } else {
                         MotionToast.error(
                           title: "SignUp Failed :(",
