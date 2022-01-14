@@ -295,6 +295,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     onSaved: (value) {
                       biography = value!.trim();
                     },
+                    keyboardType: TextInputType.multiline,
                     textCapitalization: TextCapitalization.sentences,
                     style: TextStyle(
                       color: textColor,
