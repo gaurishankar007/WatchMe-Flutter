@@ -42,7 +42,8 @@ class _HomeState extends State<Home> {
       liked = [],
       likedNum = [],
       comment = [],
-      save = [];
+      save = [],
+      unwatch = [];
   void addIndex() {
     for (int i = 0; i < posts.length; i++) {
       activeIndexField.add(0);
@@ -50,6 +51,7 @@ class _HomeState extends State<Home> {
       likedNum.add(posts[i][4]);
       comment.add(false);
       save.add(false);
+      unwatch.add(false);
     }
   }
 
@@ -144,19 +146,43 @@ class _HomeState extends State<Home> {
                                     thickness: 1,
                                     color: textColor,
                                   ),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Unwatch",
-                                      style: TextStyle(
-                                        color: Colors.deepPurpleAccent[700],
-                                        fontFamily: "Laila-Bold",
-                                      ),
-                                    ),
-                                  ),
+                                  unwatch[index]
+                                      ? TextButton(
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onPressed: () {
+                                            unwatch[index] = false;
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                          },
+                                          child: Text(
+                                            "Watch",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.deepPurpleAccent[700],
+                                              fontFamily: "Laila-Bold",
+                                            ),
+                                          ),
+                                        )
+                                      : TextButton(
+                                          style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onPressed: () {
+                                            unwatch[index] = true;
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                          },
+                                          child: Text(
+                                            "Unwatch",
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.deepPurpleAccent[700],
+                                              fontFamily: "Laila-Bold",
+                                            ),
+                                          ),
+                                        ),
                                   Divider(
                                     height: 2,
                                     thickness: 1,
