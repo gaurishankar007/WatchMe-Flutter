@@ -121,15 +121,18 @@ class _HomeState extends State<Home> {
                       ),
                       trailing: IconButton(
                         onPressed: () {
-                          final snackBar = SnackBar(
-                            backgroundColor: backColor,
-                            duration: Duration(minutes: 5),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: _screenWidth * .28,
-                            ),
-                            content: Container(
-                              height: 150,
-                              child: ListView(
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (builder) => Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: _screenWidth*.20,
+                              ),
+                              decoration: BoxDecoration(
+                                color: backColor,
+                              ),
+                              height: 170,
+                              child: Column(
                                 children: [
                                   TextButton(
                                     onPressed: () {},
@@ -205,7 +208,6 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         },
                         icon: Icon(
                           Icons.more_vert,
