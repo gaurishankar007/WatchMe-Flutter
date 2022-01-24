@@ -28,7 +28,7 @@ class _WatchMeState extends State<WatchMe> {
       theme: ThemeData(
         fontFamily: "Laila-Medium",
       ),
-      initialRoute: '/Home',
+      initialRoute: '/Login',
       routes: {
         '/Login': (context) => LoginUser(),
         '/RegisterUser': (context) => RegisterUser(),

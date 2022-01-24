@@ -526,6 +526,13 @@ class _AddressState extends State<Address> {
                           style: TextStyle(
                             color: Colors.deepPurpleAccent[700],
                             fontSize: 20,
+                            shadows: const [
+                              Shadow(
+                                color: Colors.deepPurpleAccent,
+                                offset: Offset(3, 4),
+                                blurRadius: 20,
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -550,6 +557,8 @@ class _AddressState extends State<Address> {
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.deepPurpleAccent[700],
+                          elevation: 10,
+                          shadowColor: Colors.deepPurpleAccent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

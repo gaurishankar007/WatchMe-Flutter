@@ -170,6 +170,14 @@ class _LoginUserState extends State<LoginUser> {
                         style: TextStyle(
                           color: Colors.deepPurpleAccent[700],
                           fontSize: 15,
+                          fontFamily: "Laila-Bold",
+                          shadows: const [
+                            Shadow(
+                              color: Colors.deepPurpleAccent,
+                              offset: Offset(3, 4),
+                              blurRadius: 20,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -198,6 +206,8 @@ class _LoginUserState extends State<LoginUser> {
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurpleAccent[700],
+                      elevation: 10,
+                      shadowColor: Colors.deepPurpleAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -218,6 +228,8 @@ class _LoginUserState extends State<LoginUser> {
                     ),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurpleAccent[700],
+                      elevation: 10,
+                      shadowColor: Colors.deepPurpleAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

@@ -88,8 +88,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final picProfile =
-                            await FilePicker.platform.pickFiles(
+                        final picProfile = await FilePicker.platform.pickFiles(
                           allowMultiple: false,
                           type: FileType.custom,
                           allowedExtensions: ['png', 'jpg'],
@@ -112,6 +111,8 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -121,7 +122,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       profilePicture,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color:textColor,
+                        color: textColor,
                         fontSize: 15,
                       ),
                     )
@@ -142,12 +143,18 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                         style: TextStyle(
                           color: Colors.deepPurpleAccent[700],
                           fontSize: 20,
+                          shadows: const [
+                            Shadow(
+                              color: Colors.deepPurpleAccent,
+                              offset: Offset(3, 4),
+                              blurRadius: 20,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                       child: Text(
                         "Next",
                         style: TextStyle(
@@ -156,6 +163,8 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
