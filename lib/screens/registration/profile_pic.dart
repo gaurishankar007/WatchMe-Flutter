@@ -61,7 +61,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
             child: Column(
               children: [
                 Text(
-                  "Add Profile Picture",
+                  "Add a Profile Picture",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: textColor,
@@ -104,7 +104,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                         });
                       },
                       child: Text(
-                        "Select Profile Picture",
+                        "Select a profile picture",
                         style: TextStyle(
                           fontSize: 15,
                         ),

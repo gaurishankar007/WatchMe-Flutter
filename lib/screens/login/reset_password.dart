@@ -69,7 +69,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 5,
                   ),
                   Text(
-                    "The password reset link is sent to your account's email. Copy the link and paste here.",
+                    "The password reset link is sent to your account's email. Copy the link and paste here. You have 3 minutes left otherwise the link will expire.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: textColor,

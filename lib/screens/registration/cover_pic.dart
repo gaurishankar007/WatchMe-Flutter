@@ -15,8 +15,8 @@ class AddCoverPicture extends StatefulWidget {
 class _AddCoverPictureState extends State<AddCoverPicture> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  String coverPicture = "defaultCover.jpg";
-  String coverPicturePath = "images/defaultCover.jpg";
+  String coverPicture = "defaultCover.png";
+  String coverPicturePath = "images/defaultCover.png";
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
             child: Column(
               children: [
                 Text(
-                  "Add Cover Picture",
+                  "Add a Cover Picture",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: textColor,
@@ -71,7 +71,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                 SizedBox(
                   height: 10,
                 ),
-                (coverPicture == "defaultCover.jpg")
+                (coverPicture == "defaultCover.png")
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image(
@@ -114,7 +114,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                         });
                       },
                       child: Text(
-                        "Select Cover Picture",
+                        "Select a cover picture",
                         style: TextStyle(
                           fontSize: 15,
                         ),
