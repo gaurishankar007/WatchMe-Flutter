@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class AddProfilePicture extends StatefulWidget {
   const AddProfilePicture({Key? key}) : super(key: key);
@@ -16,8 +18,8 @@ class AddProfilePicture extends StatefulWidget {
 class _AddProfilePictureState extends State<AddProfilePicture> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  String profilePicture = "defaultProfile.png";
-  String profilePicturePath = "images/defaultProfile.png";
+  File? profilePicture = null;
+  String profilePictureName = "defaultProfile.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +74,15 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                 SizedBox(
                   height: 10,
                 ),
-                (profilePicture == "defaultProfile.png")
+                (profilePicture == null)
                     ? CircleAvatar(
                         radius: 100,
-                        backgroundImage: AssetImage(profilePicturePath),
+                        backgroundImage:
+                            AssetImage("images/defaultProfile.png"),
                       )
                     : CircleAvatar(
                         radius: 100,
-                        backgroundImage: FileImage(File(profilePicturePath)),
+                        backgroundImage: FileImage(profilePicture!),
                       ),
                 SizedBox(
                   height: 20,
@@ -88,20 +91,123 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final picProfile = await FilePicker.platform.pickFiles(
-                          allowMultiple: false,
-                          type: FileType.custom,
-                          allowedExtensions: ['png', 'jpg'],
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          backgroundColor: backColor,
+                          builder: (builder) => Container(
+                            decoration: BoxDecoration(
+                              color: backColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: textColor,
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(
+                                      0, 1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            height: 60,
+                            width: _screenWidth,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final image = await ImagePicker()
+                                        .pickImage(source: ImageSource.camera);
+                                    setState(() {
+                                      profilePicture = File(image!.path);
+                                      profilePictureName =
+                                          image.path.split("/").last;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.camera,
+                                        size: 30,
+                                        color: backColor,
+                                      ),
+                                      SizedBox(
+                                        width: _screenWidth * .03,
+                                      ),
+                                      Text(
+                                        "Camera",
+                                        style: TextStyle(
+                                          color: backColor,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 5,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.deepPurpleAccent[700],
+                                  height: 55,
+                                  width: 2,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final image = await ImagePicker()
+                                        .pickImage(source: ImageSource.gallery);
+                                    setState(() {
+                                      profilePicture = File(image!.path);
+                                      profilePictureName =
+                                          image.path.split("/").last;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.photo_album,
+                                        size: 30,
+                                        color: backColor,
+                                      ),
+                                      SizedBox(
+                                        width: _screenWidth * .03,
+                                      ),
+                                      Text(
+                                        "Gallery",
+                                        style: TextStyle(
+                                          color: backColor,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 5,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
-                        if (picProfile == null) {
-                          return;
-                        }
-
-                        final pickedProfile = picProfile.files.first;
-                        setState(() {
-                          profilePicture = pickedProfile.name;
-                          profilePicturePath = pickedProfile.path!;
-                        });
                       },
                       child: Text(
                         "Select a profile picture",
@@ -119,7 +225,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       ),
                     ),
                     Text(
-                      profilePicture,
+                      profilePictureName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: textColor,
@@ -154,7 +260,35 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (profilePicture != null) {
+                          final res = await HttpConnectUser()
+                              .addProfile(profilePicture);
+                          if (res["message"] == "New profile picture added.") {
+                            Navigator.pushNamed(context, "/add-cover");
+                            MotionToast.success(
+                              position: MOTION_TOAST_POSITION.top,
+                              animationType: ANIMATION.fromTop,
+                              toastDuration: Duration(seconds: 2),
+                              description: res["message"],
+                            ).show(context);
+                          } else {
+                            MotionToast.error(
+                              position: MOTION_TOAST_POSITION.top,
+                              animationType: ANIMATION.fromTop,
+                              toastDuration: Duration(seconds: 2),
+                              description: res["message"],
+                            ).show(context);
+                          }
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 1),
+                            description: "Select a profile picture first.",
+                          ).show(context);
+                        }
+                      },
                       child: Text(
                         "Next",
                         style: TextStyle(

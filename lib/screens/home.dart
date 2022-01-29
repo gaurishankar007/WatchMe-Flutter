@@ -1,3 +1,4 @@
+import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    // Token().getToken().then((value) {
+    //   if (value.isEmpty) {
+    //     Navigator.of(context)
+    //         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+    //   }
+    // });
     addIndex();
   }
 
@@ -111,7 +118,6 @@ class _HomeState extends State<Home> {
           itemCount: posts.length,
           itemBuilder: (context, index) {
             List<String> images = posts[index][1];
-            final _formKey = GlobalKey<FormState>();
             return Container(
               color: backColor,
               child: Column(
@@ -361,54 +367,56 @@ class _HomeState extends State<Home> {
                   ),
                   TextButton(
                     onPressed: () {
-                      final snackBar = SnackBar(
-                        backgroundColor: backColor,
-                        duration: Duration(minutes: 5),
-                        dismissDirection: DismissDirection.startToEnd,
-                        shape: Border(
-                          top: BorderSide(
-                            color: textColor,
-                            width: .1,
+                      final _formKey = GlobalKey<FormState>();
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (builder) => Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          decoration: BoxDecoration(
+                            color: backColor,
                           ),
-                        ),
-                        content: ListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          title: Form(
-                            key: _formKey,
-                            child: TextFormField(
-                              maxLines: 2,
-                              keyboardType: TextInputType.multiline,
-                              onSaved: (value) {},
-                              validator: MultiValidator([
-                                RequiredValidator(errorText: "Empty field!"),
-                              ]),
-                              style: TextStyle(
-                                color: textColor,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: "Add a comment....",
-                                hintStyle: TextStyle(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
+                            title: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                autofocus: true,
+                                maxLines: 2,
+                                keyboardType: TextInputType.multiline,
+                                onSaved: (value) {},
+                                validator: MultiValidator([
+                                  RequiredValidator(
+                                      errorText: "Empty field!"),
+                                ]),
+                                style: TextStyle(
                                   color: textColor,
                                 ),
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
+                                decoration: InputDecoration(
+                                  hintText: "   Add a comment....",
+                                  hintStyle: TextStyle(
+                                    color: textColor,
+                                  ),
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                ),
                               ),
                             ),
-                          ),
-                          trailing: IconButton(
-                            onPressed: () {
-                              _formKey.currentState!.validate();
-                            },
-                            icon: Icon(
-                              Icons.send_rounded,
-                              color: Colors.deepPurpleAccent[700],
+                            trailing: IconButton(
+                              onPressed: () {
+                                _formKey.currentState!.validate();
+                              },
+                              icon: Icon(
+                                Icons.send_rounded,
+                                color: Colors.deepPurpleAccent[700],
+                              ),
                             ),
                           ),
                         ),
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
                     child: ListTile(
                       contentPadding: EdgeInsets.symmetric(
@@ -454,7 +462,7 @@ class _HomeState extends State<Home> {
                 label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_a_photo_rounded),
+                icon: Icon(Icons.camera),
                 label: "",
               ),
               BottomNavigationBarItem(

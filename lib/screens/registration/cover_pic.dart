@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class AddCoverPicture extends StatefulWidget {
   const AddCoverPicture({Key? key}) : super(key: key);
@@ -15,8 +17,8 @@ class AddCoverPicture extends StatefulWidget {
 class _AddCoverPictureState extends State<AddCoverPicture> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  String coverPicture = "defaultCover.png";
-  String coverPicturePath = "images/defaultCover.png";
+  File? coverPicture = null;
+  String coverPictureName = "defaultCover.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +73,14 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                 SizedBox(
                   height: 10,
                 ),
-                (coverPicture == "defaultCover.png")
+                (coverPicture == null)
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image(
                           height: 150,
                           width: _screenWidth * .90,
                           fit: BoxFit.contain,
-                          image: AssetImage(coverPicturePath),
+                          image: AssetImage("images/defaultCover.png"),
                         ),
                       )
                     : ClipRRect(
@@ -87,7 +89,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                           height: 150,
                           width: _screenWidth * .90,
                           fit: BoxFit.cover,
-                          image: FileImage(File(coverPicturePath)),
+                          image: FileImage(coverPicture!),
                         ),
                       ),
                 SizedBox(
@@ -97,24 +99,125 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final picProfile = await FilePicker.platform.pickFiles(
-                          allowMultiple: false,
-                          type: FileType.custom,
-                          allowedExtensions: ['png', 'jpg'],
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          backgroundColor: backColor,
+                          builder: (builder) => Container(
+                            decoration: BoxDecoration(
+                              color: backColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: textColor,
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(
+                                      0, 1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            height: 60,
+                            width: _screenWidth,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final image = await ImagePicker()
+                                        .pickImage(source: ImageSource.camera);
+                                    setState(() {
+                                      coverPicture = File(image!.path);
+                                      coverPictureName =
+                                          image.path.split("/").last;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.camera,
+                                        size: 30,
+                                        color: backColor,
+                                      ),
+                                      SizedBox(
+                                        width: _screenWidth * .03,
+                                      ),
+                                      Text(
+                                        "Camera",
+                                        style: TextStyle(
+                                          color: backColor,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 5,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.deepPurpleAccent[700],
+                                  height: 55,
+                                  width: 2,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    final image = await ImagePicker()
+                                        .pickImage(source: ImageSource.gallery);
+                                    setState(() {
+                                      coverPicture = File(image!.path);
+                                      coverPictureName =
+                                          image.path.split("/").last;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.photo_album,
+                                        size: 30,
+                                        color: backColor,
+                                      ),
+                                      SizedBox(
+                                        width: _screenWidth * .03,
+                                      ),
+                                      Text(
+                                        "Gallery",
+                                        style: TextStyle(
+                                          color: backColor,
+                                          fontSize: 15,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 5,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
-                        if (picProfile == null) {
-                          return;
-                        }
-
-                        final pickedProfile = picProfile.files.first;
-                        // OpenFile.open(pickedProfile.path);
-                        setState(() {
-                          coverPicture = pickedProfile.name;
-                          coverPicturePath = pickedProfile.path!;
-                        });
                       },
                       child: Text(
-                        "Select a cover picture",
+                        "Select a profile picture",
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -129,7 +232,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                       ),
                     ),
                     Text(
-                      coverPicture,
+                      coverPictureName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: textColor,
@@ -165,7 +268,35 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {                        
+                        if (coverPicture != null) {
+                          final res = await HttpConnectUser()
+                              .addProfile(coverPicture);
+                          if (res["message"] == "New profile picture added.") {
+                            Navigator.pushNamed(context, "/add-cover");
+                            MotionToast.success(
+                              position: MOTION_TOAST_POSITION.top,
+                              animationType: ANIMATION.fromTop,
+                              toastDuration: Duration(seconds: 2),
+                              description: res["message"],
+                            ).show(context);
+                          } else {
+                            MotionToast.error(
+                              position: MOTION_TOAST_POSITION.top,
+                              animationType: ANIMATION.fromTop,
+                              toastDuration: Duration(seconds: 2),
+                              description: res["message"],
+                            ).show(context);
+                          }
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 1),
+                            description: "Select a cover picture first.",
+                          ).show(context);
+                        }
+                      },
                       child: Text(
                         "Next",
                         style: TextStyle(
@@ -182,29 +313,6 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                       ),
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.watch(themeController)
-                        ? ref.read(themeController.notifier).lightTheme()
-                        : ref.read(themeController.notifier).darkTheme();
-
-                    ref.watch(themeController)
-                        ? MotionToast.success(
-                                description:
-                                    "Light theme applied. Restart the application to apply the theme properly.")
-                            .show(context)
-                        : MotionToast.success(
-                                description:
-                                    "Dark theme applied. Restart the application to apply the theme properly.")
-                            .show(context);
-                  },
-                  child: ref.watch(themeController)
-                      ? Text("Light Theme")
-                      : Text("Dark Theme"),
                 ),
               ],
             ),

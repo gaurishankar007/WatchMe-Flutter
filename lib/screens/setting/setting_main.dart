@@ -1,7 +1,10 @@
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -47,13 +50,48 @@ class _SettingState extends State<Setting> {
           ),
           elevation: 0,
         ),
-        body: ElevatedButton(
-          onPressed: () {
-            Token().removeToken();
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/login', (Route<dynamic> route) => false);
-          },
-          child: Text("Log Out"),
+        body: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Token().removeToken();
+                HttpConnectUser.token = "";
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login', (Route<dynamic> route) => false);
+              },
+              child: Text("Log Out"),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ref.watch(themeController)
+                    ? ref.read(themeController.notifier).lightTheme()
+                    : ref.read(themeController.notifier).darkTheme();
+
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/home', (Route<dynamic> route) => false);
+
+                ref.watch(themeController)
+                    ? MotionToast.info(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            description:
+                                "Light theme applied. Restart the application to apply the theme properly.")
+                        .show(context)
+                    : MotionToast.info(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            description:
+                                "Dark theme applied. Restart the application to apply the theme properly.")
+                        .show(context);
+              },
+              child: ref.watch(themeController)
+                  ? Text("Light Theme")
+                  : Text("Dark Theme"),
+            ),
+          ],
         ),
       );
     });

@@ -53,7 +53,7 @@ class _ProfileMainState extends State<ProfileMain> {
                 label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_a_photo_rounded),
+                icon: Icon(Icons.camera),
                 label: "",
               ),
               BottomNavigationBarItem(

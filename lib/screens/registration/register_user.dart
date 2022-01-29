@@ -1,8 +1,14 @@
+import 'dart:math';
+
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/model/user.dart';
+import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class RegisterUser extends StatefulWidget {
   const RegisterUser({Key? key}) : super(key: key);
@@ -15,7 +21,7 @@ class _RegisterUserState extends State<RegisterUser> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String username = "", password = "", email = "", phoneNumber = "";
+  String username = "", password = "", email = "", phone = "";
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +251,7 @@ class _RegisterUserState extends State<RegisterUser> {
                   ),
                   TextFormField(
                     onSaved: (value) {
-                      phoneNumber = value!;
+                      phone = value!;
                     },
                     keyboardType: TextInputType.number,
                     validator: MultiValidator([
@@ -295,15 +301,43 @@ class _RegisterUserState extends State<RegisterUser> {
                     height: 25,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        Navigator.pushNamed(context, "/AddProfile");
+
+                        final responseData =
+                            await HttpConnectUser().registerUser(
+                          UserRegister(
+                              username: username,
+                              password: password,
+                              email: email,
+                              phone: phone),
+                        );
+
+                        if (responseData.containsKey("token")) {
+                          Token().setToken(responseData["token"]);
+                          HttpConnectUser.token = responseData["token"];
+                          Navigator.pushNamed(context, "/add-profile");
+                          MotionToast.success(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        }
                       } else {
                         MotionToast.error(
-                          title: "SignUp Failed :(",
-                          description: "Fill up the form correctly.",
-                          toastDuration: Duration(seconds: 3),
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
+                          description: "Login Failed :(",
                         ).show(context);
                       }
                     },

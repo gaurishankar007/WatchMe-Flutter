@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Token {
@@ -9,6 +10,7 @@ class Token {
   Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "";
+    HttpConnectUser.token = token;
     return token;
   }
 

@@ -53,7 +53,7 @@ class _SearchState extends State<Search> {
                 label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_a_photo_rounded),
+                icon: Icon(Icons.camera),
                 label: "",
               ),
               BottomNavigationBarItem(

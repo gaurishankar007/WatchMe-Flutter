@@ -2,9 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:column_example/http/http_user.dart';
-import 'package:column_example/model/student.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class HttpConnectStudent {

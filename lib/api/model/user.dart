@@ -2,7 +2,7 @@ class UserRegister {
   final String? username;
   final String? password;
   final String? email;
-  final int? phone;
+  final String? phone;
 
   UserRegister(
       {this.username,

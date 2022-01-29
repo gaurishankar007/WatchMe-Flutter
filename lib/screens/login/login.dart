@@ -1,13 +1,12 @@
 import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/model/user.dart';
 import 'package:assignment/api/token.dart';
-import 'package:assignment/screens/home.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginUser extends StatefulWidget {
   const LoginUser({Key? key}) : super(key: key);
@@ -24,11 +23,11 @@ class _LoginUserState extends State<LoginUser> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Token().getToken().then((value) {
       if (value.isNotEmpty) {
-        Navigator.pushNamed(context, "/home");
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
       }
     });
   }
@@ -179,7 +178,7 @@ class _LoginUserState extends State<LoginUser> {
                     width: double.maxFinite,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, "/ForgotPassword");
+                        Navigator.pushNamed(context, "/forgot-password");
                       },
                       child: Text(
                         "Forgot password?",
@@ -206,11 +205,14 @@ class _LoginUserState extends State<LoginUser> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
 
-                        final responseData = await HttpConnectUser()
-                            .loginUser(usernameEmail, password);
+                        final responseData = await HttpConnectUser().loginUser(
+                          UserLogin(
+                              usernameEmail: usernameEmail, password: password),
+                        );
 
                         if (responseData.containsKey("token")) {
                           Token().setToken(responseData["token"]);
+                          HttpConnectUser.token = responseData["token"];
                           Navigator.pushNamed(context, "/home");
                         } else {
                           MotionToast.error(
@@ -249,7 +251,7 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, "/RegisterUser");
+                      Navigator.pushNamed(context, "/register-user");
                     },
                     child: Text(
                       "Create an account",
