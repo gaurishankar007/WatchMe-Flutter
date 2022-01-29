@@ -216,7 +216,7 @@ class _LoginUserState extends State<LoginUser> {
                           MotionToast.error(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
-                            toastDuration: Duration(seconds: 1),
+                            toastDuration: Duration(seconds: 2),
                             description: responseData["message"],
                           ).show(context);
                         }
