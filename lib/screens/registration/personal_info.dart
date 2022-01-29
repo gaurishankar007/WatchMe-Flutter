@@ -145,7 +145,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           value.length < 2) {
                         return "Invalid last name!";
                       } else if (value.contains(" ")) {
-                        return "Whitespaces not allowed!";
+                        return "Whitespace is not allowed!";
                       }
                       return null;
                     },
@@ -347,7 +347,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "/AddAddress");
+                          Navigator.pushNamed(context, "/add-address");
                         },
                         child: Text(
                           "Skip",

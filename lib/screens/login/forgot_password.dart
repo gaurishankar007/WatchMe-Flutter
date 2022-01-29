@@ -56,7 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: Column(
                 children: [
                   Text(
-                    "Generate Reset Link",
+                    "Generate Reset Token",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: textColor,
@@ -150,7 +150,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
-                      helperText: "Excludes whitespaces around the password.",
+                      helperText: "Excludes whitespace around the password.",
                       helperStyle: TextStyle(
                         color: textColor,
                       ),

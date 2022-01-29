@@ -2,17 +2,17 @@ import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationUnseen extends StatefulWidget {
-  const NotificationUnseen({Key? key}) : super(key: key);
+class Camera extends StatefulWidget {
+  const Camera({ Key? key }) : super(key: key);
 
   @override
-  _NotificationUnseenState createState() => _NotificationUnseenState();
+  _CameraState createState() => _CameraState();
 }
 
-class _NotificationUnseenState extends State<NotificationUnseen> {
+class _CameraState extends State<Camera> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  int activeNav = 3;
+  int activeNav = 2;
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;

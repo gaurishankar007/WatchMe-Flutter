@@ -81,6 +81,222 @@ class _AddressState extends State<Address> {
                     height: 20,
                   ),
                   Text(
+                    "Permanent",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 20,
+                      fontFamily: "Laila-Bold",
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Country:",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: textColor,
+                              side: BorderSide(
+                                color: textColor,
+                              ),
+                              padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                            ),
+                            onPressed: () {
+                              showCountryPicker(
+                                context: context,
+                                showPhoneCode: true,
+                                onSelect: (Country country) {
+                                  setState(() {
+                                    String countryName = "";
+                                    List<String> countryDetail =
+                                        country.displayName.split(" ");
+                                    for (int i = 0;
+                                        i < countryDetail.length;
+                                        i++) {
+                                      if (i < (countryDetail.length - 2)) {
+                                        countryName += countryDetail[i] + " ";
+                                      }
+                                    }
+                                    pCountry = countryName.trim();
+                                  });
+                                },
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  pCountry,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pState = value!.trim();
+                    },
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "State  is required!"),
+                    ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: "State",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
+                      hintText: "Enter state here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pCity = value!.trim();
+                    },
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "City  is required!"),
+                    ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: "City",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
+                      hintText: "Enter city here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      pStreet = value!.trim();
+                    },
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Street  is required!"),
+                    ]),
+                    style: TextStyle(
+                      color: textColor,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: "Street",
+                      labelStyle: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
+                      ),
+                      hintText: "Enter street here.....",
+                      hintStyle: TextStyle(
+                        color: textColor,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: textColor,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
                     "Temporary",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -296,222 +512,6 @@ class _AddressState extends State<Address> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Permanent",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 20,
-                      fontFamily: "Laila-Bold",
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Country:",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              primary: textColor,
-                              side: BorderSide(
-                                color: textColor,
-                              ),
-                              padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                            ),
-                            onPressed: () {
-                              showCountryPicker(
-                                context: context,
-                                showPhoneCode: true,
-                                onSelect: (Country country) {
-                                  setState(() {
-                                    String countryName = "";
-                                    List<String> countryDetail =
-                                        country.displayName.split(" ");
-                                    for (int i = 0;
-                                        i < countryDetail.length;
-                                        i++) {
-                                      if (i < (countryDetail.length - 2)) {
-                                        countryName += countryDetail[i] + " ";
-                                      }
-                                    }
-                                    pCountry = countryName.trim();
-                                  });
-                                },
-                              );
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  pCountry,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_sharp,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    onSaved: (value) {
-                      pState = value!.trim();
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "State  is required!"),
-                    ]),
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "State",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter state here.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    onSaved: (value) {
-                      pCity = value!.trim();
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "City  is required!"),
-                    ]),
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "City",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter city here.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    onSaved: (value) {
-                      pStreet = value!.trim();
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Street  is required!"),
-                    ]),
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "Street",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter street here.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
                     height: 25,
                   ),
                   Row(
@@ -540,7 +540,7 @@ class _AddressState extends State<Address> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            Navigator.pushNamed(context, "/AddAddress");
+                            Navigator.pushNamed(context, "/home");
                           } else {
                             MotionToast.error(
                               title: "Submit Failed :(",

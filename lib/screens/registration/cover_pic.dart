@@ -77,7 +77,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                         child: Image(
                           height: 150,
                           width: _screenWidth * .90,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           image: AssetImage(coverPicturePath),
                         ),
                       )
@@ -146,7 +146,8 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, "/AddPersonalInformation");
+                        Navigator.pushNamed(
+                            context, "/add-personal-information");
                       },
                       child: Text(
                         "Skip",
@@ -181,6 +182,29 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.watch(themeController)
+                        ? ref.read(themeController.notifier).lightTheme()
+                        : ref.read(themeController.notifier).darkTheme();
+
+                    ref.watch(themeController)
+                        ? MotionToast.success(
+                                description:
+                                    "Light theme applied. Restart the application to apply the theme properly.")
+                            .show(context)
+                        : MotionToast.success(
+                                description:
+                                    "Dark theme applied. Restart the application to apply the theme properly.")
+                            .show(context);
+                  },
+                  child: ref.watch(themeController)
+                      ? Text("Light Theme")
+                      : Text("Dark Theme"),
                 ),
               ],
             ),

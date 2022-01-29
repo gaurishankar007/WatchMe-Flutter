@@ -15,6 +15,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
+  int activeNav = 0;
+
   List posts = [
     [
       "user1",
@@ -75,15 +77,28 @@ class _HomeState extends State<Home> {
           iconTheme: IconThemeData(
             color: textColor,
           ),
+          automaticallyImplyLeading: false,
           backgroundColor: backColor,
           title: Text(
             "WatchMe",
             style: TextStyle(
               color: textColor,
-              fontSize: 30,
+              fontSize: 20,
               fontFamily: "BerkshireSwash-Regular",
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/setting");
+              },
+              icon: Icon(
+                Icons.settings,
+                size: 25,
+                color: textColor,
+              ),
+            )
+          ],
           shape: Border(
             bottom: BorderSide(
               color: textColor,
@@ -126,7 +141,7 @@ class _HomeState extends State<Home> {
                             builder: (builder) => Container(
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
-                                horizontal: _screenWidth*.20,
+                                horizontal: _screenWidth * .20,
                               ),
                               decoration: BoxDecoration(
                                 color: backColor,
@@ -348,15 +363,17 @@ class _HomeState extends State<Home> {
                     onPressed: () {
                       final snackBar = SnackBar(
                         backgroundColor: backColor,
-                        duration: Duration(minutes: 30),
+                        duration: Duration(minutes: 5),
+                        dismissDirection: DismissDirection.startToEnd,
+                        shape: Border(
+                          top: BorderSide(
+                            color: textColor,
+                            width: .1,
+                          ),
+                        ),
                         content: ListTile(
                           contentPadding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          leading: CircleAvatar(
-                            radius: 18,
-                            backgroundImage:
-                                AssetImage("images/defaultProfile.png"),
+                            horizontal: 2,
                           ),
                           title: Form(
                             key: _formKey,
@@ -377,16 +394,6 @@ class _HomeState extends State<Home> {
                                 ),
                                 isDense: true,
                                 contentPadding: EdgeInsets.zero,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: textColor,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: textColor,
-                                  ),
-                                ),
                               ),
                             ),
                           ),
@@ -424,6 +431,72 @@ class _HomeState extends State<Home> {
               ),
             );
           },
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: textColor,
+                spreadRadius: 1,
+                blurRadius: 5,
+                offset: Offset(0, 1), // changes position of shadow
+              ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add_a_photo_rounded),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: "",
+              ),
+              BottomNavigationBarItem(
+                icon: CircleAvatar(
+                  radius: 16,
+                  backgroundColor: (activeNav == 4)
+                      ? Colors.deepPurpleAccent[700]
+                      : textColor,
+                  child: CircleAvatar(
+                    radius: 14,
+                    backgroundImage: AssetImage("images/defaultProfile.png"),
+                  ),
+                ),
+                label: "",
+              ),
+            ],
+            currentIndex: activeNav,
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 0,
+            unselectedFontSize: 0,
+            backgroundColor: backColor,
+            iconSize: 35,
+            selectedItemColor: Colors.deepPurpleAccent[700],
+            unselectedItemColor: textColor,
+            onTap: (int navIndex) {
+              if (navIndex == 0 && activeNav != navIndex) {
+                Navigator.pushNamed(context, "/home");
+              } else if (navIndex == 1 && activeNav != navIndex) {
+                Navigator.pushNamed(context, "/search");
+              } else if (navIndex == 2 && activeNav != navIndex) {
+                Navigator.pushNamed(context, "/camera");
+              } else if (navIndex == 3 && activeNav != navIndex) {
+                Navigator.pushNamed(context, "/notification");
+              } else if (navIndex == 4 && activeNav != navIndex) {
+                Navigator.pushNamed(context, "/profile");
+              }
+            },
+          ),
         ),
       );
     });

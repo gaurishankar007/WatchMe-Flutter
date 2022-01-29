@@ -1,8 +1,11 @@
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class LoginUser extends StatefulWidget {
   const LoginUser({Key? key}) : super(key: key);
@@ -15,7 +18,7 @@ class _LoginUserState extends State<LoginUser> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String username = "", password = "";
+  String usernameEmail = "", password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _LoginUserState extends State<LoginUser> {
                   ),
                   TextFormField(
                     onSaved: (value) {
-                      username = value!;
+                      usernameEmail = value!;
                     },
                     validator: MultiValidator([
                       RequiredValidator(
@@ -186,20 +189,30 @@ class _LoginUserState extends State<LoginUser> {
                     height: 5,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        Navigator.pushNamed(context, "/Home");
+
+                        final responseData = await HttpConnectUser()
+                            .loginUser(usernameEmail, password);
+
+                        if (responseData.containsKey("token")) {
+                          Token().setToken(responseData["message"]);
+                          Navigator.pushNamed(context, "/home");
+                        } else {
+                          MotionToast.error(
+                            animationType: ANIMATION.fromTop,
+                            description: responseData["message"],
+                          ).show(context);
+                        }
                       } else {
                         MotionToast.error(
-                          title: "Login Failed :(",
-                          description: "",
-                          toastDuration: Duration(seconds: 3),
+                          description: "Login Failed :(",
                         ).show(context);
                       }
                     },
                     child: Text(
-                      "Login",
+                      "Log In",
                       style: TextStyle(
                         fontSize: 15,
                       ),

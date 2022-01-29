@@ -156,7 +156,7 @@ class _RegisterUserState extends State<RegisterUser> {
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
-                      helperText: "Excludes whitespaces around the password.",
+                      helperText: "Excludes whitespace around the password.",
                       helperStyle: TextStyle(
                         color: textColor,
                       ),

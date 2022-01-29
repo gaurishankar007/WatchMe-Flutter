@@ -69,7 +69,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 5,
                   ),
                   Text(
-                    "The password reset link is sent to your account's email. Copy the link and paste here. You have 3 minutes left otherwise the link will expire.",
+                    "A token is sent to your account's email. Copy the token and paste here. You have 3 minutes left otherwise the token will expire and you have to generate it again.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: textColor,
@@ -84,22 +84,22 @@ class _ResetPasswordState extends State<ResetPassword> {
                       link = value;
                     },
                     validator: MultiValidator([
-                      RequiredValidator(errorText: "Reset link is required!"),
+                      RequiredValidator(errorText: "Token is required!"),
                     ]),
                     style: TextStyle(
                       color: textColor,
                     ),
                     decoration: InputDecoration(
-                      labelText: "Reset Link",
+                      labelText: "Token",
                       labelStyle: TextStyle(
                         color: textColor,
                         fontFamily: "Laila-Bold",
                       ),
-                      hintText: "Enter the password reset link.....",
+                      hintText: "Enter the password reset token.....",
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
-                      helperText: "Only correct link will reset your password.",
+                      helperText: "Only correct token will reset your password.",
                       helperStyle: TextStyle(
                         color: textColor,
                       ),

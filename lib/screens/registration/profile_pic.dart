@@ -136,7 +136,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, "/AddCover");
+                        Navigator.pushNamed(context, "/add-cover");
                       },
                       child: Text(
                         "Skip",
@@ -171,19 +171,6 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       ),
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.watch(themeController)
-                        ? ref.read(themeController.notifier).lightTheme()
-                        : ref.read(themeController.notifier).darkTheme();
-                  },
-                  child: ref.watch(themeController)
-                      ? Text("Light Theme")
-                      : Text("Dark Theme"),
                 ),
               ],
             ),
