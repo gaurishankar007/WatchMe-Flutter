@@ -1,3 +1,4 @@
+import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,6 +49,7 @@ class _SettingState extends State<Setting> {
         ),
         body: ElevatedButton(
           onPressed: () {
+            Token().removeToken();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/login', (Route<dynamic> route) => false);
           },

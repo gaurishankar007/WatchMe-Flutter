@@ -6,7 +6,7 @@ class Token {
     prefs.setString("token", token);
   }
 
-  get getToken async {
+  Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token") ?? "";
     return token;

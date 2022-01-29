@@ -1,11 +1,13 @@
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/token.dart';
+import 'package:assignment/screens/home.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginUser extends StatefulWidget {
   const LoginUser({Key? key}) : super(key: key);
@@ -19,6 +21,17 @@ class _LoginUserState extends State<LoginUser> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
   String usernameEmail = "", password = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Token().getToken().then((value) {
+      if (value.isNotEmpty) {
+        Navigator.pushNamed(context, "/home");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,16 +210,21 @@ class _LoginUserState extends State<LoginUser> {
                             .loginUser(usernameEmail, password);
 
                         if (responseData.containsKey("token")) {
-                          Token().setToken(responseData["message"]);
+                          Token().setToken(responseData["token"]);
                           Navigator.pushNamed(context, "/home");
                         } else {
                           MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 1),
                             description: responseData["message"],
                           ).show(context);
                         }
                       } else {
                         MotionToast.error(
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
                           description: "Login Failed :(",
                         ).show(context);
                       }
