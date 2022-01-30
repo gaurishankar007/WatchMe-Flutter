@@ -78,13 +78,13 @@ class _SettingState extends State<Setting> {
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
                             description:
-                                "Light theme applied. Restart the application to apply the theme properly.")
+                                "Light theme applied.")
                         .show(context)
                     : MotionToast.info(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
                             description:
-                                "Dark theme applied. Restart the application to apply the theme properly.")
+                                "Dark theme applied.")
                         .show(context);
               },
               child: ref.watch(themeController)

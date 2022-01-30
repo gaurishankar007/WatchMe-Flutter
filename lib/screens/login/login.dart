@@ -227,7 +227,7 @@ class _LoginUserState extends State<LoginUser> {
                           position: MOTION_TOAST_POSITION.top,
                           animationType: ANIMATION.fromTop,
                           toastDuration: Duration(seconds: 1),
-                          description: "Login Failed :(",
+                          description: "Login failed :(",
                         ).show(context);
                       }
                     },

@@ -337,7 +337,7 @@ class _RegisterUserState extends State<RegisterUser> {
                           position: MOTION_TOAST_POSITION.top,
                           animationType: ANIMATION.fromTop,
                           toastDuration: Duration(seconds: 1),
-                          description: "Login Failed :(",
+                          description: "Sign up failed :(",
                         ).show(context);
                       }
                     },

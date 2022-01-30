@@ -104,6 +104,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                           context: context,
                           backgroundColor: backColor,
                           builder: (builder) => Container(
+                            padding: EdgeInsets.only(top: 5),
                             decoration: BoxDecoration(
                               color: backColor,
                               borderRadius: BorderRadius.only(
@@ -120,96 +121,113 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                 ),
                               ],
                             ),
-                            height: 60,
+                            height: 80,
                             width: _screenWidth,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            child: Column(
                               children: [
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    final image = await ImagePicker()
-                                        .pickImage(source: ImageSource.camera);
-                                    setState(() {
-                                      coverPicture = File(image!.path);
-                                      coverPictureName =
-                                          image.path.split("/").last;
-                                    });
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.camera,
-                                        size: 30,
-                                        color: backColor,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        final image = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.camera);
+                                        setState(() {
+                                          coverPicture = File(image!.path);
+                                          coverPictureName =
+                                              image.path.split("/").last;
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.camera,
+                                            size: 30,
+                                            color: backColor,
+                                          ),
+                                          SizedBox(
+                                            width: _screenWidth * .03,
+                                          ),
+                                          Text(
+                                            "Camera",
+                                            style: TextStyle(
+                                              color: backColor,
+                                              fontSize: 15,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: _screenWidth * .03,
-                                      ),
-                                      Text(
-                                        "Camera",
-                                        style: TextStyle(
-                                          color: backColor,
-                                          fontSize: 15,
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 5),
+                                        primary: Colors.deepPurpleAccent[700],
+                                        elevation: 5,
+                                        shadowColor: Colors.deepPurpleAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 5),
-                                    primary: Colors.deepPurpleAccent[700],
-                                    elevation: 5,
-                                    shadowColor: Colors.deepPurpleAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                      ),
                                     ),
-                                  ),
+                                    Container(
+                                      color: Colors.deepPurpleAccent[700],
+                                      height: 55,
+                                      width: 4,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        final image = await ImagePicker()
+                                            .pickImage(
+                                                source: ImageSource.gallery);
+                                        setState(() {
+                                          coverPicture = File(image!.path);
+                                          coverPictureName =
+                                              image.path.split("/").last;
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.photo_album,
+                                            size: 30,
+                                            color: backColor,
+                                          ),
+                                          SizedBox(
+                                            width: _screenWidth * .03,
+                                          ),
+                                          Text(
+                                            "Gallery",
+                                            style: TextStyle(
+                                              color: backColor,
+                                              fontSize: 15,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 5),
+                                        primary: Colors.deepPurpleAccent[700],
+                                        elevation: 5,
+                                        shadowColor: Colors.deepPurpleAccent,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Container(
                                   color: Colors.deepPurpleAccent[700],
-                                  height: 55,
-                                  width: 2,
-                                ),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    final image = await ImagePicker()
-                                        .pickImage(source: ImageSource.gallery);
-                                    setState(() {
-                                      coverPicture = File(image!.path);
-                                      coverPictureName =
-                                          image.path.split("/").last;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.photo_album,
-                                        size: 30,
-                                        color: backColor,
-                                      ),
-                                      SizedBox(
-                                        width: _screenWidth * .03,
-                                      ),
-                                      Text(
-                                        "Gallery",
-                                        style: TextStyle(
-                                          color: backColor,
-                                          fontSize: 15,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 5),
-                                    primary: Colors.deepPurpleAccent[700],
-                                    elevation: 5,
-                                    shadowColor: Colors.deepPurpleAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
+                                  width: _screenWidth * .30,
+                                  height: 5,
                                 ),
                               ],
                             ),
@@ -217,7 +235,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                         );
                       },
                       child: Text(
-                        "Select a profile picture",
+                        "Select a cover picture",
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -268,12 +286,13 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () async {                        
+                      onPressed: () async {
                         if (coverPicture != null) {
-                          final res = await HttpConnectUser()
-                              .addProfile(coverPicture);
-                          if (res["message"] == "New profile picture added.") {
-                            Navigator.pushNamed(context, "/add-cover");
+                          final res =
+                              await HttpConnectUser().addCover(coverPicture);
+                          if (res["message"] == "New cover picture added.") {
+                            Navigator.pushNamed(
+                                context, "/add-personal-information");
                             MotionToast.success(
                               position: MOTION_TOAST_POSITION.top,
                               animationType: ANIMATION.fromTop,

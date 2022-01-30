@@ -21,21 +21,21 @@ class _HomeState extends State<Home> {
   List posts = [
     [
       "user1",
-      ["defaultProfile.png", "defaultCover.jpg"],
+      ["defaultProfile.png", "defaultCover.png"],
       "Flying to the Moon.",
       "Anyone interestied flying to the Moon with me, then they can contact me. It will be really relly fun.",
       285
     ],
     [
       "user2",
-      ["defaultProfile.png", "defaultCover.jpg"],
+      ["defaultProfile.png", "defaultCover.png"],
       "Flying to the Moon.",
       "Anyone interestied flying to the Moon with me, then they can contact me. It will be really relly fun.",
       360
     ],
     [
       "user3",
-      ["defaultProfile.png", "defaultCover.jpg"],
+      ["defaultProfile.png", "defaultCover.png"],
       "Flying to the Moon.",
       "Anyone interestied flying to the Moon with me, then they can contact me. It will be really relly fun.",
       145
@@ -242,7 +242,7 @@ class _HomeState extends State<Home> {
                       return Builder(builder: (BuildContext context) {
                         return Image(
                           image: AssetImage("images/$i"),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         );
                       });
                     }).toList(),
@@ -368,12 +368,14 @@ class _HomeState extends State<Home> {
                   TextButton(
                     onPressed: () {
                       final _formKey = GlobalKey<FormState>();
+                      final _focusNode = FocusNode();
+                      double containerPadding = 0;
+
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
                         builder: (builder) => Container(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          padding: EdgeInsets.only(bottom: containerPadding),
                           decoration: BoxDecoration(
                             color: backColor,
                           ),
@@ -383,25 +385,35 @@ class _HomeState extends State<Home> {
                             ),
                             title: Form(
                               key: _formKey,
-                              child: TextFormField(
-                                autofocus: true,
-                                maxLines: 2,
-                                keyboardType: TextInputType.multiline,
-                                onSaved: (value) {},
-                                validator: MultiValidator([
-                                  RequiredValidator(
-                                      errorText: "Empty field!"),
-                                ]),
-                                style: TextStyle(
-                                  color: textColor,
-                                ),
-                                decoration: InputDecoration(
-                                  hintText: "   Add a comment....",
-                                  hintStyle: TextStyle(
+                              child: Focus(
+                                onFocusChange: (value) {
+                                  if (value) {
+                                    containerPadding = 300;
+                                  } else {
+                                    containerPadding = 0;
+                                  }
+                                },
+                                child: TextFormField(
+                                  autofocus: true,
+                                  maxLines: 2,
+                                  keyboardType: TextInputType.multiline,
+                                  onSaved: (value) {},
+                                  validator: MultiValidator([
+                                    RequiredValidator(
+                                        errorText: "Empty field!"),
+                                  ]),
+                                  style: TextStyle(
                                     color: textColor,
                                   ),
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.zero,
+                                  decoration: InputDecoration(
+                                    hintText: "   Add a comment....",
+                                    hintStyle: TextStyle(
+                                      color: textColor,
+                                    ),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: InputBorder.none,
+                                  ),
                                 ),
                               ),
                             ),
@@ -411,6 +423,7 @@ class _HomeState extends State<Home> {
                               },
                               icon: Icon(
                                 Icons.send_rounded,
+                                size: 35,
                                 color: Colors.deepPurpleAccent[700],
                               ),
                             ),

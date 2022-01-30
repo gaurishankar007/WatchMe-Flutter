@@ -1,8 +1,11 @@
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class PersonalInformation extends StatefulWidget {
   const PersonalInformation({Key? key}) : super(key: key);
@@ -365,15 +368,42 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            Navigator.pushNamed(context, "/AddAddress");
+
+                            final responseData =
+                                await HttpConnectUser().addPersonalInfo(
+                              PersonalInfoRegister(
+                                  firstname: firstName,
+                                  lastname: lastName,
+                                  gender: gender,
+                                  birthdate: birthdate,
+                                  biography: biography),
+                            );
+
+                            if (responseData["message"] == "Profile added.") {
+                              Navigator.pushNamed(context, "/add-address");
+                              MotionToast.success(
+                                position: MOTION_TOAST_POSITION.top,
+                                animationType: ANIMATION.fromTop,
+                                toastDuration: Duration(seconds: 2),
+                                description: responseData["message"],
+                              ).show(context);
+                            } else {
+                              MotionToast.error(
+                                position: MOTION_TOAST_POSITION.top,
+                                animationType: ANIMATION.fromTop,
+                                toastDuration: Duration(seconds: 2),
+                                description: responseData["message"],
+                              ).show(context);
+                            }
                           } else {
                             MotionToast.error(
-                              title: "Submit Failed :(",
-                              description: "",
-                              toastDuration: Duration(seconds: 3),
+                              position: MOTION_TOAST_POSITION.top,
+                              animationType: ANIMATION.fromTop,
+                              toastDuration: Duration(seconds: 1),
+                              description: "Validation error.",
                             ).show(context);
                           }
                         },
