@@ -50,3 +50,10 @@ class AddressRegister {
     this.tStreet,
   });
 }
+
+class passResetToken {
+  final String? email;
+  final String? newPassword;
+
+  passResetToken({this.email, this.newPassword});
+}

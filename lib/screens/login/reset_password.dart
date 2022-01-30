@@ -1,8 +1,11 @@
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/main.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -15,7 +18,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String link = "";
+  String resetToken = "";
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +75,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     "A token is sent to your account's email. Copy the token and paste here. You have 3 minutes left otherwise the token will expire and you have to generate it again.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: textColor,
+                      color: Colors.deepPurpleAccent[700],
                       fontSize: 15,
                     ),
                   ),
@@ -81,7 +84,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   TextFormField(
                     onChanged: (value) {
-                      link = value;
+                      resetToken = value;
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Token is required!"),
@@ -99,7 +102,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
-                      helperText: "Only correct token will reset your password.",
+                      helperText: "Don't use whitespace around the token.",
                       helperStyle: TextStyle(
                         color: textColor,
                       ),
@@ -132,14 +135,38 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 25,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, "/Login");
+                        _formKey.currentState!.save();
+
+                        final responseData =
+                            await HttpConnectUser().resetPassword(resetToken);
+
+                        if (responseData["message"] ==
+                            "Your password has been reset.") {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/login', (Route<dynamic> route) => false);
+
+                          MotionToast.success(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        }
                       } else {
                         MotionToast.error(
-                          title: "Submit Failed :(",
-                          description: "",
-                          toastDuration: Duration(seconds: 3),
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
+                          description: "Validation error.",
                         ).show(context);
                       }
                     },

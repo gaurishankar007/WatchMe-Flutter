@@ -1,8 +1,11 @@
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -229,14 +232,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     height: 25,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushNamed(context, "/ResetPassword");
+                        _formKey.currentState!.save();
+
+                        final responseData =
+                            await HttpConnectUser().generateResetToken(
+                          passResetToken(
+                              email: email, newPassword: newPassword),
+                        );
+
+                        if (responseData["message"] == "Token was send.") {
+                          Navigator.pushNamed(context, "/reset-password");
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        }
                       } else {
                         MotionToast.error(
-                          title: "Submit Failed :(",
-                          description: "",
-                          toastDuration: Duration(seconds: 3),
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
+                          description: "Validation error.",
                         ).show(context);
                       }
                     },

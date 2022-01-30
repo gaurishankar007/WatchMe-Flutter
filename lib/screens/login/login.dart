@@ -75,6 +75,15 @@ class _LoginUserState extends State<LoginUser> {
               key: _formKey,
               child: Column(
                 children: [
+                  Text(
+                    "Welcome to WatchMe",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 25,
+                      fontFamily: "Laila-Bold",
+                    ),
+                  ),
                   SizedBox(
                     height: 20,
                   ),

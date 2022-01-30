@@ -184,4 +184,40 @@ class HttpConnectUser {
     }
     return {"message": "Error Occured."};
   }
+
+  Future<Map> generateResetToken(passResetToken user) async {
+    try {
+      Map<String, dynamic> userData = {
+        "email": user.email,
+        "newPass": user.newPassword,
+      };
+
+      final response = await post(
+          Uri.parse(baseurl + "user/generatePassResetToken"),
+          body: userData);
+          
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> resetPassword(String resetToken) async {
+    try {
+      final response =
+          await put(Uri.parse(baseurl + "user/passReset/" + resetToken));
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
 }

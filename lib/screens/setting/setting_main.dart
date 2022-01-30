@@ -50,48 +50,175 @@ class _SettingState extends State<Setting> {
           ),
           elevation: 0,
         ),
-        body: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Token().removeToken();
-                HttpConnectUser.token = "";
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login', (Route<dynamic> route) => false);
-              },
-              child: Text("Log Out"),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                ref.watch(themeController)
-                    ? ref.read(themeController.notifier).lightTheme()
-                    : ref.read(themeController.notifier).darkTheme();
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.person,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "User information",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.person_pin_rounded,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Personal information",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.person_pin_circle_sharp,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Address information",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {
+                  ref.watch(themeController)
+                      ? ref.read(themeController.notifier).lightTheme()
+                      : ref.read(themeController.notifier).darkTheme();
 
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/home', (Route<dynamic> route) => false);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/home', (Route<dynamic> route) => false);
 
-                ref.watch(themeController)
-                    ? MotionToast.info(
-                            position: MOTION_TOAST_POSITION.top,
-                            animationType: ANIMATION.fromTop,
-                            description:
-                                "Light theme applied.")
-                        .show(context)
-                    : MotionToast.info(
-                            position: MOTION_TOAST_POSITION.top,
-                            animationType: ANIMATION.fromTop,
-                            description:
-                                "Dark theme applied.")
-                        .show(context);
-              },
-              child: ref.watch(themeController)
-                  ? Text("Light Theme")
-                  : Text("Dark Theme"),
-            ),
-          ],
+                  ref.watch(themeController)
+                      ? MotionToast.info(
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          description: "Light Theme",
+                        ).show(context)
+                      : MotionToast.info(
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          description: "Dark Theme",
+                        ).show(context);
+                },
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: ref.watch(themeController)
+                      ? Icon(
+                          Icons.light_mode_sharp,
+                          size: 30,
+                          color: textColor,
+                        )
+                      : Icon(
+                          Icons.dark_mode_sharp,
+                          size: 30,
+                          color: textColor,
+                        ),
+                  title: ref.watch(themeController)
+                      ? Text(
+                          "Light Theme",
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 18,
+                          ),
+                        )
+                      : Text(
+                          "Dark Theme",
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {
+                  Token().removeToken();
+                  HttpConnectUser.token = "";
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/login', (Route<dynamic> route) => false);
+                },
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.logout_sharp,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Log Out",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });
