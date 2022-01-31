@@ -11,7 +11,13 @@ import 'package:assignment/screens/registration/personal_info.dart';
 import 'package:assignment/screens/registration/profile_pic.dart';
 import 'package:assignment/screens/registration/register_user.dart';
 import 'package:assignment/screens/search.dart';
+import 'package:assignment/screens/setting/address_setting.dart';
+import 'package:assignment/screens/setting/cover_setting.dart';
+import 'package:assignment/screens/setting/password_setting.dart';
+import 'package:assignment/screens/setting/personal_setting.dart';
+import 'package:assignment/screens/setting/profile_setting.dart';
 import 'package:assignment/screens/setting/setting_main.dart';
+import 'package:assignment/screens/setting/user_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +40,7 @@ class _WatchMeState extends State<WatchMe> {
       theme: ThemeData(
         fontFamily: "Laila-Medium",
       ),
-      initialRoute: '/setting',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginUser(),
         '/register-user': (context) => RegisterUser(),
@@ -50,6 +56,12 @@ class _WatchMeState extends State<WatchMe> {
         '/notification': (context) => NotificationUnseen(),
         '/profile': (context) => ProfileMain(),
         '/setting': (context) => Setting(),
+        '/profile-setting': (context) => ProfileSetting(),
+        '/cover-setting': (context) => CoverSetting(),
+        '/password-setting': (context) => PasswordSetting(),
+        '/user-setting': (context) => UserSetting(),
+        '/personal-setting': (context) => PersonalSetting(),
+        '/address-setting': (context) => AddressSetting(),
       },
       title: "WatchMe Social Media App",
     );

@@ -8,14 +8,15 @@ import 'package:country_picker/country_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
-class Address extends StatefulWidget {
-  const Address({Key? key}) : super(key: key);
+class AddressSetting extends StatefulWidget {
+  const AddressSetting({ Key? key }) : super(key: key);
 
   @override
-  _AddressState createState() => _AddressState();
+  _AddressSettingState createState() => _AddressSettingState();
 }
 
-class _AddressState extends State<Address> {
+class _AddressSettingState extends State<AddressSetting> {
+  
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();

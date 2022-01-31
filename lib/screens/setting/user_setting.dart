@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/api/token.dart';
@@ -8,14 +10,14 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
-class RegisterUser extends StatefulWidget {
-  const RegisterUser({Key? key}) : super(key: key);
+class UserSetting extends StatefulWidget {
+  const UserSetting({Key? key}) : super(key: key);
 
   @override
-  _RegisterUserState createState() => _RegisterUserState();
+  _UserSettingState createState() => _UserSettingState();
 }
 
-class _RegisterUserState extends State<RegisterUser> {
+class _UserSettingState extends State<UserSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();

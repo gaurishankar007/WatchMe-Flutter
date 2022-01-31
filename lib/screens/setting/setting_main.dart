@@ -53,7 +53,82 @@ class _SettingState extends State<Setting> {
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: [             
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.face_retouching_natural_sharp,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Profile Picture",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),          
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.picture_in_picture_sharp,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Cover Picture",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),           
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: () {},
+                child: ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 0,
+                  ),
+                  horizontalTitleGap: 5,
+                  leading: Icon(
+                    Icons.vpn_key_sharp,
+                    size: 30,
+                    color: textColor,
+                  ),
+                  title: Text(
+                    "Password",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
               TextButton(
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,

@@ -7,14 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
-class PersonalInformation extends StatefulWidget {
-  const PersonalInformation({Key? key}) : super(key: key);
+class PersonalSetting extends StatefulWidget {
+  const PersonalSetting({Key? key}) : super(key: key);
 
   @override
-  _PersonalInformationState createState() => _PersonalInformationState();
+  _PersonalSettingState createState() => _PersonalSettingState();
 }
 
-class _PersonalInformationState extends State<PersonalInformation> {
+class _PersonalSettingState extends State<PersonalSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();

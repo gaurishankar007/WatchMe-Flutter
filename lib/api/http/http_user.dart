@@ -142,7 +142,7 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response = await post(Uri.parse(baseurl + "profile/add"),
+      final response = await put(Uri.parse(baseurl + "profile/update"),
           body: userData, headers: bearerToken);
 
       //json serializing inline
@@ -172,7 +172,7 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response = await post(Uri.parse(baseurl + "address/add"),
+      final response = await put(Uri.parse(baseurl + "address/update"),
           body: userData, headers: bearerToken);
 
       //json serializing inline

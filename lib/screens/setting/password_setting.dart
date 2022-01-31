@@ -1,6 +1,5 @@
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
-import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,18 +7,18 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
-class RegisterUser extends StatefulWidget {
-  const RegisterUser({Key? key}) : super(key: key);
+class PasswordSetting extends StatefulWidget {
+  const PasswordSetting({Key? key}) : super(key: key);
 
   @override
-  _RegisterUserState createState() => _RegisterUserState();
+  _PasswordSettingState createState() => _PasswordSettingState();
 }
 
-class _RegisterUserState extends State<RegisterUser> {
+class _PasswordSettingState extends State<PasswordSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String username = "", password = "", email = "", phone = "";
+  String email = "", newPassword = "";
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +44,8 @@ class _RegisterUserState extends State<RegisterUser> {
             ),
           ),
           centerTitle: true,
-          shape: Border(
-            bottom: BorderSide(
-              color: textColor,
-              width: .1,
-            ),
-          ),
-          elevation: 0,
+          elevation: 2,
+          shadowColor: textColor,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -65,42 +59,41 @@ class _RegisterUserState extends State<RegisterUser> {
               child: Column(
                 children: [
                   Text(
-                    "Welcome to WatchMe",
+                    "Generate Reset Token",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: textColor,
-                      fontSize: 25,
-                      fontFamily: "Laila-Bold",
-                    ),
+                        color: textColor,
+                        fontSize: 25,
+                        fontFamily: "Laila-Bold"),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      username = value!;
+                    onChanged: (value) {
+                      email = value;
                     },
+                    keyboardType: TextInputType.emailAddress,
                     validator: MultiValidator([
-                      RequiredValidator(errorText: "Username is required!"),
-                      MinLengthValidator(3,
-                          errorText: "Provide at least 3 characters!"),
-                      MaxLengthValidator(15,
-                          errorText: "Provide at most 15 characters!"),
-                      PatternValidator(r'^[a-zA-Z0-9]+$',
-                          errorText:
-                              "Special characters and white spaces not allowed!")
+                      RequiredValidator(
+                          errorText: "Email address is required!"),
+                      EmailValidator(errorText: "Invalid email!")
                     ]),
                     style: TextStyle(
                       color: textColor,
                     ),
                     decoration: InputDecoration(
-                      labelText: "Username",
+                      labelText: "Email",
                       labelStyle: TextStyle(
                         color: textColor,
                         fontFamily: "Laila-Bold",
                       ),
-                      hintText: "Enter your username.....",
+                      hintText: "Enter your account's email.....",
                       hintStyle: TextStyle(
+                        color: textColor,
+                      ),
+                      helperText: "Wrong email won't reset your password.",
+                      helperStyle: TextStyle(
                         color: textColor,
                       ),
                       border: OutlineInputBorder(
@@ -132,8 +125,8 @@ class _RegisterUserState extends State<RegisterUser> {
                     height: 20,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      password = value!.trim();
+                    onChanged: (value) {
+                      newPassword = value;
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Password is required!"),
@@ -151,12 +144,12 @@ class _RegisterUserState extends State<RegisterUser> {
                       color: textColor,
                     ),
                     decoration: InputDecoration(
-                      labelText: "Password",
+                      labelText: "New Password",
                       labelStyle: TextStyle(
                         color: textColor,
                         fontFamily: "Laila-Bold",
                       ),
-                      hintText: "Enter a password.....",
+                      hintText: "Enter a new password.....",
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
@@ -193,80 +186,20 @@ class _RegisterUserState extends State<RegisterUser> {
                     height: 20,
                   ),
                   TextFormField(
-                    onSaved: (value) {
-                      email = value!;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: "Email address is required!"),
-                      EmailValidator(errorText: "Invalid email!")
-                    ]),
+                    validator: (value) =>
+                        MatchValidator(errorText: "Password did not match.")
+                            .validateMatch(value!, newPassword),
+                    obscureText: true,
                     style: TextStyle(
                       color: textColor,
                     ),
                     decoration: InputDecoration(
-                      labelText: "Email",
+                      labelText: "Confirm Password",
                       labelStyle: TextStyle(
                         color: textColor,
                         fontFamily: "Laila-Bold",
                       ),
-                      hintText: "Enter your email.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      helperText: "Useful for reseting password.",
-                      helperStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    onSaved: (value) {
-                      phone = value!;
-                    },
-                    keyboardType: TextInputType.number,
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Phone number is required!"),
-                      PatternValidator(r'^(?:[+0]9)?[0-9]{10}$',
-                          errorText: "Invalid phone number!")
-                    ]),
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "Phone Number",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter your phone number.....",
+                      hintText: "Enter the password again.....",
                       hintStyle: TextStyle(
                         color: textColor,
                       ),
@@ -304,24 +237,13 @@ class _RegisterUserState extends State<RegisterUser> {
                         _formKey.currentState!.save();
 
                         final responseData =
-                            await HttpConnectUser().registerUser(
-                          UserRegister(
-                              username: username,
-                              password: password,
-                              email: email,
-                              phone: phone),
+                            await HttpConnectUser().generateResetToken(
+                          passResetToken(
+                              email: email, newPassword: newPassword),
                         );
 
-                        if (responseData.containsKey("token")) {
-                          Token().setToken(responseData["token"]);
-                          HttpConnectUser.token = responseData["token"];
-                          Navigator.pushNamed(context, "/add-profile");
-                          MotionToast.success(
-                            position: MOTION_TOAST_POSITION.top,
-                            animationType: ANIMATION.fromTop,
-                            toastDuration: Duration(seconds: 2),
-                            description: responseData["message"],
-                          ).show(context);
+                        if (responseData["message"] == "Token was send.") {
+                          Navigator.pushNamed(context, "/reset-password");
                         } else {
                           MotionToast.error(
                             position: MOTION_TOAST_POSITION.top,
@@ -335,12 +257,12 @@ class _RegisterUserState extends State<RegisterUser> {
                           position: MOTION_TOAST_POSITION.top,
                           animationType: ANIMATION.fromTop,
                           toastDuration: Duration(seconds: 1),
-                          description: "Sign up failed :(",
+                          description: "Validation error.",
                         ).show(context);
                       }
                     },
                     child: Text(
-                      "Sign Up",
+                      "Submit",
                       style: TextStyle(
                         fontSize: 15,
                       ),
