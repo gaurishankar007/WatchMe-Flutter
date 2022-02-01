@@ -38,7 +38,6 @@ class _SettingState extends State<Setting> {
             style: TextStyle(
               color: textColor,
               fontSize: 20,
-              fontFamily: "BerkshireSwash-Regular",
             ),
           ),
           centerTitle: true,
@@ -53,162 +52,141 @@ class _SettingState extends State<Setting> {
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [             
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/profile-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.face_retouching_natural_sharp,
-                    size: 30,
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.face_retouching_natural_sharp,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Profile Picture",
+                  style: TextStyle(
                     color: textColor,
-                  ),
-                  title: Text(
-                    "Profile Picture",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),          
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.picture_in_picture_sharp,
-                    size: 30,
-                    color: textColor,
-                  ),
-                  title: Text(
-                    "Cover Picture",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),           
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.vpn_key_sharp,
-                    size: 30,
-                    color: textColor,
-                  ),
-                  title: Text(
-                    "Password",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
+                    fontSize: 18,
                   ),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/cover-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.person,
-                    size: 30,
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.picture_in_picture_sharp,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Cover Picture",
+                  style: TextStyle(
                     color: textColor,
-                  ),
-                  title: Text(
-                    "User information",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
+                    fontSize: 18,
                   ),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/password-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.person_pin_rounded,
-                    size: 30,
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.vpn_key_sharp,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Password",
+                  style: TextStyle(
                     color: textColor,
-                  ),
-                  title: Text(
-                    "Personal information",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
+                    fontSize: 18,
                   ),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/user-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
-                onPressed: () {},
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.person_pin_circle_sharp,
-                    size: 30,
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.person,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "User information",
+                  style: TextStyle(
                     color: textColor,
-                  ),
-                  title: Text(
-                    "Address information",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
+                    fontSize: 18,
                   ),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/personal-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
-                onPressed: () {
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.person_pin_rounded,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Personal information",
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, "/address-setting");
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
+                ),
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.person_pin_circle_sharp,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Address information",
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              ListTile(
+                onTap: () {
                   ref.watch(themeController)
                       ? ref.read(themeController.notifier).lightTheme()
                       : ref.read(themeController.notifier).darkTheme();
@@ -228,67 +206,60 @@ class _SettingState extends State<Setting> {
                           description: "Dark Theme",
                         ).show(context);
                 },
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: ref.watch(themeController)
-                      ? Icon(
-                          Icons.light_mode_sharp,
-                          size: 30,
-                          color: textColor,
-                        )
-                      : Icon(
-                          Icons.dark_mode_sharp,
-                          size: 30,
-                          color: textColor,
-                        ),
-                  title: ref.watch(themeController)
-                      ? Text(
-                          "Light Theme",
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 18,
-                          ),
-                        )
-                      : Text(
-                          "Dark Theme",
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 18,
-                          ),
-                        ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 0,
                 ),
+                horizontalTitleGap: 5,
+                leading: ref.watch(themeController)
+                    ? Icon(
+                        Icons.light_mode_sharp,
+                        size: 30,
+                        color: Colors.deepPurpleAccent[700],
+                      )
+                    : Icon(
+                        Icons.dark_mode_sharp,
+                        size: 30,
+                        color: Colors.deepPurpleAccent[700],
+                      ),
+                title: ref.watch(themeController)
+                    ? Text(
+                        "Light Theme",
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 18,
+                        ),
+                      )
+                    : Text(
+                        "Dark Theme",
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 18,
+                        ),
+                      ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                ),
-                onPressed: () {
+              ListTile(
+                onTap: () {
                   Token().removeToken();
                   HttpConnectUser.token = "";
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       '/login', (Route<dynamic> route) => false);
                 },
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 7,
-                    vertical: 0,
-                  ),
-                  horizontalTitleGap: 5,
-                  leading: Icon(
-                    Icons.logout_sharp,
-                    size: 30,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 7,
+                  vertical: 0,
+                ),
+                horizontalTitleGap: 5,
+                leading: Icon(
+                  Icons.logout_sharp,
+                  size: 30,
+                  color: Colors.deepPurpleAccent[700],
+                ),
+                title: Text(
+                  "Log Out",
+                  style: TextStyle(
                     color: textColor,
-                  ),
-                  title: Text(
-                    "Log Out",
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 18,
-                    ),
+                    fontSize: 18,
                   ),
                 ),
               ),

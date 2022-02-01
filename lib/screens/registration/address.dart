@@ -161,6 +161,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -209,6 +210,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -257,6 +259,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -379,6 +382,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -427,6 +431,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -475,6 +480,7 @@ class _AddressState extends State<Address> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -522,7 +528,8 @@ class _AddressState extends State<Address> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "/AddAddress");
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/home', (Route<dynamic> route) => false);
                         },
                         child: Text(
                           "Skip",
@@ -557,7 +564,8 @@ class _AddressState extends State<Address> {
                                   tStreet: tStreet),
                             );
 
-                            if (responseData["message"] == "Address has been updated.") {
+                            if (responseData["message"] ==
+                                "Address has been updated.") {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/home', (Route<dynamic> route) => false);
 

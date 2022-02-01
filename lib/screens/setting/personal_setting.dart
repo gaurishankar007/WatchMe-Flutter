@@ -18,11 +18,43 @@ class _PersonalSettingState extends State<PersonalSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String firstName = "",
-      lastName = "",
-      birthdate = "2018-01-01",
-      biography = "";
-  String? gender = "Male";
+  String firstName = "", lastName = "", birthdate = "", biography = "";
+  String? gender = "";
+
+  var uFirstName = TextEditingController();
+  var uLastName = TextEditingController();
+  var uBiography = TextEditingController();
+
+  late Future<Map> getBirthDate;
+
+  void getPersonalInformaion() async {
+    final responseData = await HttpConnectUser().getPersonalInfo();
+    if (responseData.containsKey("userProfile")) {
+      uFirstName.text = responseData["userProfile"]["first_name"];
+      uLastName.text = responseData["userProfile"]["last_name"];
+      gender = responseData["userProfile"]["gender"];
+      birthdate = responseData["userProfile"]["birthday"] != null
+          ? responseData["userProfile"]["birthday"].split("T").first
+          : "";
+      uBiography.text = responseData["userProfile"]["biography"];
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPersonalInformaion();
+    getBirthDate = HttpConnectUser().getPersonalInfo();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    uFirstName.dispose();
+    uLastName.dispose();
+    uBiography.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +72,10 @@ class _PersonalSettingState extends State<PersonalSetting> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "WatchMe",
+            "Personal Information",
             style: TextStyle(
               color: textColor,
-              fontSize: 30,
-              fontFamily: "BerkshireSwash-Regular",
+              fontSize: 20,
             ),
           ),
           centerTitle: true,
@@ -59,7 +90,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: _screenWidth * 0.03,
+              top: _screenWidth * 0.10,
               left: _screenWidth * 0.10,
               right: _screenWidth * 0.10,
             ),
@@ -67,19 +98,11 @@ class _PersonalSettingState extends State<PersonalSetting> {
               key: _formKey,
               child: Column(
                 children: [
-                  Text(
-                    "Add Personal Information",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 25,
-                      fontFamily: "Laila-Bold",
-                    ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),
                   TextFormField(
+                    controller: uFirstName,
                     onSaved: (value) {
                       firstName = value!.trim();
                     },
@@ -136,6 +159,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: uLastName,
                     onSaved: (value) {
                       lastName = value!;
                     },
@@ -271,29 +295,53 @@ class _PersonalSettingState extends State<PersonalSetting> {
                             fontSize: 17,
                             fontFamily: "Laila-Bold"),
                       ),
-                      DatePickerWidget(
-                        dateFormat: "yyyy-MMMM-dd",
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
-                        initialDate: DateTime(2018),
-                        onChange: (DateTime newDate, _) {
-                          String month = "${newDate.month}";
-                          String day = "${newDate.day}";
-                          if (int.parse(newDate.month.toString()) < 10) {
-                            month = "0${newDate.month}";
-                          }
-                          if (int.parse(newDate.day.toString()) < 10) {
-                            day = "0${newDate.day}";
-                          }
-                          birthdate = "${newDate.year}-$month-$day";
-                        },
-                      ),
+                      FutureBuilder<Map>(
+                          future: getBirthDate,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return DatePickerWidget(
+                                dateFormat: "yyyy-MMMM-dd",
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                                initialDate: DateTime.parse(snapshot
+                                    .data!["userProfile"]["birthday"]
+                                    .split("T")
+                                    .first),
+                                onChange: (DateTime newDate, _) {
+                                  String month = "${newDate.month}";
+                                  String day = "${newDate.day}";
+                                  if (int.parse(newDate.month.toString()) <
+                                      10) {
+                                    month = "0${newDate.month}";
+                                  }
+                                  if (int.parse(newDate.day.toString()) < 10) {
+                                    day = "0${newDate.day}";
+                                  }
+                                  birthdate = "${newDate.year}-$month-$day";
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                  "${snapshot.error}",
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              );
+                            }
+                            return const CircularProgressIndicator(
+                              color: Colors.deepPurple,
+                            );
+                          }),
                     ],
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   TextFormField(
+                    controller: uBiography,
                     maxLines: 5,
                     onSaved: (value) {
                       biography = value!.trim();
@@ -343,90 +391,65 @@ class _PersonalSettingState extends State<PersonalSetting> {
                     ),
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/add-address");
-                        },
-                        child: Text(
-                          "Skip",
-                          style: TextStyle(
-                            color: Colors.deepPurpleAccent[700],
-                            fontSize: 20,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.deepPurpleAccent,
-                                offset: Offset(3, 4),
-                                blurRadius: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
 
-                            final responseData =
-                                await HttpConnectUser().addPersonalInfo(
-                              PersonalInfoRegister(
-                                  firstname: firstName,
-                                  lastname: lastName,
-                                  gender: gender,
-                                  birthdate: birthdate,
-                                  biography: biography),
-                            );
+                        final responseData =
+                            await HttpConnectUser().addPersonalInfo(
+                          PersonalInfoRegister(
+                              firstname: firstName,
+                              lastname: lastName,
+                              gender: gender,
+                              birthdate: birthdate,
+                              biography: biography),
+                        );
 
-                            if (responseData["message"] == "Profile updated.") {
-                              Navigator.pushNamed(context, "/add-address");
-                              MotionToast.success(
-                                position: MOTION_TOAST_POSITION.top,
-                                animationType: ANIMATION.fromTop,
-                                toastDuration: Duration(seconds: 2),
-                                description: "Personal information added.",
-                              ).show(context);
-                            } else {
-                              MotionToast.error(
-                                position: MOTION_TOAST_POSITION.top,
-                                animationType: ANIMATION.fromTop,
-                                toastDuration: Duration(seconds: 2),
-                                description: responseData["message"],
-                              ).show(context);
-                            }
-                          } else {
-                            MotionToast.error(
-                              position: MOTION_TOAST_POSITION.top,
-                              animationType: ANIMATION.fromTop,
-                              toastDuration: Duration(seconds: 1),
-                              description: "Validation error.",
-                            ).show(context);
-                          }
-                        },
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          elevation: 10,
-                          shadowColor: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                        if (responseData["message"] == "Profile updated.") {
+                          MotionToast.success(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Personal information updated.",
+                          ).show(context);
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        }
+                      } else {
+                        MotionToast.error(
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
+                          description: "Validation error.",
+                        ).show(context);
+                      }
+                    },
+                    child: Text(
+                      "Update",
+                      style: TextStyle(
+                        fontSize: 15,
                       ),
-                    ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurpleAccent[700],
+                      elevation: 10,
+                      shadowColor: Colors.deepPurpleAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                   SizedBox(
-                    height: 20,
-                  ),
+                    height: 25,
+                  )
                 ],
               ),
             ),

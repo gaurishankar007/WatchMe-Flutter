@@ -57,3 +57,10 @@ class passResetToken {
 
   passResetToken({this.email, this.newPassword});
 }
+
+class ChangePassword {
+  final String? currentPassword;
+  final String? newPassword;
+
+  ChangePassword({this.currentPassword, this.newPassword});
+}

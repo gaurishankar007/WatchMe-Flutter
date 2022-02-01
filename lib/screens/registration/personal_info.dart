@@ -18,11 +18,8 @@ class _PersonalInformationState extends State<PersonalInformation> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String firstName = "",
-      lastName = "",
-      birthdate = "2018-01-01",
-      biography = "";
-  String? gender = "Male";
+  String firstName = "", lastName = "", birthdate = "", biography = "";
+  String? gender = "";
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +272,6 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         dateFormat: "yyyy-MMMM-dd",
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now(),
-                        initialDate: DateTime(2018),
                         onChange: (DateTime newDate, _) {
                           String month = "${newDate.month}";
                           String day = "${newDate.day}";
@@ -371,6 +367,22 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
+
+                            if (gender == "") {
+                              return MotionToast.error(
+                                position: MOTION_TOAST_POSITION.top,
+                                animationType: ANIMATION.fromTop,
+                                toastDuration: Duration(seconds: 2),
+                                description: "Gender not selected.",
+                              ).show(context);
+                            } else if (birthdate == "") {
+                              return MotionToast.error(
+                                position: MOTION_TOAST_POSITION.top,
+                                animationType: ANIMATION.fromTop,
+                                toastDuration: Duration(seconds: 2),
+                                description: "Birthdate not selected.",
+                              ).show(context);
+                            }
 
                             final responseData =
                                 await HttpConnectUser().addPersonalInfo(

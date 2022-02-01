@@ -9,25 +9,64 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
 class AddressSetting extends StatefulWidget {
-  const AddressSetting({ Key? key }) : super(key: key);
+  const AddressSetting({Key? key}) : super(key: key);
 
   @override
   _AddressSettingState createState() => _AddressSettingState();
 }
 
 class _AddressSettingState extends State<AddressSetting> {
-  
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String pCountry = "Afganistan",
+  String pCountry = "",
       pState = "",
       pCity = "",
       pStreet = "",
-      tCountry = "Afganistan",
+      tCountry = "",
       tState = "",
       tCity = "",
       tStreet = "";
+
+  var uPState = TextEditingController();
+  var uPCity = TextEditingController();
+  var uPStreet = TextEditingController();
+  var uTState = TextEditingController();
+  var uTCity = TextEditingController();
+  var uTStreet = TextEditingController();
+
+  void getAddressInformation() async {
+    final responseData = await HttpConnectUser().getAddressInfo();
+    if (responseData.containsKey("userAddress")) {
+      pCountry = responseData["userAddress"]["permanent"]["country"];
+      uPState.text = responseData["userAddress"]["permanent"]["state"];
+      uPCity.text = responseData["userAddress"]["permanent"]["city"];
+      uPStreet.text = responseData["userAddress"]["permanent"]["street"];
+      tCountry = responseData["userAddress"]["temporary"]["country"];
+      uTState.text = responseData["userAddress"]["temporary"]["state"];
+      uTCity.text = responseData["userAddress"]["temporary"]["city"];
+      uTStreet.text = responseData["userAddress"]["temporary"]["street"];
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAddressInformation();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    uPState.dispose();
+    uPCity.dispose();
+    uPStreet.dispose();
+    uTState.dispose();
+    uTCity.dispose();
+    uTStreet.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +84,10 @@ class _AddressSettingState extends State<AddressSetting> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "WatchMe",
+            "Address Information",
             style: TextStyle(
               color: textColor,
-              fontSize: 30,
-              fontFamily: "BerkshireSwash-Regular",
+              fontSize: 20,
             ),
           ),
           centerTitle: true,
@@ -64,7 +102,7 @@ class _AddressSettingState extends State<AddressSetting> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: _screenWidth * 0.03,
+              top: _screenWidth * 0.10,
               left: _screenWidth * 0.10,
               right: _screenWidth * 0.10,
             ),
@@ -72,18 +110,6 @@ class _AddressSettingState extends State<AddressSetting> {
               key: _formKey,
               child: Column(
                 children: [
-                  Text(
-                    "Add Address",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 25,
-                      fontFamily: "Laila-Bold",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text(
                     "Permanent",
                     textAlign: TextAlign.center,
@@ -157,11 +183,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: uPState,
                     onSaved: (value) {
                       pState = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -205,11 +233,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 15,
                   ),
                   TextFormField(
+                    controller: uPCity,
                     onSaved: (value) {
                       pCity = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -253,11 +283,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 15,
                   ),
                   TextFormField(
+                    controller: uPStreet,
                     onSaved: (value) {
                       pStreet = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -375,11 +407,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: uTState,
                     onSaved: (value) {
                       tState = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -423,11 +457,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 15,
                   ),
                   TextFormField(
+                    controller: uTCity,
                     onSaved: (value) {
                       tCity = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -471,11 +507,13 @@ class _AddressSettingState extends State<AddressSetting> {
                     height: 15,
                   ),
                   TextFormField(
+                    controller: uTStreet,
                     onSaved: (value) {
                       tStreet = value!.trim();
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
+                      MinLengthValidator(2, errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -518,89 +556,62 @@ class _AddressSettingState extends State<AddressSetting> {
                   SizedBox(
                     height: 25,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/AddAddress");
-                        },
-                        child: Text(
-                          "Skip",
-                          style: TextStyle(
-                            color: Colors.deepPurpleAccent[700],
-                            fontSize: 20,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.deepPurpleAccent,
-                                offset: Offset(3, 4),
-                                blurRadius: 20,
-                              ),
-                            ],
-                          ),
-                        ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+
+                        final responseData = await HttpConnectUser().addAddress(
+                          AddressRegister(
+                              pCountry: pCountry,
+                              pState: pState,
+                              pCity: pCity,
+                              pStreet: pStreet,
+                              tCountry: tCountry,
+                              tState: tState,
+                              tCity: tCity,
+                              tStreet: tStreet),
+                        );
+
+                        if (responseData["message"] ==
+                            "Address has been updated.") {
+                          MotionToast.success(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Address added.",
+                          ).show(context);
+                        } else {
+                          MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
+                        }
+                      } else {
+                        MotionToast.error(
+                          position: MOTION_TOAST_POSITION.top,
+                          animationType: ANIMATION.fromTop,
+                          toastDuration: Duration(seconds: 1),
+                          description: "Validation error.",
+                        ).show(context);
+                      }
+                    },
+                    child: Text(
+                      "Update",
+                      style: TextStyle(
+                        fontSize: 15,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-
-                            final responseData =
-                                await HttpConnectUser().addAddress(
-                              AddressRegister(
-                                  pCountry: pCountry,
-                                  pState: pState,
-                                  pCity: pCity,
-                                  pStreet: pStreet,
-                                  tCountry: tCountry,
-                                  tState: tState,
-                                  tCity: tCity,
-                                  tStreet: tStreet),
-                            );
-
-                            if (responseData["message"] == "Address has been updated.") {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/home', (Route<dynamic> route) => false);
-
-                              MotionToast.success(
-                                position: MOTION_TOAST_POSITION.top,
-                                animationType: ANIMATION.fromTop,
-                                toastDuration: Duration(seconds: 2),
-                                description: "Address added.",
-                              ).show(context);
-                            } else {
-                              MotionToast.error(
-                                position: MOTION_TOAST_POSITION.top,
-                                animationType: ANIMATION.fromTop,
-                                toastDuration: Duration(seconds: 2),
-                                description: responseData["message"],
-                              ).show(context);
-                            }
-                          } else {
-                            MotionToast.error(
-                              position: MOTION_TOAST_POSITION.top,
-                              animationType: ANIMATION.fromTop,
-                              toastDuration: Duration(seconds: 1),
-                              description: "Validation error.",
-                            ).show(context);
-                          }
-                        },
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          elevation: 10,
-                          shadowColor: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurpleAccent[700],
+                      elevation: 10,
+                      shadowColor: Colors.deepPurpleAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(
                     height: 20,

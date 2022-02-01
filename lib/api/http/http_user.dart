@@ -195,7 +195,7 @@ class HttpConnectUser {
       final response = await post(
           Uri.parse(baseurl + "user/generatePassResetToken"),
           body: userData);
-          
+
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
 
@@ -213,7 +213,147 @@ class HttpConnectUser {
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
-      
+
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> getUser() async {
+    try {
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response = await get(Uri.parse(baseurl + "user/checkType"), headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> changePassword(ChangePassword passwordData) async {
+    try {
+      Map<String, dynamic> passData = {
+        "currPassword": passwordData.currentPassword,
+        "newPassword": passwordData.newPassword,
+      };
+
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response =
+          await put(Uri.parse(baseurl + "user/changePassword"), body: passData, headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> changeUsername(String username) async {
+    try {
+      Map<String, dynamic> userData = {
+        "username": username,
+      };
+
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response =
+          await put(Uri.parse(baseurl + "user/changeUsername"), body: userData, headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> changeEmail(String email) async {
+    try {
+      Map<String, dynamic> userData = {
+        "email": email,
+      };
+
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response =
+          await put(Uri.parse(baseurl + "user/changeEmail"), body: userData, headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+   Future<Map> changePhone(String phone) async {
+    try {
+      Map<String, dynamic> userData = {
+        "phone": phone,
+      };
+
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response =
+          await put(Uri.parse(baseurl + "user/changePhone"), body: userData, headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> getPersonalInfo() async {
+    try {
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response = await get(Uri.parse(baseurl + "profile/get/my"), headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> getAddressInfo() async {
+    try {
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response = await get(Uri.parse(baseurl + "address/get/my"), headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
       return responseData;
     } catch (err) {
       log('$err');

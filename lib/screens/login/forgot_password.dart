@@ -187,7 +187,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   TextFormField(
                     validator: (value) =>
-                        MatchValidator(errorText: "Password did not match.")
+                        MatchValidator(errorText: "Confirm Password did not match.")
                             .validateMatch(value!, newPassword),
                     obscureText: true,
                     style: TextStyle(

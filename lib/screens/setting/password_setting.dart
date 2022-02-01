@@ -18,7 +18,8 @@ class _PasswordSettingState extends State<PasswordSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String email = "", newPassword = "";
+  String currentPassword = "", newPassword = "", confirmPassword = "";
+  bool curP = false, newP = false, conP = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +37,10 @@ class _PasswordSettingState extends State<PasswordSetting> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "WatchMe",
+            "Password",
             style: TextStyle(
               color: textColor,
-              fontSize: 30,
-              fontFamily: "BerkshireSwash-Regular",
+              fontSize: 20,
             ),
           ),
           centerTitle: true,
@@ -50,200 +50,261 @@ class _PasswordSettingState extends State<PasswordSetting> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: _screenWidth * 0.03,
-              left: _screenWidth * 0.10,
-              right: _screenWidth * 0.10,
+              top: _screenWidth * 0.05,
+              left: _screenWidth * 0.03,
+              right: _screenWidth * 0.03,
             ),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  Text(
-                    "Generate Reset Token",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+                  ListTile(
+                    contentPadding:
+                        EdgeInsets.only(left: 0, right: 0, bottom: 20),
+                    minLeadingWidth: 0,
+                    title: TextFormField(
+                      onChanged: (value) {
+                        currentPassword = value;
+                      },
+                      validator: MultiValidator([
+                        RequiredValidator(
+                            errorText: "Currrent password is required!"),
+                      ]),
+                      obscureText: !curP,
+                      style: TextStyle(
                         color: textColor,
-                        fontSize: 25,
-                        fontFamily: "Laila-Bold"),
+                      ),
+                      decoration: InputDecoration(
+                        labelText: "Current Password",
+                        labelStyle: TextStyle(
+                          color: textColor,
+                          fontFamily: "Laila-Bold",
+                        ),
+                        hintText: "Enter the current password.....",
+                        hintStyle: TextStyle(
+                          color: textColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                    ),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          curP = !curP;
+                        });
+                      },
+                      child: curP ? Text("Hide") : Text("Show"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding:
+                        EdgeInsets.only(left: 0, right: 0, bottom: 20),
+                    minLeadingWidth: 0,
+                    title: TextFormField(
+                      onSaved: (value) {
+                        newPassword = value!.trim();
+                      },
+                      validator: MultiValidator([
+                        RequiredValidator(
+                            errorText: "New password is required!"),
+                        MinLengthValidator(5,
+                            errorText: "Provide at least 5 characters!"),
+                        MaxLengthValidator(15,
+                            errorText: "Provide at most 15 characters!"),
+                        PatternValidator(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{5,15}$',
+                            errorText:
+                                'At least 1 upper, lowercase, number & special character!')
+                      ]),
+                      obscureText: !newP,
+                      style: TextStyle(
+                        color: textColor,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: "New Password",
+                        labelStyle: TextStyle(
+                          color: textColor,
+                          fontFamily: "Laila-Bold",
+                        ),
+                        hintText: "Enter a password.....",
+                        hintStyle: TextStyle(
+                          color: textColor,
+                        ),
+                        helperText: "Excludes whitespace around the password.",
+                        helperStyle: TextStyle(
+                          color: textColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                    ),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          newP = !newP;
+                        });
+                      },
+                      child: newP ? Text("Hide") : Text("Show"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding:
+                        EdgeInsets.only(left: 0, right: 0, bottom: 20),
+                    minLeadingWidth: 0,
+                    title: TextFormField(
+                      onSaved: (value) {
+                        confirmPassword = value!.trim();
+                      },
+                      obscureText: !conP,
+                      style: TextStyle(
+                        color: textColor,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        labelStyle: TextStyle(
+                          color: textColor,
+                          fontFamily: "Laila-Bold",
+                        ),
+                        hintText: "Enter the password again.....",
+                        hintStyle: TextStyle(
+                          color: textColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: textColor,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                    ),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          conP = !conP;
+                        });
+                      },
+                      child: conP ? Text("Hide") : Text("Show"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: "Email address is required!"),
-                      EmailValidator(errorText: "Invalid email!")
-                    ]),
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter your account's email.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      helperText: "Wrong email won't reset your password.",
-                      helperStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    onChanged: (value) {
-                      newPassword = value;
-                    },
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Password is required!"),
-                      MinLengthValidator(5,
-                          errorText: "Provide at least 5 characters!"),
-                      MaxLengthValidator(15,
-                          errorText: "Provide at most 15 characters!"),
-                      PatternValidator(
-                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{5,15}$',
-                          errorText:
-                              'At least 1 upper, lowercase, number & special character!')
-                    ]),
-                    obscureText: true,
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "New Password",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter a new password.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      helperText: "Excludes whitespace around the password.",
-                      helperStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    validator: (value) =>
-                        MatchValidator(errorText: "Password did not match.")
-                            .validateMatch(value!, newPassword),
-                    obscureText: true,
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      labelStyle: TextStyle(
-                        color: textColor,
-                        fontFamily: "Laila-Bold",
-                      ),
-                      hintText: "Enter the password again.....",
-                      hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: textColor,
-                          width: 2,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
+                    height: 5,
                   ),
                   ElevatedButton(
                     onPressed: () async {
+                      print(currentPassword);
+                      print(newPassword);
+                      print(confirmPassword);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
 
+                        if (confirmPassword != newPassword) {
+                          return MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Confirm password did not match.",
+                          ).show(context);
+                        }
+
                         final responseData =
-                            await HttpConnectUser().generateResetToken(
-                          passResetToken(
-                              email: email, newPassword: newPassword),
+                            await HttpConnectUser().changePassword(
+                          ChangePassword(
+                              currentPassword: currentPassword,
+                              newPassword: newPassword),
                         );
 
-                        if (responseData["message"] == "Token was send.") {
-                          Navigator.pushNamed(context, "/reset-password");
+                        if (responseData["message"] ==
+                            "Your password has been changed.") {
+                          MotionToast.success(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: responseData["message"],
+                          ).show(context);
                         } else {
                           MotionToast.error(
                             position: MOTION_TOAST_POSITION.top,
@@ -262,7 +323,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                       }
                     },
                     child: Text(
-                      "Submit",
+                      "Change Password",
                       style: TextStyle(
                         fontSize: 15,
                       ),
