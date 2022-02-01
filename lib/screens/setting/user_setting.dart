@@ -159,6 +159,7 @@ class _UserSettingState extends State<UserSetting> {
 
                         if (responseData["message"] ==
                             "Your username has been changed.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
@@ -264,6 +265,7 @@ class _UserSettingState extends State<UserSetting> {
 
                         if (responseData["message"] ==
                             "Your email address has been changed.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
@@ -366,6 +368,7 @@ class _UserSettingState extends State<UserSetting> {
 
                         if (responseData["message"] ==
                             "Your phone number has been changed.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,

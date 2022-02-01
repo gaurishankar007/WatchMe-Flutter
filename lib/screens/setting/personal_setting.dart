@@ -303,10 +303,14 @@ class _PersonalSettingState extends State<PersonalSetting> {
                                 dateFormat: "yyyy-MMMM-dd",
                                 firstDate: DateTime(1900),
                                 lastDate: DateTime.now(),
-                                initialDate: DateTime.parse(snapshot
-                                    .data!["userProfile"]["birthday"]
-                                    .split("T")
-                                    .first),
+                                initialDate: snapshot.data!["userProfile"]
+                                            ["birthday"] ==
+                                        null
+                                    ? DateTime.now()
+                                    : DateTime.parse(snapshot
+                                        .data!["userProfile"]["birthday"]
+                                        .split("T")
+                                        .first),
                                 onChange: (DateTime newDate, _) {
                                   String month = "${newDate.month}";
                                   String day = "${newDate.day}";
@@ -398,6 +402,22 @@ class _PersonalSettingState extends State<PersonalSetting> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
 
+                        if (gender == "") {
+                          return MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Gender not selected.",
+                          ).show(context);
+                        } else if (birthdate == "") {
+                          return MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Birthdate not selected.",
+                          ).show(context);
+                        }
+
                         final responseData =
                             await HttpConnectUser().addPersonalInfo(
                           PersonalInfoRegister(
@@ -409,6 +429,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                         );
 
                         if (responseData["message"] == "Profile updated.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,

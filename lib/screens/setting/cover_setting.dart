@@ -141,6 +141,7 @@ class _CoverSettingState extends State<CoverSetting> {
                                                   coverPictureName = image.path
                                                       .split("/")
                                                       .last;
+                                                Navigator.pop(context);
                                                 });
                                               },
                                               child: Row(
@@ -283,8 +284,7 @@ class _CoverSettingState extends State<CoverSetting> {
                                   .addCover(coverPicture);
                               if (res["message"] ==
                                   "New cover picture added.") {
-                                Navigator.pushNamed(
-                                    context, "/add-personal-information");
+                                Navigator.pop(context);
                                 MotionToast.success(
                                   position: MOTION_TOAST_POSITION.top,
                                   animationType: ANIMATION.fromTop,

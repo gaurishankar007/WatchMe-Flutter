@@ -275,8 +275,6 @@ class _PasswordSettingState extends State<PasswordSetting> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      print(currentPassword);
-                      print(newPassword);
                       print(confirmPassword);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
@@ -299,6 +297,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
 
                         if (responseData["message"] ==
                             "Your password has been changed.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,

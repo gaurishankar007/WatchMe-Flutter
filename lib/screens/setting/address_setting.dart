@@ -67,7 +67,6 @@ class _AddressSettingState extends State<AddressSetting> {
     uTStreet.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
@@ -189,7 +188,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -239,7 +239,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -289,7 +290,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -413,7 +415,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "State  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -463,7 +466,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "City  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -513,7 +517,8 @@ class _AddressSettingState extends State<AddressSetting> {
                     },
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Street  is required!"),
-                      MinLengthValidator(2, errorText: "Provide at least two character.")
+                      MinLengthValidator(2,
+                          errorText: "Provide at least two character.")
                     ]),
                     style: TextStyle(
                       color: textColor,
@@ -561,6 +566,15 @@ class _AddressSettingState extends State<AddressSetting> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
 
+                        if (pCountry == "" || tCountry == "") {
+                          return MotionToast.error(
+                            position: MOTION_TOAST_POSITION.top,
+                            animationType: ANIMATION.fromTop,
+                            toastDuration: Duration(seconds: 2),
+                            description: "Country not selected.",
+                          ).show(context);
+                        }
+
                         final responseData = await HttpConnectUser().addAddress(
                           AddressRegister(
                               pCountry: pCountry,
@@ -575,6 +589,7 @@ class _AddressSettingState extends State<AddressSetting> {
 
                         if (responseData["message"] ==
                             "Address has been updated.") {
+                          Navigator.pop(context);
                           MotionToast.success(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,

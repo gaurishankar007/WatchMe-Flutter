@@ -275,6 +275,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   .addProfile(profilePicture);
                               if (res["message"] ==
                                   "New profile picture added.") {
+                                Navigator.pop(context);
                                 MotionToast.success(
                                   position: MOTION_TOAST_POSITION.top,
                                   animationType: ANIMATION.fromTop,
