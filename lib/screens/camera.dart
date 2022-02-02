@@ -29,6 +29,7 @@ class _CameraState extends State<Camera> {
   String caption = "", description = "";
   List<String> tag_friend_id = [];
   List<String> tag_friend_name = [];
+  List<String> tag_friend_profile_pic = [];
 
   String profilePicUrl = "http://10.0.2.2:4040/profiles/";
 
@@ -56,16 +57,9 @@ class _CameraState extends State<Camera> {
     });
   }
 
-  late Future<List> getFollowers;
   Future<List> getUserFollowers() async {
     final res = await HttpConnectWatch().getWatchers();
     return res;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getFollowers = getUserFollowers();
   }
 
   @override
@@ -364,60 +358,53 @@ class _CameraState extends State<Camera> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                setState(() {});
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: (builder) {
-                                    return SingleChildScrollView(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: _screenWidth * .02,
-                                          vertical: 20),
-                                      child: Container(
-                                        color: backColor,
-                                        height: 150,
-                                        child: FutureBuilder<List>(
-                                            future: getFollowers,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                return ListView.separated(
-                                                  itemCount:
-                                                      snapshot.data!.length,
-                                                  itemBuilder:
-                                                      (context, index) =>
-                                                          ListTile(
-                                                    contentPadding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal: 0,
-                                                      vertical: 10,
-                                                    ),
-                                                    leading: CircleAvatar(
-                                                      radius: 40,
-                                                      backgroundImage: NetworkImage(
-                                                          profilePicUrl +
-                                                              snapshot.data![
-                                                                          index]
-                                                                      [
-                                                                      "follower"]
-                                                                  [
-                                                                  "profile_pic"]),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![index]
-                                                              ["follower"]
-                                                          ["username"],
-                                                      style: TextStyle(
-                                                        fontSize: 20,
+                                  builder: (builder) => SingleChildScrollView(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.all(5),
+                                      height: 100,
+                                      color: backColor,
+                                      child: FutureBuilder<List>(
+                                          future: getUserFollowers(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return ListView.builder(
+                                                itemCount:
+                                                    snapshot.data!.length,
+                                                itemBuilder: (context, index) =>
+                                                    ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  minVerticalPadding: 1,
+                                                  leading: CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundImage: NetworkImage(
+                                                        profilePicUrl +
+                                                            snapshot.data![
+                                                                        index]
+                                                                    ["follower"]
+                                                                [
+                                                                "profile_pic"]),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![index]
+                                                            ["follower"]
+                                                        ["username"],
+                                                    style: TextStyle(
+                                                        fontSize: 15,
                                                         color: textColor,
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      if (!tag_friend_id
-                                                          .contains(snapshot
-                                                                          .data![
-                                                                      index]
-                                                                  ["follower"]
-                                                              ["_id"])) {
-                                                        setState(() {
+                                                        fontFamily:
+                                                            "Laila-bold"),
+                                                  ),
+                                                  onTap: () {
+                                                    if (!tag_friend_id.contains(
+                                                        snapshot.data![index]
+                                                                ["follower"]
+                                                            ["_id"])) {
+                                                      setState(
+                                                        () {
                                                           tag_friend_id.add(
                                                               snapshot.data![
                                                                           index]
@@ -429,49 +416,40 @@ class _CameraState extends State<Camera> {
                                                                       [
                                                                       "follower"]
                                                                   ["username"]);
-                                                        });
-                                                      }
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                  separatorBuilder:
-                                                      (context, builder) =>
-                                                          Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          20,
-                                                    ),
-                                                    child: Divider(
-                                                      color: Colors
-                                                              .deepPurpleAccent[
-                                                          700],
-                                                      thickness: 2,
-                                                    ),
-                                                  ),
-                                                );
-                                              } else if (snapshot.hasError) {
-                                                return Center(
-                                                  child: Text(
-                                                    "${snapshot.error}",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              return const CircularProgressIndicator(
-                                                color: Colors.deepPurple,
+                                                          tag_friend_profile_pic
+                                                              .add(snapshot.data![
+                                                                          index]
+                                                                      [
+                                                                      "follower"]
+                                                                  [
+                                                                  "profile_pic"]);
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                ),
                                               );
-                                            }),
-                                      ),
-                                    );
-                                  },
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                child: Text(
+                                                  "${snapshot.error}",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return const CircularProgressIndicator(
+                                              color: Colors.deepPurple,
+                                            );
+                                          }),
+                                    ),
+                                  ),
                                 );
                               },
                               child: Text(
-                                "Tag Friends",
+                                "Tag Watchers",
                                 style: TextStyle(
                                   fontSize: 15,
                                 ),
@@ -489,79 +467,88 @@ class _CameraState extends State<Camera> {
                                 ? SizedBox(
                                     height: 20,
                                   )
-                                : Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 10, bottom: 10),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(
-                                              top: 10, bottom: 10),
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          "Tagged Watchers",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontFamily: "Laila-Bold",
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
                                           decoration: BoxDecoration(
                                             color: backColor,
                                             border: Border.all(
-                                              color: Colors.deepPurple,
-                                              width: 3,
+                                              color: textColor,
+                                              width: 2,
                                             ),
                                             borderRadius:
-                                                BorderRadius.circular(25),
+                                                BorderRadius.circular(10),
                                           ),
-                                          height: 100,
-                                          child: ListView.separated(
+                                          height: 120,
+                                          child: ListView.builder(
                                             itemCount: tag_friend_name.length,
                                             itemBuilder: (context, index) =>
-                                                Center(
-                                              child: Text(
+                                                ListTile(
+                                              contentPadding: EdgeInsets.zero,
+                                              minVerticalPadding: 1,
+                                              leading: CircleAvatar(
+                                                radius: 20,
+                                                backgroundImage: NetworkImage(
+                                                    profilePicUrl +
+                                                        tag_friend_profile_pic[
+                                                            index]),
+                                              ),
+                                              title: Text(
                                                 tag_friend_name[index],
                                                 style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: textColor,
-                                                ),
-                                              ),
-                                            ),
-                                            separatorBuilder:
-                                                (context, builder) => Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: _screenWidth * .25,
-                                              ),
-                                              child: Divider(
-                                                color: Colors
-                                                    .deepPurpleAccent[700],
-                                                thickness: 2,
+                                                    fontSize: 15,
+                                                    color: textColor,
+                                                    fontFamily: "Laila-bold"),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 10,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            tag_friend_id.clear();
+                                            tag_friend_name.clear();
+                                            tag_friend_profile_pic.clear();
+                                          });
+                                        },
+                                        child: Text(
+                                          "Cancel Tagging",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              tag_friend_id.clear();
-                                              tag_friend_name.clear();
-                                            });
-                                          },
-                                          child: Text(
-                                            "Cancel Tagging",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                            ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.deepPurpleAccent[700],
+                                          elevation: 10,
+                                          shadowColor: Colors.deepPurpleAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
-                                          style: ElevatedButton.styleFrom(
-                                            primary:
-                                                Colors.deepPurpleAccent[700],
-                                            elevation: 10,
-                                            shadowColor:
-                                                Colors.deepPurpleAccent,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -611,7 +598,8 @@ class _CameraState extends State<Camera> {
                                         position: MOTION_TOAST_POSITION.top,
                                         animationType: ANIMATION.fromTop,
                                         toastDuration: Duration(seconds: 2),
-                                        description: "Your post has been uploaded",
+                                        description:
+                                            "Your post has been uploaded",
                                       ).show(context);
                                     } else {
                                       MotionToast.error(

@@ -29,7 +29,7 @@ class HttpConnetPost {
       };
       request.fields.addAll(postDetail);
       for (int i = 0; i < postData.taggedFriend!.length; i++) {
-        request.fields["tag_friend"] = "${postData.taggedFriend![i]}";
+        request.fields.addAll({"tag_friend[${i}]": "${postData.taggedFriend![i]}"});
       }
 
       // Adding images
@@ -47,7 +47,6 @@ class HttpConnetPost {
       final response = await request.send();
       var responseString = await response.stream.bytesToString();
       final responseData = jsonDecode(responseString) as Map;
-      log(responseString);
       return responseData;
     } catch (err) {
       log('$err');

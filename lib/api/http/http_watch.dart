@@ -8,7 +8,7 @@ import 'package:http/http.dart';
 
 class HttpConnectWatch {
   String baseurl = 'http://10.0.2.2:4040/';
-  static String token = HttpConnectUser.token;
+  String token = HttpConnectUser.token;
 
   Future<List> getWatchers() async {
     final bearerToken = {
@@ -20,6 +20,7 @@ class HttpConnectWatch {
 
     //json serializing inline
     final responseData = jsonDecode(response.body);
+    print(responseData);
     return responseData;
   }
 }
