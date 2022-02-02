@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/model/post.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -26,7 +27,10 @@ class _CameraState extends State<Camera> {
   List<File> posts = [];
   int activatedIndex = 0;
   String caption = "", description = "";
-  List<String> tag_friend = [];
+  List<String> tag_friend_id = [];
+  List<String> tag_friend_name = [];
+
+  String profilePicUrl = "http://10.0.2.2:4040/profiles/";
 
   void fromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -50,6 +54,18 @@ class _CameraState extends State<Camera> {
         posts.add(File(singleImage.path));
       });
     });
+  }
+
+  late Future<List> getFollowers;
+  Future<List> getUserFollowers() async {
+    final res = await HttpConnectWatch().getWatchers();
+    return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getFollowers = getUserFollowers();
   }
 
   @override
@@ -347,7 +363,113 @@ class _CameraState extends State<Camera> {
                               height: 10,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {});
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (builder) {
+                                    return SingleChildScrollView(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: _screenWidth * .02,
+                                          vertical: 20),
+                                      child: Container(
+                                        color: backColor,
+                                        height: 150,
+                                        child: FutureBuilder<List>(
+                                            future: getFollowers,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return ListView.separated(
+                                                  itemCount:
+                                                      snapshot.data!.length,
+                                                  itemBuilder:
+                                                      (context, index) =>
+                                                          ListTile(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 0,
+                                                      vertical: 10,
+                                                    ),
+                                                    leading: CircleAvatar(
+                                                      radius: 40,
+                                                      backgroundImage: NetworkImage(
+                                                          profilePicUrl +
+                                                              snapshot.data![
+                                                                          index]
+                                                                      [
+                                                                      "follower"]
+                                                                  [
+                                                                  "profile_pic"]),
+                                                    ),
+                                                    title: Text(
+                                                      snapshot.data![index]
+                                                              ["follower"]
+                                                          ["username"],
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        color: textColor,
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      if (!tag_friend_id
+                                                          .contains(snapshot
+                                                                          .data![
+                                                                      index]
+                                                                  ["follower"]
+                                                              ["_id"])) {
+                                                        setState(() {
+                                                          tag_friend_id.add(
+                                                              snapshot.data![
+                                                                          index]
+                                                                      ["follower"]
+                                                                  ["_id"]);
+                                                          tag_friend_name.add(
+                                                              snapshot.data![
+                                                                          index]
+                                                                      [
+                                                                      "follower"]
+                                                                  ["username"]);
+                                                        });
+                                                      }
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  separatorBuilder:
+                                                      (context, builder) =>
+                                                          Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          20,
+                                                    ),
+                                                    child: Divider(
+                                                      color: Colors
+                                                              .deepPurpleAccent[
+                                                          700],
+                                                      thickness: 2,
+                                                    ),
+                                                  ),
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                  child: Text(
+                                                    "${snapshot.error}",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              return const CircularProgressIndicator(
+                                                color: Colors.deepPurple,
+                                              );
+                                            }),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
                               child: Text(
                                 "Tag Friends",
                                 style: TextStyle(
@@ -363,9 +485,84 @@ class _CameraState extends State<Camera> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            tag_friend_id.isEmpty
+                                ? SizedBox(
+                                    height: 20,
+                                  )
+                                : Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.only(
+                                              top: 10, bottom: 10),
+                                          decoration: BoxDecoration(
+                                            color: backColor,
+                                            border: Border.all(
+                                              color: Colors.deepPurple,
+                                              width: 3,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          height: 100,
+                                          child: ListView.separated(
+                                            itemCount: tag_friend_name.length,
+                                            itemBuilder: (context, index) =>
+                                                Center(
+                                              child: Text(
+                                                tag_friend_name[index],
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: textColor,
+                                                ),
+                                              ),
+                                            ),
+                                            separatorBuilder:
+                                                (context, builder) => Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: _screenWidth * .25,
+                                              ),
+                                              child: Divider(
+                                                color: Colors
+                                                    .deepPurpleAccent[700],
+                                                thickness: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              tag_friend_id.clear();
+                                              tag_friend_name.clear();
+                                            });
+                                          },
+                                          child: Text(
+                                            "Cancel Tagging",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary:
+                                                Colors.deepPurpleAccent[700],
+                                            elevation: 10,
+                                            shadowColor:
+                                                Colors.deepPurpleAccent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -405,7 +602,7 @@ class _CameraState extends State<Camera> {
                                       caption: caption,
                                       description: description,
                                       images: posts,
-                                      taggedFriend: tag_friend,
+                                      taggedFriend: tag_friend_id,
                                     ));
 
                                     if (res["message"] == "Post uploaded") {
@@ -414,7 +611,7 @@ class _CameraState extends State<Camera> {
                                         position: MOTION_TOAST_POSITION.top,
                                         animationType: ANIMATION.fromTop,
                                         toastDuration: Duration(seconds: 2),
-                                        description: res["message"],
+                                        description: "Your post has been uploaded",
                                       ).show(context);
                                     } else {
                                       MotionToast.error(
@@ -520,48 +717,5 @@ class _CameraState extends State<Camera> {
         ),
       );
     });
-  }
-
-  Widget taggFriend() {
-    return SingleChildScrollView(
-      child: Container(
-        height: 200,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          children: [
-            const Text(
-              'Choose profile photo',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.camera),
-                  label: const Text('Camera'),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.image),
-                  label: const Text('Gallery'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
