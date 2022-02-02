@@ -20,6 +20,7 @@ class _LoginUserState extends State<LoginUser> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
   String usernameEmail = "", password = "";
+  bool passVisibility = false;
 
   @override
   void initState() {
@@ -143,7 +144,7 @@ class _LoginUserState extends State<LoginUser> {
                     validator: MultiValidator([
                       RequiredValidator(errorText: "Password is required!"),
                     ]),
-                    obscureText: true,
+                    obscureText: !passVisibility,
                     style: TextStyle(
                       color: textColor,
                     ),
@@ -182,29 +183,41 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    width: double.maxFinite,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/forgot-password");
-                      },
-                      child: Text(
-                        "Forgot password?",
-                        style: TextStyle(
-                          color: Colors.deepPurpleAccent[700],
-                          fontSize: 15,
-                          fontFamily: "Laila-Bold",
-                          shadows: const [
-                            Shadow(
-                              color: Colors.deepPurpleAccent,
-                              offset: Offset(3, 4),
-                              blurRadius: 20,
-                            ),
-                          ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/forgot-password");
+                        },
+                        child: Text(
+                          "Forgot password?",
+                          style: TextStyle(
+                            color: Colors.deepPurpleAccent[700],
+                            fontSize: 15,
+                            fontFamily: "Laila-Bold",
+                            shadows: const [
+                              Shadow(
+                                color: Colors.deepPurpleAccent,
+                                offset: Offset(3, 4),
+                                blurRadius: 20,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            passVisibility = !passVisibility;
+                          });
+                        },
+                        icon: Icon(Icons.remove_red_eye_sharp),
+                        color: Colors.deepPurpleAccent[700],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 5,

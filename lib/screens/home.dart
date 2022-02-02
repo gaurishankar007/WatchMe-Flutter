@@ -122,118 +122,112 @@ class _HomeState extends State<Home> {
               color: backColor,
               child: Column(
                 children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 4,
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    leading: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage("images/defaultProfile.png"),
+                    ),
+                    title: Text(
+                      posts[index][0],
+                      style: TextStyle(
+                        color: textColor,
+                        fontFamily: "Laila-Bold",
                       ),
-                      leading: CircleAvatar(
-                        radius: 20,
-                        backgroundImage:
-                            AssetImage("images/defaultProfile.png"),
-                      ),
-                      title: Text(
-                        posts[index][0],
-                        style: TextStyle(
-                          color: textColor,
-                          fontFamily: "Laila-Bold",
-                        ),
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (builder) => Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: _screenWidth * .20,
-                              ),
-                              decoration: BoxDecoration(
-                                color: backColor,
-                              ),
-                              height: 170,
-                              child: Column(
-                                children: [
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "View tagged friends",
-                                      style: TextStyle(
-                                        color: Colors.deepPurpleAccent[700],
-                                        fontFamily: "Laila-Bold",
-                                      ),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (builder) => Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: _screenWidth * .20,
+                            ),
+                            decoration: BoxDecoration(
+                              color: backColor,
+                            ),
+                            height: 170,
+                            child: Column(
+                              children: [
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    "View tagged friends",
+                                    style: TextStyle(
+                                      color: Colors.deepPurpleAccent[700],
+                                      fontFamily: "Laila-Bold",
                                     ),
                                   ),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 1,
-                                    color: textColor,
-                                  ),
-                                  unwatch[index]
-                                      ? TextButton(
-                                          style: TextButton.styleFrom(
-                                            padding: EdgeInsets.zero,
-                                          ),
-                                          onPressed: () {
-                                            unwatch[index] = false;
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                          },
-                                          child: Text(
-                                            "Watch",
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.deepPurpleAccent[700],
-                                              fontFamily: "Laila-Bold",
-                                            ),
-                                          ),
-                                        )
-                                      : TextButton(
-                                          style: TextButton.styleFrom(
-                                            padding: EdgeInsets.zero,
-                                          ),
-                                          onPressed: () {
-                                            unwatch[index] = true;
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                          },
-                                          child: Text(
-                                            "Unwatch",
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.deepPurpleAccent[700],
-                                              fontFamily: "Laila-Bold",
-                                            ),
+                                ),
+                                Divider(
+                                  height: 2,
+                                  thickness: 1,
+                                  color: textColor,
+                                ),
+                                unwatch[index]
+                                    ? TextButton(
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        onPressed: () {
+                                          unwatch[index] = false;
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                        },
+                                        child: Text(
+                                          "Watch",
+                                          style: TextStyle(
+                                            color: Colors.deepPurpleAccent[700],
+                                            fontFamily: "Laila-Bold",
                                           ),
                                         ),
-                                  Divider(
-                                    height: 2,
-                                    thickness: 1,
-                                    color: textColor,
-                                  ),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Report",
-                                      style: TextStyle(
-                                        color: Colors.red[700],
-                                        fontFamily: "Laila-Bold",
+                                      )
+                                    : TextButton(
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                        onPressed: () {
+                                          unwatch[index] = true;
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                        },
+                                        child: Text(
+                                          "Unwatch",
+                                          style: TextStyle(
+                                            color: Colors.deepPurpleAccent[700],
+                                            fontFamily: "Laila-Bold",
+                                          ),
+                                        ),
                                       ),
+                                Divider(
+                                  height: 2,
+                                  thickness: 1,
+                                  color: textColor,
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Report",
+                                    style: TextStyle(
+                                      color: Colors.red[700],
+                                      fontFamily: "Laila-Bold",
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: textColor,
-                        ),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: textColor,
                       ),
                     ),
                   ),
@@ -314,21 +308,16 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       ),
-                      (images.length > 1)
-                          ? AnimatedSmoothIndicator(
-                              activeIndex: activeIndexField[index],
-                              count: images.length,
-                              effect: WormEffect(
-                                dotColor: textColor,
-                                activeDotColor: Colors.deepPurpleAccent,
-                                dotHeight: 9,
-                                dotWidth: 9,
-                              ),
-                            )
-                          : SizedBox(
-                              width: 0,
-                              height: 0,
-                            ),
+                      AnimatedSmoothIndicator(
+                        activeIndex: activeIndexField[index],
+                        count: images.length,
+                        effect: WormEffect(
+                          dotColor: textColor,
+                          activeDotColor: Colors.deepPurpleAccent,
+                          dotHeight: 9,
+                          dotWidth: 9,
+                        ),
+                      ),
                     ],
                   ),
                   Padding(

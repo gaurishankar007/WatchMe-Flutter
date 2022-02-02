@@ -19,6 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
   String email = "", newPassword = "";
+  bool newP = false, conP = false;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +140,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           errorText:
                               'At least 1 upper, lowercase, number & special character!')
                     ]),
-                    obscureText: true,
+                    obscureText: !newP,
                     style: TextStyle(
                       color: textColor,
                     ),
@@ -151,10 +152,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       hintText: "Enter a new password.....",
                       hintStyle: TextStyle(
-                        color: textColor,
-                      ),
-                      helperText: "Excludes whitespace around the password.",
-                      helperStyle: TextStyle(
                         color: textColor,
                       ),
                       border: OutlineInputBorder(
@@ -182,14 +179,30 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            newP = !newP;
+                          });
+                        },
+                        icon: Icon(Icons.remove_red_eye_sharp),
+                        color: Colors.deepPurpleAccent[700],
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: 20,
                   ),
                   TextFormField(
-                    validator: (value) =>
-                        MatchValidator(errorText: "Confirm Password did not match.")
-                            .validateMatch(value!, newPassword),
-                    obscureText: true,
+                    validator: (value) => MatchValidator(
+                            errorText: "Confirm Password did not match.")
+                        .validateMatch(value!, newPassword),
+                    obscureText: !conP,
                     style: TextStyle(
                       color: textColor,
                     ),
@@ -227,6 +240,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
                       ),
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        iconSize: 25,
+                        onPressed: () {
+                          setState(() {
+                            conP = !conP;
+                          });
+                        },
+                        icon: Icon(Icons.remove_red_eye_sharp),
+                        color: Colors.deepPurpleAccent[700],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 25,

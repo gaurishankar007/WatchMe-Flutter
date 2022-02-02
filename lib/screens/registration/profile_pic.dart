@@ -161,7 +161,10 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                       ),
                                     ),
                                     Container(
-                                      color: Colors.deepPurpleAccent[700],
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(3),
+                                        color: Colors.deepPurpleAccent[700],
+                                      ),
                                       height: 55,
                                       width: 4,
                                     ),
@@ -214,7 +217,10 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                   height: 10,
                                 ),
                                 Container(
-                                  color: Colors.deepPurpleAccent[700],
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3),
+                                    color: Colors.deepPurpleAccent[700],
+                                  ),
                                   width: _screenWidth * .30,
                                   height: 5,
                                 ),
