@@ -108,7 +108,8 @@ class HttpConnectUser {
 
       // need a filename
       var coverPictureName = coverPicture.path.split('/').last;
-      // adding the file in the request
+
+      // adding the image in the request
       request.files.add(
         http.MultipartFile(
           'cover',

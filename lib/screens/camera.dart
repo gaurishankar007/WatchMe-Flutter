@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/http/http_post.dart';
+import 'package:assignment/api/model/post.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -26,6 +26,7 @@ class _CameraState extends State<Camera> {
   List<File> posts = [];
   int activatedIndex = 0;
   String caption = "", description = "";
+  List<String> tag_friend = [];
 
   void fromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -197,189 +198,218 @@ class _CameraState extends State<Camera> {
                     ),
                   ),
                 )
-              : Column(
-                  children: [
-                    SizedBox(
-                      height: 5,
-                    ),
-                    CarouselSlider(
-                      items: posts.map((i) {
-                        return Builder(builder: (BuildContext context) {
-                          return Image(
-                            image: FileImage(i),
-                            fit: BoxFit.contain,
-                          );
-                        });
-                      }).toList(),
-                      options: CarouselOptions(
-                        initialPage: 0, // shows the first image
-                        viewportFraction: 1, // shows one image at a time
-                        height: 250,
-                        enableInfiniteScroll:
-                            false, // makes carousel scrolling only from first image to last image, disables loop scrolling
-                        onPageChanged: ((indexCar, reason) {
-                          setState(() {
-                            activatedIndex = indexCar;
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 5,
+                      ),
+                      CarouselSlider(
+                        items: posts.map((i) {
+                          return Builder(builder: (BuildContext context) {
+                            return Image(
+                              image: FileImage(i),
+                              fit: BoxFit.contain,
+                            );
                           });
-                        }),
+                        }).toList(),
+                        options: CarouselOptions(
+                          initialPage: 0, // shows the first image
+                          viewportFraction: 1, // shows one image at a time
+                          height: 250,
+                          enableInfiniteScroll:
+                              false, // makes carousel scrolling only from first image to last image, disables loop scrolling
+                          onPageChanged: ((indexCar, reason) {
+                            setState(() {
+                              activatedIndex = indexCar;
+                            });
+                          }),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    AnimatedSmoothIndicator(
-                      activeIndex: activatedIndex,
-                      count: posts.length,
-                      effect: WormEffect(
-                        dotColor: textColor,
-                        activeDotColor: Colors.deepPurpleAccent,
-                        dotHeight: 9,
-                        dotWidth: 9,
+                      SizedBox(
+                        height: 5,
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: _screenWidth * .05,
+                      AnimatedSmoothIndicator(
+                        activeIndex: activatedIndex,
+                        count: posts.length,
+                        effect: WormEffect(
+                          dotColor: textColor,
+                          activeDotColor: Colors.deepPurpleAccent,
+                          dotHeight: 9,
+                          dotWidth: 9,
+                        ),
                       ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            onSaved: (value) {
-                              caption = value!.trim();
-                            },
-                            textCapitalization: TextCapitalization.words,
-                            validator: MultiValidator([
-                              RequiredValidator(
-                                  errorText: "Caption is requied.")
-                            ]),
-                            style: TextStyle(
-                              color: textColor,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: _screenWidth * .05,
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
                             ),
-                            decoration: InputDecoration(
-                              labelText: "Caption",
-                              labelStyle: TextStyle(
-                                color: textColor,
-                                fontFamily: "Laila-Bold",
-                              ),
-                              hintText: "Enter post's caption.....",
-                              hintStyle: TextStyle(
+                            TextFormField(
+                              onChanged: (value) {
+                                caption = value.trim();
+                              },
+                              textCapitalization: TextCapitalization.words,
+                              style: TextStyle(
                                 color: textColor,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
+                              decoration: InputDecoration(
+                                labelText: "Caption",
+                                labelStyle: TextStyle(
                                   color: textColor,
-                                  width: 2,
-                                  style: BorderStyle.solid,
+                                  fontFamily: "Laila-Bold",
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
+                                hintText: "Enter post's caption.....",
+                                hintStyle: TextStyle(
                                   color: textColor,
-                                  width: 2,
-                                  style: BorderStyle.solid,
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            maxLines: 3,
-                            onSaved: (value) {
-                              description = value!.trim();
-                            },
-                            keyboardType: TextInputType.multiline,
-                            textCapitalization: TextCapitalization.sentences,
-                            style: TextStyle(
-                              color: textColor,
-                            ),
-                            decoration: InputDecoration(
-                              labelText: "Description",
-                              labelStyle: TextStyle(
-                                color: textColor,
-                                fontFamily: "Laila-Bold",
-                              ),
-                              hintText: "Enter post's description.....",
-                              hintStyle: TextStyle(
-                                color: textColor,
-                              ),
-                              helperText: "Optional",
-                              helperStyle: TextStyle(
-                                color: textColor,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  style: BorderStyle.solid,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
                                 ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: textColor,
-                                  width: 2,
-                                  style: BorderStyle.solid,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: textColor,
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: textColor,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(context, "/camera");
-                                },
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                    color: Colors.deepPurpleAccent[700],
-                                    fontSize: 20,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.deepPurpleAccent,
-                                        offset: Offset(3, 4),
-                                        blurRadius: 20,
-                                      ),
-                                    ],
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: textColor,
+                                    width: 2,
+                                    style: BorderStyle.solid,
                                   ),
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  if (5 == 4) {
-                                    final res = await HttpConnectUser()
-                                        .addProfile(File("skdjlk"));
-                                    if (res["message"] ==
-                                        "New profile picture added.") {
-                                      Navigator.pushNamed(
-                                          context, "/add-cover");
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              maxLines: 3,
+                              onChanged: (value) {
+                                description = value.trim();
+                              },
+                              keyboardType: TextInputType.multiline,
+                              textCapitalization: TextCapitalization.sentences,
+                              style: TextStyle(
+                                color: textColor,
+                              ),
+                              decoration: InputDecoration(
+                                labelText: "Description",
+                                labelStyle: TextStyle(
+                                  color: textColor,
+                                  fontFamily: "Laila-Bold",
+                                ),
+                                hintText: "Enter post's description.....",
+                                hintStyle: TextStyle(
+                                  color: textColor,
+                                ),
+                                helperText: "Optional",
+                                helperStyle: TextStyle(
+                                  color: textColor,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: textColor,
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: textColor,
+                                    width: 2,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Tag Friends",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.deepPurpleAccent[700],
+                                elevation: 10,
+                                shadowColor: Colors.deepPurpleAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, "/camera");
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                    style: TextStyle(
+                                      color: Colors.deepPurpleAccent[700],
+                                      fontSize: 20,
+                                      shadows: const [
+                                        Shadow(
+                                          color: Colors.deepPurpleAccent,
+                                          offset: Offset(3, 4),
+                                          blurRadius: 20,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (caption == "") {
+                                      return MotionToast.error(
+                                        position: MOTION_TOAST_POSITION.top,
+                                        animationType: ANIMATION.fromTop,
+                                        toastDuration: Duration(seconds: 2),
+                                        description:
+                                            "Give a caption to your post.",
+                                      ).show(context);
+                                    }
+                                    final res = await HttpConnetPost()
+                                        .postImage(AddPost(
+                                      caption: caption,
+                                      description: description,
+                                      images: posts,
+                                      taggedFriend: tag_friend,
+                                    ));
+
+                                    if (res["message"] == "Post uploaded") {
+                                      Navigator.pushNamed(context, "/camera");
                                       MotionToast.success(
                                         position: MOTION_TOAST_POSITION.top,
                                         animationType: ANIMATION.fromTop,
@@ -394,37 +424,32 @@ class _CameraState extends State<Camera> {
                                         description: res["message"],
                                       ).show(context);
                                     }
-                                  } else {
-                                    MotionToast.error(
-                                      position: MOTION_TOAST_POSITION.top,
-                                      animationType: ANIMATION.fromTop,
-                                      toastDuration: Duration(seconds: 1),
-                                      description:
-                                          "Select a profile picture first.",
-                                    ).show(context);
-                                  }
-                                },
-                                child: Text(
-                                  "Post",
-                                  style: TextStyle(
-                                    fontSize: 15,
+                                  },
+                                  child: Text(
+                                    "Post",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 10,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.deepPurpleAccent[700],
-                                  elevation: 10,
-                                  shadowColor: Colors.deepPurpleAccent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
                 ),
         ),
         bottomNavigationBar: Container(
@@ -495,5 +520,48 @@ class _CameraState extends State<Camera> {
         ),
       );
     });
+  }
+
+  Widget taggFriend() {
+    return SingleChildScrollView(
+      child: Container(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
+          children: [
+            const Text(
+              'Choose profile photo',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.camera),
+                  label: const Text('Camera'),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.image),
+                  label: const Text('Gallery'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
