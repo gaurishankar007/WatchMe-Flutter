@@ -73,37 +73,191 @@ class _CoverSettingState extends State<CoverSetting> {
                         ),
                         (coverPicture == null)
                             ? ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(5),
                                 child: Image(
-                                  height: 150,
-                                  width: _screenWidth * .90,
+                                  width: _screenWidth * .95,
                                   fit: BoxFit.contain,
                                   image: NetworkImage(coverPictureUrl +
                                       snapshot.data!["userData"]["cover_pic"]),
                                 ),
                               )
                             : ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(5),
                                 child: Image(
-                                  height: 150,
-                                  width: _screenWidth * .90,
-                                  fit: BoxFit.cover,
+                                  width: _screenWidth * .95,
+                                  fit: BoxFit.contain,
                                   image: FileImage(coverPicture!),
                                 ),
                               ),
                         SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Column(
                           children: [
                             ElevatedButton(
                               onPressed: () async {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (builder) => Container(
+                                    padding: EdgeInsets.only(top: 5),
+                                    decoration: BoxDecoration(
+                                      color: backColor,
+                                      borderRadius: new BorderRadius.only(
+                                        topLeft: const Radius.circular(25.0),
+                                        topRight: const Radius.circular(25.0),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: textColor,
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                          offset: Offset(0,
+                                              1), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    height: 80,
+                                    width: _screenWidth,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                final image =
+                                                    await ImagePicker()
+                                                        .pickImage(
+                                                            source: ImageSource
+                                                                .camera);
+                                                setState(() {
+                                                  coverPicture =
+                                                      File(image!.path);
+                                                  coverPictureName = image.path
+                                                      .split("/")
+                                                      .last;
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.camera,
+                                                    size: 30,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(
+                                                    width: _screenWidth * .03,
+                                                  ),
+                                                  Text(
+                                                    "Camera",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 15,
+                                                    vertical: 5),
+                                                primary: Colors
+                                                    .deepPurpleAccent[700],
+                                                elevation: 5,
+                                                shadowColor:
+                                                    Colors.deepPurpleAccent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(3),
+                                                color: Colors
+                                                    .deepPurpleAccent[700],
+                                              ),
+                                              height: 55,
+                                              width: 4,
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                final image =
+                                                    await ImagePicker()
+                                                        .pickImage(
+                                                            source: ImageSource
+                                                                .gallery);
+                                                setState(() {
+                                                  coverPicture =
+                                                      File(image!.path);
+                                                  coverPictureName = image.path
+                                                      .split("/")
+                                                      .last;
+                                                });
+                                                Navigator.pop(context);
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.photo_album,
+                                                    size: 30,
+                                                    color: Colors.white,
+                                                  ),
+                                                  SizedBox(
+                                                    width: _screenWidth * .03,
+                                                  ),
+                                                  Text(
+                                                    "Gallery",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 15,
+                                                    vertical: 5),
+                                                primary: Colors
+                                                    .deepPurpleAccent[700],
+                                                elevation: 5,
+                                                shadowColor:
+                                                    Colors.deepPurpleAccent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                            color: Colors.deepPurpleAccent[700],
+                                          ),
+                                          width: _screenWidth * .30,
+                                          height: 5,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               },
-                              child: Text(
-                                "Select a cover picture",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                              child: Icon(
+                                Icons.upload_outlined,
+                                size: 40,
                               ),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.deepPurpleAccent[700],

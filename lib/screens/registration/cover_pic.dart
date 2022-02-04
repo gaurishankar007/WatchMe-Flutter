@@ -75,7 +75,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                 ),
                 (coverPicture == null)
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(5),
                         child: Image(
                           height: 150,
                           width: _screenWidth * .90,
@@ -84,7 +84,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                         ),
                       )
                     : ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(5),
                         child: Image(
                           height: 150,
                           width: _screenWidth * .90,
@@ -102,14 +102,14 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                         showModalBottomSheet(
                           isScrollControlled: true,
                           context: context,
-                          backgroundColor: backColor,
+                          backgroundColor: Colors.transparent,
                           builder: (builder) => Container(
                             padding: EdgeInsets.only(top: 5),
                             decoration: BoxDecoration(
                               color: backColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
+                              borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(25.0),
+                                topRight: const Radius.circular(25.0),
                               ),
                               boxShadow: [
                                 BoxShadow(
@@ -145,7 +145,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                           Icon(
                                             Icons.camera,
                                             size: 30,
-                                            color: backColor,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
                                             width: _screenWidth * .03,
@@ -153,7 +153,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                           Text(
                                             "Camera",
                                             style: TextStyle(
-                                              color: backColor,
+                                              color: Colors.white,
                                               fontSize: 15,
                                             ),
                                           )
@@ -196,7 +196,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                           Icon(
                                             Icons.photo_album,
                                             size: 30,
-                                            color: backColor,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
                                             width: _screenWidth * .03,
@@ -204,7 +204,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                           Text(
                                             "Gallery",
                                             style: TextStyle(
-                                              color: backColor,
+                                              color: Colors.white,
                                               fontSize: 15,
                                             ),
                                           )

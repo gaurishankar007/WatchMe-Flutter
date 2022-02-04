@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_address.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -36,7 +37,7 @@ class _AddressSettingState extends State<AddressSetting> {
   var uTStreet = TextEditingController();
 
   void getAddressInformation() async {
-    final responseData = await HttpConnectUser().getAddressInfo();
+    final responseData = await HttpConnectAddress().getAddressInfo();
     if (responseData.containsKey("userAddress")) {
       pCountry = responseData["userAddress"]["permanent"]["country"];
       uPState.text = responseData["userAddress"]["permanent"]["state"];
@@ -575,7 +576,7 @@ class _AddressSettingState extends State<AddressSetting> {
                           ).show(context);
                         }
 
-                        final responseData = await HttpConnectUser().addAddress(
+                        final responseData = await HttpConnectAddress().addAddress(
                           AddressRegister(
                               pCountry: pCountry,
                               pState: pState,

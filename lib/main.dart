@@ -5,6 +5,8 @@ import 'package:assignment/screens/login/login.dart';
 import 'package:assignment/screens/login/reset_password.dart';
 import 'package:assignment/screens/notification/notification_unseen.dart';
 import 'package:assignment/screens/profile/profile_main.dart';
+import 'package:assignment/screens/profile/watcher.dart';
+import 'package:assignment/screens/profile/watching.dart';
 import 'package:assignment/screens/registration/address.dart';
 import 'package:assignment/screens/registration/cover_pic.dart';
 import 'package:assignment/screens/registration/personal_info.dart';
@@ -55,6 +57,8 @@ class _WatchMeState extends State<WatchMe> {
         '/camera': (context) => Camera(),
         '/notification': (context) => NotificationUnseen(),
         '/profile': (context) => ProfileMain(),
+        '/watchers': (context) => Watcher(),
+        '/watchings': (context) => Watching(),
         '/setting': (context) => Setting(),
         '/profile-setting': (context) => ProfileSetting(),
         '/cover-setting': (context) => CoverSetting(),

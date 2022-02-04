@@ -73,19 +73,37 @@ class _ProfileSettingState extends State<ProfileSetting> {
                           height: 20,
                         ),
                         (profilePicture == null)
-                            ? CircleAvatar(
-                                radius: _screenWidth * .45,
-                                backgroundImage: NetworkImage(
-                                    profilePictureUrl +
-                                        snapshot.data!["userData"]
-                                            ["profile_pic"]),
-                              )
+                            ? snapshot.data!["userData"]["profile_pic"] !=
+                                    "defaultProfile.png"
+                                ? CircleAvatar(
+                                    radius: _screenWidth * .48,
+                                    backgroundColor:
+                                        Colors.deepPurpleAccent[700],
+                                    child: CircleAvatar(
+                                      radius: _screenWidth * .45,
+                                      backgroundImage: NetworkImage(
+                                          profilePictureUrl +
+                                              snapshot.data!["userData"]
+                                                  ["profile_pic"]),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: _screenWidth * .45,
+                                    backgroundImage: NetworkImage(
+                                        profilePictureUrl +
+                                            snapshot.data!["userData"]
+                                                ["profile_pic"]),
+                                  )
                             : CircleAvatar(
-                                radius: _screenWidth * .45,
-                                backgroundImage: FileImage(profilePicture!),
+                                radius: _screenWidth * .48,
+                                backgroundColor: Colors.deepPurpleAccent[700],
+                                child: CircleAvatar(
+                                  radius: _screenWidth * .45,
+                                  backgroundImage: FileImage(profilePicture!),
+                                ),
                               ),
                         SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Column(
                           children: [
@@ -94,11 +112,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                 showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
-                                  backgroundColor: backColor,
+                                  backgroundColor: Colors.transparent,
                                   builder: (builder) => Container(
                                     padding: EdgeInsets.only(top: 5),
                                     decoration: BoxDecoration(
                                       color: backColor,
+                                      borderRadius: new BorderRadius.only(
+                                        topLeft: const Radius.circular(25.0),
+                                        topRight: const Radius.circular(25.0),
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
                                           color: textColor,
@@ -139,7 +161,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                   Icon(
                                                     Icons.camera,
                                                     size: 30,
-                                                    color: backColor,
+                                                    color: Colors.white,
                                                   ),
                                                   SizedBox(
                                                     width: _screenWidth * .03,
@@ -147,7 +169,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                   Text(
                                                     "Camera",
                                                     style: TextStyle(
-                                                      color: backColor,
+                                                      color: Colors.white,
                                                       fontSize: 15,
                                                     ),
                                                   )
@@ -200,7 +222,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                   Icon(
                                                     Icons.photo_album,
                                                     size: 30,
-                                                    color: backColor,
+                                                    color: Colors.white,
                                                   ),
                                                   SizedBox(
                                                     width: _screenWidth * .03,
@@ -208,7 +230,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                   Text(
                                                     "Gallery",
                                                     style: TextStyle(
-                                                      color: backColor,
+                                                      color: Colors.white,
                                                       fontSize: 15,
                                                     ),
                                                   )
@@ -248,11 +270,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   ),
                                 );
                               },
-                              child: Text(
-                                "Select a profile picture",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
+                              child: Icon(
+                                Icons.upload_outlined,
+                                size: 40,
                               ),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.deepPurpleAccent[700],

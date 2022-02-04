@@ -129,63 +129,6 @@ class HttpConnectUser {
     return {"message": "Error Occured. Something went wrong."};
   }
 
-  Future<Map> addPersonalInfo(PersonalInfoRegister pInfo) async {
-    try {
-      Map<String, dynamic> userData = {
-        "first_name": pInfo.firstname,
-        "last_name": pInfo.lastname,
-        "gender": pInfo.gender,
-        "birthday": pInfo.birthdate,
-        "biography": pInfo.biography,
-      };
-
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
-
-      final response = await put(Uri.parse(baseurl + "profile/update"),
-          body: userData, headers: bearerToken);
-
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
-  }
-
-  Future<Map> addAddress(AddressRegister address) async {
-    try {
-      Map<String, dynamic> userData = {
-        "pCountry": address.pCountry,
-        "pState": address.pState,
-        "pCity": address.pCity,
-        "pStreet": address.pStreet,
-        "tCountry": address.tCountry,
-        "tState": address.tState,
-        "tCity": address.tCity,
-        "tStreet": address.tStreet,
-      };
-
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
-
-      final response = await put(Uri.parse(baseurl + "address/update"),
-          body: userData, headers: bearerToken);
-
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
-  }
-
   Future<Map> generateResetToken(passResetToken user) async {
     try {
       Map<String, dynamic> userData = {
@@ -318,40 +261,6 @@ class HttpConnectUser {
 
       final response =
           await put(Uri.parse(baseurl + "user/changePhone"), body: userData, headers: bearerToken);
-
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
-  }
-
-  Future<Map> getPersonalInfo() async {
-    try {
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
-
-      final response = await get(Uri.parse(baseurl + "profile/get/my"), headers: bearerToken);
-
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
-  }
-
-  Future<Map> getAddressInfo() async {
-    try {
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
-
-      final response = await get(Uri.parse(baseurl + "address/get/my"), headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;

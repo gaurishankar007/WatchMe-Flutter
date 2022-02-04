@@ -7,7 +7,7 @@ import 'package:assignment/api/model/post.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class HttpConnetPost {
+class HttpConnectPost {
   String baseurl = 'http://10.0.2.2:4040/';
   String token = HttpConnectUser.token;
 
@@ -29,7 +29,8 @@ class HttpConnetPost {
       };
       request.fields.addAll(postDetail);
       for (int i = 0; i < postData.taggedFriend!.length; i++) {
-        request.fields.addAll({"tag_friend[${i}]": "${postData.taggedFriend![i]}"});
+        request.fields
+            .addAll({"tag_friend[${i}]": "${postData.taggedFriend![i]}"});
       }
 
       // Adding images
@@ -52,5 +53,31 @@ class HttpConnetPost {
       log('$err');
     }
     return {"message": "Error Occured."};
+  }
+
+  Future<List> getPosts() async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response =
+        await get(Uri.parse(baseurl + "posts/get/my"), headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
+  Future<List> getTaggedPosts() async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await get(Uri.parse(baseurl + "posts/get/tagged"),
+        headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
   }
 }

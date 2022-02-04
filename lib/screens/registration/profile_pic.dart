@@ -94,11 +94,15 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                         showModalBottomSheet(
                           isScrollControlled: true,
                           context: context,
-                          backgroundColor: backColor,
+                          backgroundColor: Colors.transparent,
                           builder: (builder) => Container(
                             padding: EdgeInsets.only(top: 5),
                             decoration: BoxDecoration(
                               color: backColor,
+                              borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(25.0),
+                                topRight: const Radius.circular(25.0),
+                              ),
                               boxShadow: [
                                 BoxShadow(
                                   color: textColor,
@@ -134,7 +138,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                           Icon(
                                             Icons.camera,
                                             size: 30,
-                                            color: backColor,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
                                             width: _screenWidth * .03,
@@ -142,7 +146,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                           Text(
                                             "Camera",
                                             style: TextStyle(
-                                              color: backColor,
+                                              color: Colors.white,
                                               fontSize: 15,
                                             ),
                                           )
@@ -185,7 +189,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                           Icon(
                                             Icons.photo_album,
                                             size: 30,
-                                            color: backColor,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
                                             width: _screenWidth * .03,

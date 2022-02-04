@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_address.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -552,7 +553,7 @@ class _AddressState extends State<Address> {
                             _formKey.currentState!.save();
 
                             final responseData =
-                                await HttpConnectUser().addAddress(
+                                await HttpConnectAddress().addAddress(
                               AddressRegister(
                                   pCountry: pCountry,
                                   pState: pState,

@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -28,7 +29,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
   late Future<Map> getBirthDate;
 
   void getPersonalInformaion() async {
-    final responseData = await HttpConnectUser().getPersonalInfo();
+    final responseData = await HttpConnectProfile().getPersonalInfo();
     if (responseData.containsKey("userProfile")) {
       uFirstName.text = responseData["userProfile"]["first_name"];
       uLastName.text = responseData["userProfile"]["last_name"];
@@ -45,7 +46,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
   void initState() {
     super.initState();
     getPersonalInformaion();
-    getBirthDate = HttpConnectUser().getPersonalInfo();
+    getBirthDate = HttpConnectProfile().getPersonalInfo();
   }
 
   @override
@@ -419,7 +420,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                         }
 
                         final responseData =
-                            await HttpConnectUser().addPersonalInfo(
+                            await HttpConnectProfile().addPersonalInfo(
                           PersonalInfoRegister(
                               firstname: firstName,
                               lastname: lastName,

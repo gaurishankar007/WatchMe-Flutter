@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -385,7 +386,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                             }
 
                             final responseData =
-                                await HttpConnectUser().addPersonalInfo(
+                                await HttpConnectProfile().addPersonalInfo(
                               PersonalInfoRegister(
                                   firstname: firstName,
                                   lastname: lastName,

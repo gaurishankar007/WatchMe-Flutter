@@ -61,12 +61,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // Token().getToken().then((value) {
-    //   if (value.isEmpty) {
-    //     Navigator.of(context)
-    //         .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-    //   }
-    // });
+    Token().getToken().then((value) {
+      if (value.isEmpty) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+      }
+    });
     addIndex();
   }
 
