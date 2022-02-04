@@ -33,7 +33,7 @@ class _ProfileMainState extends State<ProfileMain> {
   String taggedPostsNum = "0";
   bool postsMy = true;
 
-  Future setWatchersWatchingNum() async {
+  Future setUserNum() async {
     final res = await HttpConnectWatch().getUserNum();
     setState(() {
       watchersNum = res["followers"];
@@ -47,7 +47,7 @@ class _ProfileMainState extends State<ProfileMain> {
   void initState() {
     super.initState();
     getUser = HttpConnectUser().getUser();
-    setWatchersWatchingNum();
+    setUserNum();
     userProfile = HttpConnectProfile().getPersonalInfo();
     userAdddress = HttpConnectAddress().getAddressInfo();
     userPosts = HttpConnectPost().getPosts();

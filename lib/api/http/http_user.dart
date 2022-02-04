@@ -183,14 +183,14 @@ class HttpConnectUser {
     return {"message": "Error Occured."};
   }
 
-  Future<Map> getUserOther(String user_id) async {
+  Future<Map> getUserOther(String? user_id) async {
     try {
       final bearerToken = {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
       final response = await post(Uri.parse(baseurl + "user/other"),
-          body: {"user_id": user_id}, headers: bearerToken);
+          body: {"user_id": user_id!}, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;

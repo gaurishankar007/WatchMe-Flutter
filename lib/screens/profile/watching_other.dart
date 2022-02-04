@@ -1,28 +1,34 @@
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Watching extends StatefulWidget {
-  const Watching({Key? key}) : super(key: key);
+class WatchingOther extends StatefulWidget {
+  final String? user_id;
+  const WatchingOther({Key? key, @required this.user_id}) : super(key: key);
 
   @override
-  _WatchingState createState() => _WatchingState();
+  _WatchingOtherState createState() => _WatchingOtherState();
 }
 
-class _WatchingState extends State<Watching> {
+class _WatchingOtherState extends State<WatchingOther> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
   String profileUrl = "http://10.0.2.2:4040/profiles/";
 
   late Future<List> userWatchings;
+  String? myId;
 
   @override
   void initState() {
     super.initState();
-    userWatchings = HttpConnectWatch().getWatchings();
+    userWatchings = HttpConnectWatch().getWatchingsOther(widget.user_id);
+    HttpConnectUser()
+        .getUser()
+        .then((value) => myId = value["userData"]["_id"]);
   }
 
   @override
@@ -38,16 +44,6 @@ class _WatchingState extends State<Watching> {
           appBar: AppBar(
             iconTheme: IconThemeData(
               color: textColor,
-            ),
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, "/profile");
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: textColor,
-              ),
             ),
             backgroundColor: backColor,
             title: Text(
@@ -73,17 +69,6 @@ class _WatchingState extends State<Watching> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) => ListTile(
-                    onLongPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => ProfileMainOther(
-                            user_id: snapshot.data![index]["followed_user"]
-                                ["_id"],
-                          ),
-                        ),
-                      );
-                    },
                     horizontalTitleGap: 15,
                     minVerticalPadding: 20,
                     leading: CircleAvatar(
@@ -99,30 +84,38 @@ class _WatchingState extends State<Watching> {
                           color: textColor,
                           fontFamily: "Laila-bold"),
                     ),
-                    trailing: ElevatedButton(
-                      onPressed: () async {
-                        await HttpConnectWatch().unWatch(
-                            snapshot.data![index]["followed_user"]["_id"]);
-
-                        setState(() {
-                          userWatchings = HttpConnectWatch().getWatchings();
-                        });
-                      },
-                      child: Text(
-                        "UnWatch",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurpleAccent[700],
-                        elevation: 10,
-                        shadowColor: Colors.deepPurpleAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
+                    trailing:
+                        myId != snapshot.data![index]["followed_user"]["_id"]
+                            ? ElevatedButton(
+                                onPressed: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (builder) => ProfileMainOther(
+                                        user_id: snapshot.data![index]
+                                            ["followed_user"]["_id"],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "View Profile",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.deepPurpleAccent[700],
+                                  elevation: 10,
+                                  shadowColor: Colors.deepPurpleAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 0,
+                              ),
                   ),
                 );
               } else if (snapshot.hasError) {

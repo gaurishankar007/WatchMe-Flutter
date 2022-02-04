@@ -20,7 +20,6 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
       Color backColor =
           ref.watch(themeController) ? Colors.black : Colors.white;

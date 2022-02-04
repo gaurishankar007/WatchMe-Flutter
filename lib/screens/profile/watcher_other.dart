@@ -1,28 +1,34 @@
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Watcher extends StatefulWidget {
-  const Watcher({Key? key}) : super(key: key);
+class WatcherOther extends StatefulWidget {
+  final String? user_id;
+  const WatcherOther({Key? key, @required this.user_id}) : super(key: key);
 
   @override
-  _WatcherState createState() => _WatcherState();
+  _WatcherOtherState createState() => _WatcherOtherState();
 }
 
-class _WatcherState extends State<Watcher> {
+class _WatcherOtherState extends State<WatcherOther> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
   String profileUrl = "http://10.0.2.2:4040/profiles/";
 
   late Future<List> userWatchers;
+  String? myId;
 
   @override
   void initState() {
     super.initState();
-    userWatchers = HttpConnectWatch().getWatchers();
+    userWatchers = HttpConnectWatch().getWatchersOther(widget.user_id);
+    HttpConnectUser()
+        .getUser()
+        .then((value) => myId = value["userData"]["_id"]);
   }
 
   @override
@@ -37,16 +43,6 @@ class _WatcherState extends State<Watcher> {
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: textColor,
-          ),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, "/profile");
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: textColor,
-            ),
           ),
           backgroundColor: backColor,
           title: Text(
@@ -72,16 +68,6 @@ class _WatcherState extends State<Watcher> {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
-                  onLongPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (builder) => ProfileMainOther(
-                          user_id: snapshot.data![index]["follower"]["_id"],
-                        ),
-                      ),
-                    );
-                  },
                   horizontalTitleGap: 15,
                   minVerticalPadding: 20,
                   leading: CircleAvatar(
@@ -96,30 +82,37 @@ class _WatcherState extends State<Watcher> {
                         color: textColor,
                         fontFamily: "Laila-bold"),
                   ),
-                  trailing: ElevatedButton(
-                    onPressed: () async {
-                      await HttpConnectWatch().removeWatcher(
-                          snapshot.data![index]["follower"]["_id"]);
-
-                      setState(() {
-                        userWatchers = HttpConnectWatch().getWatchers();
-                      });
-                    },
-                    child: Text(
-                      "Remove",
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.deepPurpleAccent[700],
-                      elevation: 10,
-                      shadowColor: Colors.deepPurpleAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
+                  trailing: myId != snapshot.data![index]["follower"]["_id"]
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => ProfileMainOther(
+                                  user_id: snapshot.data![index]["follower"]
+                                      ["_id"],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "View Profile",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.deepPurpleAccent[700],
+                            elevation: 10,
+                            shadowColor: Colors.deepPurpleAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 0,
+                        ),
                 ),
               );
             } else if (snapshot.hasError) {

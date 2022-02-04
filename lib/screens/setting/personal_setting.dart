@@ -1,5 +1,4 @@
 import 'package:assignment/api/http/http_profile.dart';
-import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';

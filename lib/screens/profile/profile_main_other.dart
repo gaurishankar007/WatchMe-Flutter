@@ -3,6 +3,8 @@ import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
+import 'package:assignment/screens/profile/watcher_other.dart';
+import 'package:assignment/screens/profile/watching_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,25 +35,28 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
   String postsNum = "0";
   String taggedPostsNum = "0";
   bool postsMy = true;
+  bool watched = false;
 
-  Future setWatchersWatchingNum() async {
-    final res = await HttpConnectWatch().getUserNum();
+  Future setUserNum() async {
+    final res = await HttpConnectWatch().getOtherNum(widget.user_id);
+    final res1 = await HttpConnectWatch().checkWatch(widget.user_id);
     setState(() {
       watchersNum = res["followers"];
       watchingsNum = res["followed_users"];
       postsNum = res["postsNum"];
       taggedPostsNum = res["taggedPostsNum"];
+      res1["message"] == "Followed." ? watched = true : watched = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getUser = HttpConnectUser().getUser();
-    setWatchersWatchingNum();
-    userProfile = HttpConnectProfile().getPersonalInfo();
-    userAdddress = HttpConnectAddress().getAddressInfo();
-    userPosts = HttpConnectPost().getPosts();
+    getUser = HttpConnectUser().getUserOther(widget.user_id);
+    setUserNum();
+    userProfile = HttpConnectProfile().getPersonalOther(widget.user_id);
+    userAdddress = HttpConnectAddress().getAddressOther(widget.user_id);
+    userPosts = HttpConnectPost().getOtherPosts(widget.user_id);
   }
 
   @override
@@ -65,350 +70,232 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
             ref.watch(themeController) ? Colors.white : Colors.black87;
         return Scaffold(
           backgroundColor: backColor,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: _screenWidth * .025,
-                vertical: _screenWidth * .025,
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: textColor,
+            ),
+            backgroundColor: backColor,
+            title: Text(
+              "Profile",
+              style: TextStyle(
+                color: textColor,
+                fontSize: 20,
               ),
-              child: Column(
-                children: [
-                  FutureBuilder<Map>(
-                    future: getUser,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                          children: [
-                            Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                CircleAvatar(
-                                  radius: 80,
-                                  backgroundColor: Colors.deepPurpleAccent[700],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {},
-                                      onLongPress: () {
-                                        Navigator.pop(context);
-                                        Navigator.pushNamed(
-                                            context, "/watchers");
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            watchersNum,
-                                            style: TextStyle(
-                                              color: textColor,
-                                              fontSize: 25,
-                                              fontFamily: "Laila-Bold",
-                                            ),
-                                          ),
-                                          Text(
-                                            "Waterchs",
-                                            style: TextStyle(
-                                              color: textColor,
-                                              fontSize: 15,
-                                              fontFamily: "Laila-Bold",
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      onLongPress: () {
-                                        Navigator.pop(context);
-                                        Navigator.pushNamed(
-                                            context, "/watchings");
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            watchingsNum,
-                                            style: TextStyle(
-                                              color: textColor,
-                                              fontSize: 25,
-                                              fontFamily: "Laila-Bold",
-                                            ),
-                                          ),
-                                          Text(
-                                            "Watchings",
-                                            style: TextStyle(
-                                              color: textColor,
-                                              fontSize: 15,
-                                              fontFamily: "Laila-Bold",
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: 80,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Image(
-                                      width: _screenWidth * .95,
-                                      fit: BoxFit.contain,
-                                      image: NetworkImage(
-                                        coverUrl +
-                                            snapshot.data!["userData"]
-                                                ["cover_pic"],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    bottom: 5,
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 75,
-                                    backgroundImage: NetworkImage(
-                                      profileUrl +
-                                          snapshot.data!["userData"]
-                                              ["profile_pic"],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              snapshot.data!["userData"]["username"],
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 20,
-                                fontFamily: "Laila-Bold",
+            ),
+            centerTitle: true,
+            shape: Border(
+              bottom: BorderSide(
+                color: textColor,
+                width: .1,
+              ),
+            ),
+            elevation: 0,
+          ),
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: _screenWidth * .025,
+              vertical: _screenWidth * .025,
+            ),
+            child: Column(
+              children: [
+                FutureBuilder<Map>(
+                  future: getUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              CircleAvatar(
+                                radius: 80,
+                                backgroundColor: Colors.deepPurpleAccent[700],
                               ),
-                            ),
-                          ],
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text(
-                            "${snapshot.error}",
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    onLongPress: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (builder) => WatcherOther(
+                                            user_id: widget.user_id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          watchersNum,
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 25,
+                                            fontFamily: "Laila-Bold",
+                                          ),
+                                        ),
+                                        Text(
+                                          "Waterchs",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 15,
+                                            fontFamily: "Laila-Bold",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    onLongPress: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (builder) => WatchingOther(
+                                            user_id: widget.user_id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          watchingsNum,
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 25,
+                                            fontFamily: "Laila-Bold",
+                                          ),
+                                        ),
+                                        Text(
+                                          "Watchings",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 15,
+                                            fontFamily: "Laila-Bold",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                  bottom: 80,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Image(
+                                    width: _screenWidth * .95,
+                                    fit: BoxFit.contain,
+                                    image: NetworkImage(
+                                      coverUrl +
+                                          snapshot.data!["userData"]
+                                              ["cover_pic"],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                  bottom: 5,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 75,
+                                  backgroundImage: NetworkImage(
+                                    profileUrl +
+                                        snapshot.data!["userData"]
+                                            ["profile_pic"],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            snapshot.data!["userData"]["username"],
                             style: TextStyle(
                               color: textColor,
-                              fontSize: 15,
+                              fontSize: 20,
+                              fontFamily: "Laila-Bold",
                             ),
                           ),
-                        );
-                      }
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.deepPurpleAccent[700],
-                      );
-                    },
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (builder) => SingleChildScrollView(
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                  top: 10,
-                                  left: _screenWidth * .05,
-                                  right: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: backColor,
-                                  borderRadius: new BorderRadius.only(
-                                    topLeft: const Radius.circular(25.0),
-                                    topRight: const Radius.circular(25.0),
+                          watched
+                              ? ElevatedButton(
+                                  onPressed: () async {
+                                    await HttpConnectWatch().unWatch(
+                                        snapshot.data!["userData"]["_id"]);
+                                      setUserNum();
+                                  },
+                                  child: Text(
+                                    "UnWatch",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: textColor,
-                                      spreadRadius: 1,
-                                      blurRadius: 2,
-                                      offset: Offset(
-                                          0, 1), // changes position of shadow
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 10,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.deepPurpleAccent[700],
-                                      ),
-                                      height: 5,
-                                      width: _screenWidth * .20,
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () async {
+                                    await HttpConnectWatch().watch(
+                                        snapshot.data!["userData"]["_id"]);
+                                      setUserNum();
+                                  },
+                                  child: Text(
+                                    "Watch",
+                                    style: TextStyle(
+                                      fontSize: 15,
                                     ),
-                                    Container(
-                                      height: 250,
-                                      child: FutureBuilder<Map>(
-                                        future: userProfile,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "First Name: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
-                                                      ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["first_name"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Last Name: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
-                                                      ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["last_name"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Gender: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
-                                                      ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["gender"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Birthday: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
-                                                      ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["birthday"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Biography: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
-                                                      ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["biography"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          } else if (snapshot.hasError) {
-                                            return Center(
-                                              child: Text(
-                                                "${snapshot.error}",
-                                                style: TextStyle(
-                                                  color: textColor,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          return const CircularProgressIndicator(
-                                            color: Colors.deepPurple,
-                                          );
-                                        },
-                                      ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 10,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          "Profile",
+                                  ),
+                                )
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          "${snapshot.error}",
                           style: TextStyle(
+                            color: textColor,
                             fontSize: 15,
                           ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          elevation: 10,
-                          shadowColor: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            backgroundColor: Colors.transparent,
-                            context: context,
-                            builder: (builder) => Container(
+                      );
+                    }
+                    return CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.deepPurpleAccent[700],
+                    );
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (builder) => SingleChildScrollView(
+                            child: Container(
                               padding: EdgeInsets.only(
                                 top: 10,
                                 left: _screenWidth * .05,
@@ -441,27 +328,17 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                     width: _screenWidth * .20,
                                   ),
                                   Container(
-                                    height: 350,
+                                    height: 250,
                                     child: FutureBuilder<Map>(
-                                      future: userAdddress,
+                                      future: userProfile,
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           return SingleChildScrollView(
                                             child: Column(
                                               children: [
-                                                Text(
-                                                  "Permanent",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 20,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
                                                 ListTile(
                                                   leading: Text(
-                                                    "Country: ",
+                                                    "First Name: ",
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -470,9 +347,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                   ),
                                                   title: Text(
                                                     snapshot.data![
-                                                                "userAddress"]
-                                                            ["permanent"]
-                                                        ["country"],
+                                                            "userProfile"]
+                                                        ["first_name"],
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -481,7 +357,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                 ),
                                                 ListTile(
                                                   leading: Text(
-                                                    "State: ",
+                                                    "Last Name: ",
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -490,8 +366,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                   ),
                                                   title: Text(
                                                     snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["state"],
+                                                            "userProfile"]
+                                                        ["last_name"],
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -500,7 +376,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                 ),
                                                 ListTile(
                                                   leading: Text(
-                                                    "City: ",
+                                                    "Gender: ",
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -509,8 +385,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                   ),
                                                   title: Text(
                                                     snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["city"],
+                                                            "userProfile"]
+                                                        ["gender"],
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -519,7 +395,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                 ),
                                                 ListTile(
                                                   leading: Text(
-                                                    "Street: ",
+                                                    "Birthday: ",
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -528,38 +404,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                   ),
                                                   title: Text(
                                                     snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["street"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Temporary",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 20,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Country: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                                "userAddress"]
-                                                            ["temporary"]
-                                                        ["country"],
+                                                            "userProfile"]
+                                                        ["birthday"],
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -568,7 +414,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                 ),
                                                 ListTile(
                                                   leading: Text(
-                                                    "State: ",
+                                                    "Biography: ",
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -577,46 +423,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                                   ),
                                                   title: Text(
                                                     snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["state"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "City: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["city"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Street: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["street"],
+                                                            "userProfile"]
+                                                        ["biography"],
                                                     style: TextStyle(
                                                       color: textColor,
                                                       fontSize: 15,
@@ -646,152 +454,408 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                 ],
                               ),
                             ),
-                          );
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          context: context,
+                          builder: (builder) => Container(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              left: _screenWidth * .05,
+                              right: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: backColor,
+                              borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(25.0),
+                                topRight: const Radius.circular(25.0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: textColor,
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(
+                                      0, 1), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.deepPurpleAccent[700],
+                                  ),
+                                  height: 5,
+                                  width: _screenWidth * .20,
+                                ),
+                                Container(
+                                  height: 350,
+                                  child: FutureBuilder<Map>(
+                                    future: userAdddress,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "Permanent",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontSize: 20,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontFamily: "Laila-Bold",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "Country: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["permanent"]["country"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "State: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["permanent"]["state"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "City: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["permanent"]["city"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "Street: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["permanent"]["street"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                "Temporary",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontSize: 20,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontFamily: "Laila-Bold",
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "Country: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["temporary"]["country"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "State: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["temporary"]["state"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "City: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["temporary"]["city"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                leading: Text(
+                                                  "Street: ",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                    fontFamily: "Laila-Bold",
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  snapshot.data!["userAddress"]
+                                                      ["temporary"]["street"],
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            "${snapshot.error}",
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const CircularProgressIndicator(
+                                        color: Colors.deepPurple,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.location_on_sharp,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Address",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurpleAccent[700],
+                        elevation: 10,
+                        shadowColor: Colors.deepPurpleAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: backColor,
+                    border: Border(
+                      top: BorderSide(
+                        color: textColor,
+                        width: 3,
+                      ),
+                      bottom: BorderSide(
+                        color: textColor,
+                        width: 3,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          setState(() {
+                            postsMy = true;
+                            userPosts =
+                                HttpConnectPost().getOtherPosts(widget.user_id);
+                          });
                         },
                         icon: Icon(
-                          Icons.location_on_sharp,
-                          color: Colors.white,
+                          Icons.grid_view_sharp,
+                          size: 40,
+                          color: postsMy
+                              ? Colors.deepPurpleAccent[700]
+                              : textColor,
                         ),
-                        label: Text(
-                          "Address",
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
+                      ),
+                      Text(
+                        postsMy ? postsNum : taggedPostsNum,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 25,
+                          fontFamily: "Laila-Bold",
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurpleAccent[700],
-                          elevation: 10,
-                          shadowColor: Colors.deepPurpleAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          setState(() {
+                            postsMy = false;
+                            userPosts = HttpConnectPost()
+                                .getOtherTaggedPosts(widget.user_id);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.person_add_alt_sharp,
+                          size: 40,
+                          color: postsMy
+                              ? textColor
+                              : Colors.deepPurpleAccent[700],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: backColor,
-                      border: Border(
-                        top: BorderSide(
-                          color: textColor,
-                          width: 3,
-                        ),
-                        bottom: BorderSide(
-                          color: textColor,
-                          width: 3,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            setState(() {
-                              postsMy = true;
-                              userPosts = HttpConnectPost().getPosts();
-                            });
-                          },
-                          icon: Icon(
-                            Icons.grid_view_sharp,
-                            size: 40,
-                            color: postsMy
-                                ? Colors.deepPurpleAccent[700]
-                                : textColor,
-                          ),
-                        ),
-                        Text(
-                          postsMy ? postsNum : taggedPostsNum,
-                          style: TextStyle(
-                            color: textColor,
-                            fontSize: 25,
-                            fontFamily: "Laila-Bold",
-                          ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            setState(() {
-                              postsMy = false;
-                              userPosts = HttpConnectPost().getTaggedPosts();
-                            });
-                          },
-                          icon: Icon(
-                            Icons.person_add_alt_sharp,
-                            size: 40,
-                            color: postsMy
-                                ? textColor
-                                : Colors.deepPurpleAccent[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SingleChildScrollView(
-                    child: Container(
-                      height: 520,
-                      child: FutureBuilder<List>(
-                        future: userPosts,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return GridView.count(
-                              crossAxisCount: 3,
-                              children:
-                                  List.generate(snapshot.data!.length, (index) {
-                                return Container(
-                                  padding: EdgeInsets.all(5),
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero),
-                                    child: ClipRRect(
-                                      child: Image(
-                                        height: _screenWidth * .30,
-                                        width: _screenWidth * .30,
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(postUrl +
-                                            snapshot.data![index]["attach_file"]
-                                                [0]),
-                                      ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SingleChildScrollView(
+                  child: Container(
+                    height: 520,
+                    child: FutureBuilder<List>(
+                      future: userPosts,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridView.count(
+                            crossAxisCount: 3,
+                            children:
+                                List.generate(snapshot.data!.length, (index) {
+                              return Container(
+                                padding: EdgeInsets.all(5),
+                                child: TextButton(
+                                  onPressed: () {},
+                                  style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero),
+                                  child: ClipRRect(
+                                    child: Image(
+                                      height: _screenWidth * .30,
+                                      width: _screenWidth * .30,
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(postUrl +
+                                          snapshot.data![index]["attach_file"]
+                                              [0]),
                                     ),
                                   ),
-                                );
-                              }),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text(
-                                "${snapshot.error}",
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: 15,
                                 ),
-                              ),
-                            );
-                          }
+                              );
+                            }),
+                          );
+                        } else if (snapshot.hasError) {
                           return Center(
                             child: Text(
-                              "No posts yet.",
+                              "${snapshot.error}",
                               style: TextStyle(
                                 color: textColor,
                                 fontSize: 15,
                               ),
                             ),
                           );
-                        },
-                      ),
+                        }
+                        return Center(
+                          child: Text(
+                            "No posts yet.",
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 15,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           bottomNavigationBar: Container(

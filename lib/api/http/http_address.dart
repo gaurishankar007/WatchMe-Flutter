@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class HttpConnectAddress {
@@ -18,6 +17,24 @@ class HttpConnectAddress {
       };
 
       final response = await get(Uri.parse(baseurl + "address/get/my"),
+          headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> getAddressOther(String? user_id) async {
+    try {
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response = await post(Uri.parse(baseurl + "address/get/other"), body: {"user_id": user_id},
           headers: bearerToken);
 
       //json serializing inline

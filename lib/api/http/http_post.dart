@@ -68,6 +68,19 @@ class HttpConnectPost {
     return responseData;
   }
 
+  Future<List> getOtherPosts(String? user_id) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "posts/get/other"),
+        body: {"user_id": user_id!}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
   Future<List> getTaggedPosts() async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -75,6 +88,19 @@ class HttpConnectPost {
 
     final response = await get(Uri.parse(baseurl + "posts/get/tagged"),
         headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
+  Future<List> getOtherTaggedPosts(String? user_id) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "posts/get/tagged/other"),
+        body: {"user_id": user_id!}, headers: bearerToken);
 
     //json serializing inline
     final responseData = jsonDecode(response.body);
