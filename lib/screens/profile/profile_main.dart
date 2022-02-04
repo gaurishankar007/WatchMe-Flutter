@@ -31,6 +31,12 @@ class _ProfileMainState extends State<ProfileMain> {
   String watchersNum = "0";
   String watchingsNum = "0";
 
+  String firstName = "",
+      lastName = "",
+      birthdate = "",
+      biography = "",
+      gender = "";
+
   Future setWatchersWatchingNum() async {
     final res = await HttpConnectWatch().getWatcheNum();
     setState(() {
@@ -248,104 +254,111 @@ class _ProfileMainState extends State<ProfileMain> {
                                     width: _screenWidth * .20,
                                   ),
                                   Container(
-                                    height: 300,
+                                    height: 250,
                                     child: FutureBuilder<Map>(
                                       future: userProfile,
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          return Column(
-                                            children: [
-                                              ListTile(
-                                                leading: Text(
-                                                  "First Name: ",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                    fontFamily: "Laila-Bold",
+                                          return SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                ListTile(
+                                                  leading: Text(
+                                                    "First Name: ",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                      fontFamily: "Laila-Bold",
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![
+                                                            "userProfile"]
+                                                        ["first_name"],
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                                title: Text(
-                                                  snapshot.data!["userProfile"]
-                                                      ["first_name"],
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
+                                                ListTile(
+                                                  leading: Text(
+                                                    "Last Name: ",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                      fontFamily: "Laila-Bold",
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![
+                                                            "userProfile"]
+                                                        ["last_name"],
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              ListTile(
-                                                leading: Text(
-                                                  "Last Name: ",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                    fontFamily: "Laila-Bold",
+                                                ListTile(
+                                                  leading: Text(
+                                                    "Gender: ",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                      fontFamily: "Laila-Bold",
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![
+                                                            "userProfile"]
+                                                        ["gender"],
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                                title: Text(
-                                                  snapshot.data!["userProfile"]
-                                                      ["last_name"],
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
+                                                ListTile(
+                                                  leading: Text(
+                                                    "Birthday: ",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                      fontFamily: "Laila-Bold",
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![
+                                                            "userProfile"]
+                                                        ["birthday"],
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              ListTile(
-                                                leading: Text(
-                                                  "Gender: ",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                    fontFamily: "Laila-Bold",
+                                                ListTile(
+                                                  leading: Text(
+                                                    "Biography: ",
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                      fontFamily: "Laila-Bold",
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    snapshot.data![
+                                                            "userProfile"]
+                                                        ["biography"],
+                                                    style: TextStyle(
+                                                      color: textColor,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
                                                 ),
-                                                title: Text(
-                                                  snapshot.data!["userProfile"]
-                                                      ["gender"],
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                              ListTile(
-                                                leading: Text(
-                                                  "Birthday: ",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
-                                                title: Text(
-                                                  snapshot.data!["userProfile"]
-                                                      ["birthday"],
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                              ListTile(
-                                                leading: Text(
-                                                  "Biography: ",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
-                                                title: Text(
-                                                  snapshot.data!["userProfile"]
-                                                      ["biography"],
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           );
                                         } else if (snapshot.hasError) {
                                           return Center(
@@ -394,46 +407,46 @@ class _ProfileMainState extends State<ProfileMain> {
                         showModalBottomSheet(
                           backgroundColor: Colors.transparent,
                           context: context,
-                          builder: (builder) => SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                left: _screenWidth * .05,
-                                right: 5,
+                          builder: (builder) => Container(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              left: _screenWidth * .05,
+                              right: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: backColor,
+                              borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(25.0),
+                                topRight: const Radius.circular(25.0),
                               ),
-                              height: 350,
-                              decoration: BoxDecoration(
-                                color: backColor,
-                                borderRadius: new BorderRadius.only(
-                                  topLeft: const Radius.circular(25.0),
-                                  topRight: const Radius.circular(25.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: textColor,
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(
+                                      0, 1), // changes position of shadow
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: textColor,
-                                    spreadRadius: 1,
-                                    blurRadius: 2,
-                                    offset: Offset(
-                                        0, 1), // changes position of shadow
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.deepPurpleAccent[700],
                                   ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.deepPurpleAccent[700],
-                                    ),
-                                    height: 5,
-                                    width: _screenWidth * .20,
-                                  ),
-                                  Container(
-                                    child: FutureBuilder<Map>(
-                                      future: userAdddress,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Column(
+                                  height: 5,
+                                  width: _screenWidth * .20,
+                                ),
+                                Container(
+                                  height: 350,
+                                  child: FutureBuilder<Map>(
+                                    future: userAdddress,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return SingleChildScrollView(
+                                          child: Column(
                                             children: [
                                               Text(
                                                 "Permanent",
@@ -600,26 +613,26 @@ class _ProfileMainState extends State<ProfileMain> {
                                                 ),
                                               ),
                                             ],
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Center(
-                                            child: Text(
-                                              "${snapshot.error}",
-                                              style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        return const CircularProgressIndicator(
-                                          color: Colors.deepPurple,
+                                          ),
                                         );
-                                      },
-                                    ),
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                            "${snapshot.error}",
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return const CircularProgressIndicator(
+                                        color: Colors.deepPurple,
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         );
