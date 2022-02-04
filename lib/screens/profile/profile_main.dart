@@ -448,6 +448,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                         return SingleChildScrollView(
                                           child: Column(
                                             children: [
+                                              
                                               Text(
                                                 "Permanent",
                                                 style: TextStyle(
