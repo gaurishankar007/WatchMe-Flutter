@@ -171,7 +171,26 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response = await get(Uri.parse(baseurl + "user/checkType"), headers: bearerToken);
+      final response = await get(Uri.parse(baseurl + "user/checkType"),
+          headers: bearerToken);
+
+      //json serializing inline
+      final responseData = jsonDecode(response.body) as Map;
+      return responseData;
+    } catch (err) {
+      log('$err');
+    }
+    return {"message": "Error Occured."};
+  }
+
+  Future<Map> getUserOther(String user_id) async {
+    try {
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
+
+      final response = await post(Uri.parse(baseurl + "user/other"),
+          body: {"user_id": user_id}, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
@@ -193,8 +212,8 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response =
-          await put(Uri.parse(baseurl + "user/changePassword"), body: passData, headers: bearerToken);
+      final response = await put(Uri.parse(baseurl + "user/changePassword"),
+          body: passData, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
@@ -215,8 +234,8 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response =
-          await put(Uri.parse(baseurl + "user/changeUsername"), body: userData, headers: bearerToken);
+      final response = await put(Uri.parse(baseurl + "user/changeUsername"),
+          body: userData, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
@@ -237,8 +256,8 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response =
-          await put(Uri.parse(baseurl + "user/changeEmail"), body: userData, headers: bearerToken);
+      final response = await put(Uri.parse(baseurl + "user/changeEmail"),
+          body: userData, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
@@ -249,7 +268,7 @@ class HttpConnectUser {
     return {"message": "Error Occured."};
   }
 
-   Future<Map> changePhone(String phone) async {
+  Future<Map> changePhone(String phone) async {
     try {
       Map<String, dynamic> userData = {
         "phone": phone,
@@ -259,8 +278,8 @@ class HttpConnectUser {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response =
-          await put(Uri.parse(baseurl + "user/changePhone"), body: userData, headers: bearerToken);
+      final response = await put(Uri.parse(baseurl + "user/changePhone"),
+          body: userData, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;

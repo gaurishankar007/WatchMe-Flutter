@@ -7,14 +7,15 @@ import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileMain extends StatefulWidget {
-  const ProfileMain({Key? key}) : super(key: key);
+class ProfileMainOther extends StatefulWidget {
+  final String? user_id;
+  const ProfileMainOther({Key? key, @required this.user_id}) : super(key: key);
 
   @override
-  _ProfileMainState createState() => _ProfileMainState();
+  _ProfileMainOtherState createState() => _ProfileMainOtherState();
 }
 
-class _ProfileMainState extends State<ProfileMain> {
+class _ProfileMainOtherState extends State<ProfileMainOther> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;

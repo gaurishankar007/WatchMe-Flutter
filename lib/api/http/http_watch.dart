@@ -36,13 +36,13 @@ class HttpConnectWatch {
     return responseData;
   }
 
-  Future<Map> getWatcheNum() async {
+  Future<Map> getUserNum() async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
 
     final response =
-        await get(Uri.parse(baseurl + "follow/getNum"), headers: bearerToken);
+        await get(Uri.parse(baseurl + "number/user"), headers: bearerToken);
 
     //json serializing inline
     final responseData = jsonDecode(response.body);
