@@ -131,7 +131,7 @@ class _WatchingOtherState extends State<WatchingOther> {
               }
               return Center(
                 child: Text(
-                  "You have not watched anybody yet.",
+                  "This user has not watched anybody yet.",
                   style: TextStyle(
                     color: textColor,
                     fontSize: 15,

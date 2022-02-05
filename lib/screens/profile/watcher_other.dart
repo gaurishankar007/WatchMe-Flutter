@@ -128,7 +128,7 @@ class _WatcherOtherState extends State<WatcherOther> {
             }
             return Center(
               child: Text(
-                "No one have watched you yet.",
+                "No one has watched this user yet",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,

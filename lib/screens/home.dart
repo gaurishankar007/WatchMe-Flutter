@@ -357,7 +357,6 @@ class _HomeState extends State<Home> {
                   TextButton(
                     onPressed: () {
                       final _formKey = GlobalKey<FormState>();
-                      final _focusNode = FocusNode();
                       double containerPadding = 0;
 
                       showModalBottomSheet(

@@ -4,6 +4,7 @@ import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/post/post_edit.dart';
+import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -750,6 +751,17 @@ class _ProfileMainState extends State<ProfileMain> {
                                   padding: EdgeInsets.all(5),
                                   child: TextButton(
                                     onPressed: () {
+                                      if (!postsMy) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (builder) => PostView(
+                                                post_id: snapshot.data![index]
+                                                    ["_id"], activeNav: 4),
+                                          ),
+                                        );
+                                        return;
+                                      }
                                       showModalBottomSheet(
                                         backgroundColor: Colors.transparent,
                                         context: context,
@@ -761,7 +773,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                               left: _screenWidth * .05,
                                               right: 5,
                                             ),
-                                            height: 180,
+                                            height: 160,
                                             decoration: BoxDecoration(
                                               color: backColor,
                                               borderRadius:
@@ -800,15 +812,23 @@ class _ProfileMainState extends State<ProfileMain> {
                                                     width: _screenWidth * .20,
                                                   ),
                                                   SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Divider(
-                                                    height: 2,
-                                                    thickness: 1,
-                                                    color: textColor,
+                                                    height: 5,
                                                   ),
                                                   TextButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (builder) =>
+                                                              PostView(
+                                                            post_id: snapshot
+                                                                    .data![
+                                                                index]["_id"], activeNav: 4
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
                                                     child: Text(
                                                       "View Post",
                                                       style: TextStyle(
@@ -821,15 +841,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                                       ),
                                                     ),
                                                   ),
-                                                  Divider(
-                                                    height: 2,
-                                                    thickness: 1,
-                                                    color: textColor,
-                                                  ),
                                                   TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      padding: EdgeInsets.zero,
-                                                    ),
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                       Navigator.push(
@@ -856,16 +868,19 @@ class _ProfileMainState extends State<ProfileMain> {
                                                       ),
                                                     ),
                                                   ),
-                                                  Divider(
-                                                    height: 2,
-                                                    thickness: 1,
-                                                    color: textColor,
-                                                  ),
                                                   TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      padding: EdgeInsets.zero,
-                                                    ),
-                                                    onPressed: () {},
+                                                    onPressed: () async {
+                                                      await HttpConnectPost()
+                                                          .deletePost(snapshot
+                                                                  .data![index]
+                                                              ["_id"]);
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        userPosts =
+                                                            HttpConnectPost()
+                                                                .getPosts();
+                                                      });
+                                                    },
                                                     child: Text(
                                                       "Delete Post",
                                                       style: TextStyle(
@@ -875,11 +890,6 @@ class _ProfileMainState extends State<ProfileMain> {
                                                         fontSize: 20,
                                                       ),
                                                     ),
-                                                  ),
-                                                  Divider(
-                                                    height: 2,
-                                                    thickness: 1,
-                                                    color: textColor,
                                                   ),
                                                 ],
                                               ),

@@ -12,8 +12,21 @@ class GetPost {
   String? description;
   List<String>? attach_file;
   List<Map<String, String>>? tag_friend;
+  int? like_num;
+  int? comment_num;
+  int? report_num;
 
-  GetPost({this.id, this.user_id, this.caption, this.description, this.attach_file, this.tag_friend});
+  GetPost({
+    this.id,
+    this.user_id,
+    this.caption,
+    this.description,
+    this.attach_file,
+    this.tag_friend,
+    this.like_num,
+    this.comment_num,
+    this.report_num,
+  });
 
   factory GetPost.fromJson(Map<String, dynamic> json) =>
       _$GetPostFromJson(json);

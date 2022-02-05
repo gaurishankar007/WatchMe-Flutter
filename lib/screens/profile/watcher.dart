@@ -135,7 +135,7 @@ class _WatcherState extends State<Watcher> {
             }
             return Center(
               child: Text(
-                "No one have watched you yet.",
+                "No one has watched you yet.",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,

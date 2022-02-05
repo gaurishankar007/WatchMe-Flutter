@@ -1,33 +1,33 @@
-import 'package:assignment/api/http/http_comment.dart';
+import 'package:assignment/api/http/http_like.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Commenters extends StatefulWidget {
+class Likers extends StatefulWidget {
   final String? post_id;
   final int? activeNav;
-  const Commenters({Key? key, @required this.post_id, @required this.activeNav})
+  const Likers({Key? key, @required this.post_id, @required this.activeNav})
       : super(key: key);
 
   @override
-  _CommentersState createState() => _CommentersState();
+  _LikersState createState() => _LikersState();
 }
 
-class _CommentersState extends State<Commenters> {
+class _LikersState extends State<Likers> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
   String profilePicUrl = "http://10.0.2.2:4040/profiles/";
 
-  late Future<List> postCommenters;
+  late Future<List> postLikers;
   String? myId;
 
   @override
   void initState() {
     super.initState();
-    postCommenters = HttpConnectComment().getComments(widget.post_id);
+    postLikers = HttpConnectLike().getLikes(widget.post_id);
     HttpConnectUser()
         .getUser()
         .then((value) => myId = value["userData"]["_id"]);
@@ -48,7 +48,7 @@ class _CommentersState extends State<Commenters> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "Commenters",
+            "Likers",
             style: TextStyle(
               color: textColor,
               fontSize: 20,
@@ -64,7 +64,7 @@ class _CommentersState extends State<Commenters> {
           elevation: 0,
         ),
         body: FutureBuilder<List>(
-          future: postCommenters,
+          future: postLikers,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -83,13 +83,6 @@ class _CommentersState extends State<Commenters> {
                         fontSize: 20,
                         color: textColor,
                         fontFamily: "Laila-bold"),
-                  ),
-                  subtitle: Text(
-                    snapshot.data![index]["comment"],
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: textColor,
-                        fontFamily: "Laila-Regulor"),
                   ),
                   trailing: myId != snapshot.data![index]["user_id"]["_id"]
                       ? ElevatedButton(

@@ -19,6 +19,9 @@ GetPost _$GetPostFromJson(Map<String, dynamic> json) => GetPost(
       tag_friend: (json['tag_friend'] as List<dynamic>?)
           ?.map((e) => Map<String, String>.from(e as Map))
           .toList(),
+      like_num: json['like_num'] as int?,
+      comment_num: json['comment_num'] as int?,
+      report_num: json['report_num'] as int?,
     );
 
 Map<String, dynamic> _$GetPostToJson(GetPost instance) => <String, dynamic>{
@@ -28,4 +31,7 @@ Map<String, dynamic> _$GetPostToJson(GetPost instance) => <String, dynamic>{
       'description': instance.description,
       'attach_file': instance.attach_file,
       'tag_friend': instance.tag_friend,
+      'like_num': instance.like_num,
+      'comment_num': instance.comment_num,
+      'report_num': instance.report_num,
     };
