@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/post.dart';
+import 'package:assignment/api/response/response_post.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -101,6 +102,55 @@ class HttpConnectPost {
 
     final response = await post(Uri.parse(baseurl + "posts/get/tagged/other"),
         body: {"user_id": user_id!}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
+  Future<GetPost> getSinglePost(String? post_id) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "post/get/single"),
+        body: {"post_id": post_id!}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = GetPost.fromJson(jsonDecode(response.body));
+    return responseData;
+  }
+
+  Future<Map> updatePost(UpdatedPost postData) async {
+    Map<String, dynamic> postDetail = {
+      "post_id": postData.post_id,
+      "caption": postData.caption,
+      "description": postData.description,
+    };
+
+    for (int i = 0; i < postData.taggedFriend!.length; i++) {
+      postDetail["tag_friend[${i}]"] = "${postData.taggedFriend![i]}";
+    }
+
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await put(Uri.parse(baseurl + "post/edit"),
+        body: postDetail, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
+  Future<Map> deletePost(String? post_id) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await delete(Uri.parse(baseurl + "post/delete"),
+        body: {"post_id": post_id!}, headers: bearerToken);
 
     //json serializing inline
     final responseData = jsonDecode(response.body);

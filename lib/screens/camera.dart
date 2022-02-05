@@ -397,7 +397,7 @@ class _CameraState extends State<Camera> {
                                             width: _screenWidth * .20,
                                           ),
                                           Container(
-                                            height: 150,
+                                            height: 250,
                                             child: FutureBuilder<List>(
                                               future: getUserFollowers(),
                                               builder: (context, snapshot) {
@@ -463,6 +463,8 @@ class _CameraState extends State<Camera> {
                                                                       "profile_pic"]);
                                                             },
                                                           );
+                                                          Navigator.pop(
+                                                              context);
                                                         }
                                                       },
                                                     ),
@@ -538,7 +540,7 @@ class _CameraState extends State<Camera> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          height: 120,
+                                          height: 200,
                                           child: ListView.builder(
                                             itemCount: tag_friend_name.length,
                                             itemBuilder: (context, index) =>
@@ -558,6 +560,24 @@ class _CameraState extends State<Camera> {
                                                     fontSize: 15,
                                                     color: textColor,
                                                     fontFamily: "Laila-bold"),
+                                              ),
+                                              trailing: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    tag_friend_id
+                                                        .removeAt(index);
+                                                    tag_friend_name
+                                                        .removeAt(index);
+                                                    tag_friend_profile_pic
+                                                        .removeAt(index);
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                  color: Colors
+                                                      .red,
+                                                ),
                                               ),
                                             ),
                                           ),

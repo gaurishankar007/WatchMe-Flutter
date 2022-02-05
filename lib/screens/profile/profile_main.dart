@@ -3,6 +3,7 @@ import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
+import 'package:assignment/screens/post/post_edit.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -748,7 +749,145 @@ class _ProfileMainState extends State<ProfileMain> {
                                 return Container(
                                   padding: EdgeInsets.all(5),
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        backgroundColor: Colors.transparent,
+                                        context: context,
+                                        builder: (builder) =>
+                                            SingleChildScrollView(
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                              top: 5,
+                                              left: _screenWidth * .05,
+                                              right: 5,
+                                            ),
+                                            height: 180,
+                                            decoration: BoxDecoration(
+                                              color: backColor,
+                                              borderRadius:
+                                                  new BorderRadius.only(
+                                                topLeft:
+                                                    const Radius.circular(25.0),
+                                                topRight:
+                                                    const Radius.circular(25.0),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: textColor,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 2,
+                                                  offset: Offset(0,
+                                                      1), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: _screenWidth * .25,
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      color: Colors
+                                                              .deepPurpleAccent[
+                                                          700],
+                                                    ),
+                                                    height: 5,
+                                                    width: _screenWidth * .20,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Divider(
+                                                    height: 2,
+                                                    thickness: 1,
+                                                    color: textColor,
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      "View Post",
+                                                      style: TextStyle(
+                                                        color: Colors
+                                                                .deepPurpleAccent[
+                                                            700],
+                                                        fontFamily:
+                                                            "Laila-Bold",
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    height: 2,
+                                                    thickness: 1,
+                                                    color: textColor,
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      padding: EdgeInsets.zero,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (builder) =>
+                                                              PostEdit(
+                                                            post_id: snapshot
+                                                                    .data![
+                                                                index]["_id"],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      "Edit Post",
+                                                      style: TextStyle(
+                                                        color: Colors
+                                                                .deepPurpleAccent[
+                                                            700],
+                                                        fontFamily:
+                                                            "Laila-Bold",
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    height: 2,
+                                                    thickness: 1,
+                                                    color: textColor,
+                                                  ),
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      padding: EdgeInsets.zero,
+                                                    ),
+                                                    onPressed: () {},
+                                                    child: Text(
+                                                      "Delete Post",
+                                                      style: TextStyle(
+                                                        color: Colors.red[700],
+                                                        fontFamily:
+                                                            "Laila-Bold",
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    height: 2,
+                                                    thickness: 1,
+                                                    color: textColor,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                     style: TextButton.styleFrom(
                                         padding: EdgeInsets.zero),
                                     child: ClipRRect(
