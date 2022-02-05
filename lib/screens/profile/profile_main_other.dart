@@ -3,6 +3,7 @@ import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_profile.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
+import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/profile/watcher_other.dart';
 import 'package:assignment/screens/profile/watching_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -229,7 +230,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                   onPressed: () async {
                                     await HttpConnectWatch().unWatch(
                                         snapshot.data!["userData"]["_id"]);
-                                      setUserNum();
+                                    setUserNum();
                                   },
                                   child: Text(
                                     "UnWatch",
@@ -250,7 +251,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                   onPressed: () async {
                                     await HttpConnectWatch().watch(
                                         snapshot.data!["userData"]["_id"]);
-                                      setUserNum();
+                                    setUserNum();
                                   },
                                   child: Text(
                                     "Watch",
@@ -814,7 +815,17 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                               return Container(
                                 padding: EdgeInsets.all(5),
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (builder) => PostView(
+                                            post_id: snapshot.data![index]
+                                                ["_id"],
+                                            activeNav: 4),
+                                      ),
+                                    );
+                                  },
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero),
                                   child: ClipRRect(
