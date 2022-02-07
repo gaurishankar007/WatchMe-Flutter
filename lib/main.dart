@@ -3,7 +3,7 @@ import 'package:assignment/screens/home.dart';
 import 'package:assignment/screens/login/forgot_password.dart';
 import 'package:assignment/screens/login/login.dart';
 import 'package:assignment/screens/login/reset_password.dart';
-import 'package:assignment/screens/notification/notification_unseen.dart';
+import 'package:assignment/screens/notification.dart';
 import 'package:assignment/screens/profile/profile_main.dart';
 import 'package:assignment/screens/profile/watcher.dart';
 import 'package:assignment/screens/profile/watching.dart';
