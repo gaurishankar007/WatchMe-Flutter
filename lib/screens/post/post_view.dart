@@ -126,6 +126,9 @@ class _PostViewState extends State<PostView> {
                               }),
                             ),
                           ),
+                          SizedBox(
+                            height: 5,
+                          ),
                           AnimatedSmoothIndicator(
                             activeIndex: activatedIndex,
                             count: totalImages,

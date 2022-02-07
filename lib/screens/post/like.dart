@@ -84,6 +84,13 @@ class _LikersState extends State<Likers> {
                         color: textColor,
                         fontFamily: "Laila-bold"),
                   ),
+                  subtitle: Text(
+                    snapshot.data![index]["user_id"]["email"],
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: textColor,
+                    ),
+                  ),
                   trailing: myId != snapshot.data![index]["user_id"]["_id"]
                       ? ElevatedButton(
                           onPressed: () async {

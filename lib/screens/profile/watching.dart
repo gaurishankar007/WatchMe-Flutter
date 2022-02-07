@@ -99,6 +99,13 @@ class _WatchingState extends State<Watching> {
                           color: textColor,
                           fontFamily: "Laila-bold"),
                     ),
+                    subtitle: Text(
+                      snapshot.data![index]["followed_user"]["email"],
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: textColor,
+                      ),
+                    ),
                     trailing: ElevatedButton(
                       onPressed: () async {
                         await HttpConnectWatch().unWatch(

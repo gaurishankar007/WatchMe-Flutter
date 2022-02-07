@@ -1,3 +1,5 @@
+import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +15,17 @@ class _SearchState extends State<Search> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 1;
+  String profileUrl = "http://10.0.2.2:4040/profiles/";
+
+  late Future<List> searchedUsers;
+  bool help = false;
+
+  @override
+  void initState() {
+    super.initState();
+    searchedUsers = HttpConnectUser().getSearchedUsers("@!#%^&*()-=");
+  }
+
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
@@ -24,11 +37,195 @@ class _SearchState extends State<Search> {
       return Scaffold(
         backgroundColor: backColor,
         body: SafeArea(
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("Back"),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: _screenWidth * .05,
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 5,
+                    ),
+                    help
+                        ? Text(
+                            "Users can be searched by their username and email or by their profile's first and last name",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.deepPurpleAccent[700],
+                              fontSize: 15,
+                            ),
+                          )
+                        : SizedBox(
+                            height: 5,
+                          ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                          top: _screenWidth * .02,
+                          bottom: _screenWidth * .02,
+                          left: _screenWidth * .02,
+                          right: _screenWidth * .02),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurpleAccent[700],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextField(
+                        onChanged: (value) {
+                          if (value.trim() != "") {
+                            setState(() {
+                              searchedUsers =
+                                  HttpConnectUser().getSearchedUsers(value);
+                            });
+                          }
+                        },
+                        textCapitalization: TextCapitalization.words,
+                        style: TextStyle(
+                          color: textColor,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "Search users here.....",
+                          hintStyle: TextStyle(
+                            color: textColor,
+                          ),
+                          isDense: true,
+                          fillColor: backColor,
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                              color: backColor,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(
+                              color: backColor,
+                              width: 2,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        onPressed: () {
+                          setState(() {
+                            help = !help;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.help_sharp,
+                          color: Colors.deepPurpleAccent[700],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 600,
+                      child: FutureBuilder<List>(
+                        future: searchedUsers,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) => ListTile(
+                                horizontalTitleGap: 15,
+                                minVerticalPadding: 20,
+                                leading: CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage(profileUrl +
+                                      snapshot.data![index]["profile_pic"]),
+                                ),
+                                title: Text(
+                                  snapshot.data![index]["username"],
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: textColor,
+                                      fontFamily: "Laila-bold"),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data![index]["email"],
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: textColor,
+                                  ),
+                                ),
+                                trailing: ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (builder) => ProfileMainOther(
+                                            user_id: snapshot.data![index]
+                                                ["_id"]),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "View Profile",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 10,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                "${snapshot.error}",
+                                style: TextStyle(
+                                  color: textColor,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            );
+                          }
+                          return Center(
+                            child: Text(
+                              "Search users by their username or email address or by their profile first_name or last_name.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: textColor,
+                                fontSize: 20,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
         bottomNavigationBar: Container(
@@ -83,15 +280,15 @@ class _SearchState extends State<Search> {
             selectedItemColor: Colors.deepPurpleAccent[700],
             unselectedItemColor: textColor,
             onTap: (int navIndex) {
-              if (navIndex == 0 && activeNav!=navIndex) {
+              if (navIndex == 0 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/home");
-              } else if (navIndex == 1 && activeNav!=navIndex) {
+              } else if (navIndex == 1 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/search");
-              } else if (navIndex == 2 && activeNav!=navIndex) {
+              } else if (navIndex == 2 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/camera");
-              } else if (navIndex == 3 && activeNav!=navIndex) {
+              } else if (navIndex == 3 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/notification");
-              } else if (navIndex == 4 && activeNav!=navIndex) {
+              } else if (navIndex == 4 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/profile");
               }
             },

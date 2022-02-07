@@ -21,7 +21,7 @@ class PostEdit extends StatefulWidget {
 class _PostEditState extends State<PostEdit> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
-  int activeNav = 2;
+  int activeNav = 4;
 
   late Future<GetPost> userPost;
   int totalImages = 0;

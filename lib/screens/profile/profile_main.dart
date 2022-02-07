@@ -757,7 +757,8 @@ class _ProfileMainState extends State<ProfileMain> {
                                           MaterialPageRoute(
                                             builder: (builder) => PostView(
                                                 post_id: snapshot.data![index]
-                                                    ["_id"], activeNav: 4),
+                                                    ["_id"],
+                                                activeNav: 4),
                                           ),
                                         );
                                         return;
@@ -822,10 +823,10 @@ class _ProfileMainState extends State<ProfileMain> {
                                                         MaterialPageRoute(
                                                           builder: (builder) =>
                                                               PostView(
-                                                            post_id: snapshot
-                                                                    .data![
-                                                                index]["_id"], activeNav: 4
-                                                          ),
+                                                                  post_id: snapshot
+                                                                          .data![
+                                                                      index]["_id"],
+                                                                  activeNav: 4),
                                                         ),
                                                       );
                                                     },

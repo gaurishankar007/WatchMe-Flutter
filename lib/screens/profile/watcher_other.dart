@@ -82,6 +82,13 @@ class _WatcherOtherState extends State<WatcherOther> {
                         color: textColor,
                         fontFamily: "Laila-bold"),
                   ),
+                  subtitle: Text(
+                    snapshot.data![index]["follower"]["email"],
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: textColor,
+                    ),
+                  ),
                   trailing: myId != snapshot.data![index]["follower"]["_id"]
                       ? ElevatedButton(
                           onPressed: () async {
