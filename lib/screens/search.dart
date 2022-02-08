@@ -18,12 +18,12 @@ class _SearchState extends State<Search> {
   String profileUrl = "http://10.0.2.2:4040/profiles/";
 
   late Future<List> searchedUsers;
-  bool help = false;
+  String filterOption = "Username";
 
   @override
   void initState() {
     super.initState();
-    searchedUsers = HttpConnectUser().getSearchedUsers("@!#%^&*()-=");
+    searchedUsers = HttpConnectUser().getByUsername("@");
   }
 
   @override
@@ -48,18 +48,57 @@ class _SearchState extends State<Search> {
                     SizedBox(
                       height: 5,
                     ),
-                    help
-                        ? Text(
-                            "Users can be searched by their username and email or by their profile's first and last name",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.deepPurpleAccent[700],
-                              fontSize: 15,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          "Filter Option: ",
+                          style: TextStyle(
+                              color: textColor,
+                              fontSize: 18,
+                              fontFamily: "Laila-Bold"),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: textColor,
+                              width: 2,
                             ),
-                          )
-                        : SizedBox(
-                            height: 5,
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          child: DropdownButton<String>(
+                            value: filterOption,
+                            icon: const Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            dropdownColor: backColor,
+                            borderRadius: BorderRadius.circular(10),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                filterOption = newValue!;
+                              });
+                            },
+                            items: <String>[
+                              'Username',
+                              'Email',
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 5,
                     ),
@@ -75,12 +114,19 @@ class _SearchState extends State<Search> {
                       ),
                       child: TextField(
                         onChanged: (value) {
-                          if (value.trim() != "") {
+                          if (value.trim() == "") {
+                            return;
+                          }else if(filterOption=="Username") {
                             setState(() {
                               searchedUsers =
-                                  HttpConnectUser().getSearchedUsers(value);
+                                  HttpConnectUser().getByUsername(value);
                             });
-                          }
+                          } else if(filterOption=="Email") {
+                            setState(() {
+                              searchedUsers =
+                                  HttpConnectUser().getByEmail(value);
+                            });
+                          } 
                         },
                         textCapitalization: TextCapitalization.words,
                         style: TextStyle(
@@ -121,22 +167,6 @@ class _SearchState extends State<Search> {
                               style: BorderStyle.solid,
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        onPressed: () {
-                          setState(() {
-                            help = !help;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.help_sharp,
-                          color: Colors.deepPurpleAccent[700],
                         ),
                       ),
                     ),

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/post.dart';
+import 'package:assignment/api/response/response_f_post.dart';
 import 'package:assignment/api/response/response_post.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -54,6 +55,19 @@ class HttpConnectPost {
       log('$err');
     }
     return {"message": "Error Occured."};
+  }
+
+  Future<List<GetPost>> getFollowedPost() async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await get(Uri.parse(baseurl + "posts/get/followedUser"),
+        headers: bearerToken);
+
+    //json serializing inline
+    final responseData = GetFollowedPosts.fromJson(jsonDecode(response.body));
+    return responseData.followedPosts;
   }
 
   Future<List> getPosts() async {

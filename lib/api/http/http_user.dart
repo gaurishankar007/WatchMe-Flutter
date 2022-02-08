@@ -290,13 +290,26 @@ class HttpConnectUser {
     return {"message": "Error Occured."};
   }
 
-  Future<List> getSearchedUsers(String username_email) async {
+  Future<List> getByUsername(String parameter) async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
 
-    final response =
-        await post(Uri.parse(baseurl + "user/search"), body:{"username_email": username_email}, headers: bearerToken);
+    final response = await post(Uri.parse(baseurl + "user/search/username"),
+        body: {"parameter": parameter}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body);
+    return responseData;
+  }
+
+  Future<List> getByEmail(String parameter) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "user/search/email"),
+        body: {"parameter": parameter}, headers: bearerToken);
 
     //json serializing inline
     final responseData = jsonDecode(response.body);

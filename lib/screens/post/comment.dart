@@ -31,6 +31,7 @@ class _CommentersState extends State<Commenters> {
     HttpConnectUser()
         .getUser()
         .then((value) => myId = value["userData"]["_id"]);
+    activeNav = widget.activeNav!;
   }
 
   @override
@@ -198,15 +199,15 @@ class _CommentersState extends State<Commenters> {
             selectedItemColor: Colors.deepPurpleAccent[700],
             unselectedItemColor: textColor,
             onTap: (int navIndex) {
-              if (navIndex == 0 && activeNav != navIndex) {
+              if (navIndex == 0) {
                 Navigator.pushNamed(context, "/home");
-              } else if (navIndex == 1 && activeNav != navIndex) {
+              } else if (navIndex == 1) {
                 Navigator.pushNamed(context, "/search");
-              } else if (navIndex == 2 && activeNav != navIndex) {
+              } else if (navIndex == 2) {
                 Navigator.pushNamed(context, "/camera");
-              } else if (navIndex == 3 && activeNav != navIndex) {
+              } else if (navIndex == 3) {
                 Navigator.pushNamed(context, "/notification");
-              } else if (navIndex == 4 && activeNav != navIndex) {
+              } else if (navIndex == 4) {
                 Navigator.pushNamed(context, "/profile");
               }
             },
