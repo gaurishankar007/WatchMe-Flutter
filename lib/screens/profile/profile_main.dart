@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assignment/api/http/http_address.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_profile.dart';
@@ -9,6 +11,7 @@ import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class ProfileMain extends StatefulWidget {
   const ProfileMain({Key? key}) : super(key: key);
@@ -18,6 +21,8 @@ class ProfileMain extends StatefulWidget {
 }
 
 class _ProfileMainState extends State<ProfileMain> {
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
@@ -54,6 +59,26 @@ class _ProfileMainState extends State<ProfileMain> {
     userProfile = HttpConnectProfile().getPersonalInfo();
     userAdddress = HttpConnectAddress().getAddressInfo();
     userPosts = HttpConnectPost().getPosts();
+
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            if (event.x > 10) {
+              postsMy = !postsMy;
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
   }
 
   @override

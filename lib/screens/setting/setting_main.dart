@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart' as foundation;
+
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/token.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -5,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -17,6 +21,36 @@ class _SettingState extends State<Setting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 5;
+
+  late StreamSubscription<dynamic> _streamSubscription;
+
+  Future<void> listenSensor() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (foundation.kDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      }
+    };
+    _streamSubscription = ProximitySensor.events.listen((int event) {
+      if (event > 0) {
+        Token().removeToken();
+        HttpConnectUser.token = "";
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listenSensor();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {

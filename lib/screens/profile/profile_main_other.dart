@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assignment/api/http/http_address.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_profile.dart';
@@ -9,6 +11,7 @@ import 'package:assignment/screens/profile/watching_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import '../../api/base_urls.dart';
 
@@ -21,6 +24,8 @@ class ProfileMainOther extends StatefulWidget {
 }
 
 class _ProfileMainOtherState extends State<ProfileMainOther> {
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
@@ -62,6 +67,26 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
     userProfile = HttpConnectProfile().getPersonalOther(widget.user_id);
     userAdddress = HttpConnectAddress().getAddressOther(widget.user_id);
     userPosts = HttpConnectPost().getOtherPosts(widget.user_id);
+
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            if (event.x > 10) {
+              postsMy = !postsMy;
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
   }
 
   @override
@@ -909,19 +934,19 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                         ? Colors.deepPurpleAccent[700]
                         : textColor,
                     child: FutureBuilder<Map>(
-                      future: getUser,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+                        future: getUser,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return CircleAvatar(
+                              radius: 16,
+                              backgroundImage: NetworkImage(profileUrl +
+                                  snapshot.data!["userData"]["profile_pic"]),
+                            );
+                          }
                           return CircleAvatar(
                             radius: 16,
-                            backgroundImage: NetworkImage(profileUrl +
-                                snapshot.data!["userData"]["profile_pic"]),
                           );
-                        }
-                        return CircleAvatar(
-                          radius: 16,
-                        );
-                      }),
+                        }),
                   ),
                   label: "",
                 ),

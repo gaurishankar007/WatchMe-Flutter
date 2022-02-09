@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:assignment/api/base_urls.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
@@ -11,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
+import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Camera extends StatefulWidget {
@@ -25,6 +29,26 @@ class _CameraState extends State<Camera> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 2;
 
+  late StreamSubscription<dynamic> _streamSubscription;
+
+  Future<void> listenSensor() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (foundation.kDebugMode) {
+        FlutterError.dumpErrorToConsole(details);
+      }
+    };
+    _streamSubscription = ProximitySensor.events.listen((int event) {
+      if (event > 0) {
+        return MotionToast.warning(
+          position: MOTION_TOAST_POSITION.top,
+          animationType: ANIMATION.fromTop,
+          toastDuration: Duration(seconds: 2),
+          description: "Obstacle came infront of the camera.",
+        ).show(context);
+      }
+    });
+  }
+
   late Future<Map> getUser;
   List<File> posts = [];
   int activatedIndex = 0;
@@ -33,7 +57,7 @@ class _CameraState extends State<Camera> {
   List<String> tag_friend_name = [];
   List<String> tag_friend_profile_pic = [];
 
-  String profilePicUrl = "http://10.0.2.2:4040/profiles/";
+  String profilePicUrl = BaseUrl.profilePicUrl;
 
   void fromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -68,6 +92,13 @@ class _CameraState extends State<Camera> {
   void initState() {
     super.initState();
     getUser = HttpConnectUser().getUser();
+    listenSensor();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
   }
 
   @override

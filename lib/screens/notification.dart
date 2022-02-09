@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:assignment/api/http/http_notification.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/post/post_view.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import '../api/base_urls.dart';
 
@@ -18,6 +21,8 @@ class NotificationUnseen extends StatefulWidget {
 }
 
 class _NotificationUnseenState extends State<NotificationUnseen> {
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 3;
@@ -40,6 +45,26 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
         seenNum = res["seenNum"];
       });
     });
+
+    _streamSubscriptions.add(
+      accelerometerEvents.listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            if (event.x > 10) {
+              unSeen = !unSeen;
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
   }
 
   @override
