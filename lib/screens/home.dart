@@ -1,3 +1,4 @@
+import 'package:assignment/api/http/http_like.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/response/response_post.dart';
 import 'package:assignment/api/token.dart';
@@ -29,7 +30,11 @@ class _HomeState extends State<Home> {
   String postUrl = "http://10.0.2.2:4040/posts/";
   String profilePicUrl = "http://10.0.2.2:4040/profiles/";
 
-  List activeIndexField = [];
+  List activeIndexField = [],
+      liked = [],
+      likeNum = [],
+      comment = [],
+      commentNum = [];
 
   @override
   void initState() {
@@ -40,11 +45,14 @@ class _HomeState extends State<Home> {
             .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
       }
     });
+
     followedPosts = HttpConnectPost().getFollowedPost();
     followedPosts.then((value) {
       setState(() {
         for (int i = 0; i < value.length; i++) {
           activeIndexField.add(0);
+          likeNum.add(value[i].like_num);
+          commentNum.add(value[i].comment_num);
         }
       });
     });
@@ -366,8 +374,13 @@ class _HomeState extends State<Home> {
                                   IconButton(
                                     padding: EdgeInsets.all(0),
                                     constraints: BoxConstraints(minWidth: 20),
-                                    onPressed: () {
-                                      setState(() {});
+                                    onPressed: () async {
+                                      await HttpConnectLike()
+                                          .likePost(snapshot.data![index].id);
+                                      setState(() {
+                                        followedPosts =
+                                            HttpConnectPost().getFollowedPost();
+                                      });
                                     },
                                     icon: Icon(
                                       Icons.favorite,
@@ -389,7 +402,7 @@ class _HomeState extends State<Home> {
                                       );
                                     },
                                     child: Text(
-                                      "${snapshot.data![index].like_num.toString()} likes,",
+                                      "${likeNum[index].toString()} likes,",
                                       style: TextStyle(
                                         color: textColor,
                                         fontFamily: "Laila-Bold",
@@ -414,7 +427,7 @@ class _HomeState extends State<Home> {
                                       );
                                     },
                                     child: Text(
-                                      "${snapshot.data![index].comment_num.toString()} comments",
+                                      "${commentNum[index].toString()} comments",
                                       style: TextStyle(
                                         color: textColor,
                                         fontFamily: "Laila-Bold",

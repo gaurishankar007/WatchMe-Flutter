@@ -4,6 +4,9 @@ import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class Commenters extends StatefulWidget {
   final String? post_id;
@@ -36,6 +39,7 @@ class _CommentersState extends State<Commenters> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
       Color backColor =
           ref.watch(themeController) ? Colors.black : Colors.white;
@@ -120,8 +124,238 @@ class _CommentersState extends State<Commenters> {
                             ),
                           ),
                         )
-                      : SizedBox(
-                          height: 0,
+                      : IconButton(
+                          onPressed: () async {
+                            final uComment = TextEditingController();
+                            final res = await HttpConnectComment()
+                                .findComment(widget.post_id);
+                            uComment.text = res["commentData"]["comment"];
+                            String newComment = res["commentData"]["comment"];
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (builder) => Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal: _screenWidth * .20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: backColor,
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(25.0),
+                                    topRight: const Radius.circular(25.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: textColor,
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          0, 1), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                height: 115,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.deepPurpleAccent[700],
+                                      ),
+                                      height: 5,
+                                      width: _screenWidth * .20,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        showModalBottomSheet(
+                                          backgroundColor: Colors.transparent,
+                                          context: context,
+                                          builder: (builder) => Container(
+                                            padding: EdgeInsets.only(
+                                              top: 5,
+                                              left: _screenWidth * .05,
+                                              right: 5,
+                                            ),
+                                            height: 370,
+                                            decoration: BoxDecoration(
+                                              color: backColor,
+                                              borderRadius:
+                                                  new BorderRadius.only(
+                                                topLeft:
+                                                    const Radius.circular(25.0),
+                                                topRight:
+                                                    const Radius.circular(25.0),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: textColor,
+                                                  spreadRadius: 1,
+                                                  blurRadius: 2,
+                                                  offset: Offset(0,
+                                                      1), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    color: Colors
+                                                        .deepPurpleAccent[700],
+                                                  ),
+                                                  height: 5,
+                                                  width: _screenWidth * .20,
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Container(
+                                                  child: ListTile(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 2,
+                                                    ),
+                                                    title: TextFormField(
+                                                      controller: uComment,
+                                                      autofocus: true,
+                                                      maxLines: 2,
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      onChanged: (value) {
+                                                        newComment =
+                                                            value.trim();
+                                                      },
+                                                      style: TextStyle(
+                                                        color: textColor,
+                                                      ),
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            "Add a comment....",
+                                                        hintStyle: TextStyle(
+                                                          color: textColor,
+                                                        ),
+                                                        isDense: true,
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        border:
+                                                            InputBorder.none,
+                                                      ),
+                                                    ),
+                                                    trailing: IconButton(
+                                                      onPressed: () async {
+                                                        if (newComment == "") {
+                                                          MotionToast.error(
+                                                            position:
+                                                                MOTION_TOAST_POSITION
+                                                                    .top,
+                                                            animationType:
+                                                                ANIMATION
+                                                                    .fromTop,
+                                                            toastDuration:
+                                                                Duration(
+                                                                    seconds: 2),
+                                                            description:
+                                                                "Emplty field",
+                                                          ).show(context);
+                                                        } else {
+                                                          final res =
+                                                              await HttpConnectComment()
+                                                                  .editComment(
+                                                                      widget
+                                                                          .post_id,
+                                                                      newComment);
+                                                          Navigator.pop(
+                                                              context);
+                                                          setState(() {
+                                                            postCommenters =
+                                                                HttpConnectComment()
+                                                                    .getComments(
+                                                                        widget
+                                                                            .post_id);
+                                                          });
+                                                          MotionToast.success(
+                                                            position:
+                                                                MOTION_TOAST_POSITION
+                                                                    .top,
+                                                            animationType:
+                                                                ANIMATION
+                                                                    .fromTop,
+                                                            toastDuration:
+                                                                Duration(
+                                                                    seconds: 2),
+                                                            description:
+                                                                res["message"],
+                                                          ).show(context);
+                                                        }
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.send_rounded,
+                                                        size: 35,
+                                                        color: Colors
+                                                                .deepPurpleAccent[
+                                                            700],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Edit comment",
+                                        style: TextStyle(
+                                          color: Colors.deepPurpleAccent[700],
+                                          fontFamily: "Laila-Bold",
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                      onPressed: () async {
+                                        final res = await HttpConnectComment()
+                                            .deleteComment(widget.post_id);
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          postCommenters = HttpConnectComment()
+                                              .getComments(widget.post_id);
+                                        });
+                                        MotionToast.success(
+                                          position: MOTION_TOAST_POSITION.top,
+                                          animationType: ANIMATION.fromTop,
+                                          toastDuration: Duration(seconds: 2),
+                                          description: res["message"],
+                                        ).show(context);
+                                      },
+                                      child: Text(
+                                        "Delete comment",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontFamily: "Laila-Bold",
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: textColor,
+                          ),
                         ),
                 ),
               );
