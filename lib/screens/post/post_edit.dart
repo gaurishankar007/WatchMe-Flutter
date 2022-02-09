@@ -1,3 +1,5 @@
+import 'package:assignment/api/base_urls.dart';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/model/post.dart';
@@ -24,6 +26,7 @@ class _PostEditState extends State<PostEdit> {
   int activeNav = 4;
 
   late Future<GetPost> userPost;
+  late Future<Map> getUser;
   int totalImages = 0;
   int activatedIndex = 0;
 
@@ -35,8 +38,8 @@ class _PostEditState extends State<PostEdit> {
   List<String> tag_friend_name = [];
   List<String> tag_friend_profile_pic = [];
 
-  String postUrl = "http://10.0.2.2:4040/posts/";
-  String profilePicUrl = "http://10.0.2.2:4040/profiles/";
+  String postUrl = BaseUrl.postUrl;
+  String profilePicUrl = BaseUrl.profilePicUrl;
 
   Future<List> getUserFollowers() async {
     final res = await HttpConnectWatch().getWatchers();
@@ -47,6 +50,7 @@ class _PostEditState extends State<PostEdit> {
   void initState() {
     super.initState();
     userPost = HttpConnectPost().getSinglePost(widget.post_id);
+    getUser = HttpConnectUser().getUser();
     userPost.then((value) {
       setState(() {
         totalImages = value.attach_file!.length;
@@ -554,14 +558,24 @@ class _PostEditState extends State<PostEdit> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profilePicUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

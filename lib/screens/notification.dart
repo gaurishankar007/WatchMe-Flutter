@@ -1,4 +1,5 @@
 import 'package:assignment/api/http/http_notification.dart';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
+
+import '../api/base_urls.dart';
 
 class NotificationUnseen extends StatefulWidget {
   const NotificationUnseen({Key? key}) : super(key: key);
@@ -18,9 +21,10 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 3;
-  String profileUrl = "http://10.0.2.2:4040/profiles/";
+  String profileUrl = BaseUrl.profilePicUrl;
 
   late Future<List> notifications;
+  late Future<Map> getUser;
   String unSeenNum = '0';
   String seenNum = '0';
   bool unSeen = true;
@@ -29,6 +33,7 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
   void initState() {
     super.initState();
     notifications = HttpConnectNotification().getUnSeen();
+    getUser = HttpConnectUser().getUser();
     HttpConnectNotification().getNotificationNum().then((res) {
       setState(() {
         unSeenNum = res["unSeenNum"];
@@ -329,14 +334,24 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profileUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

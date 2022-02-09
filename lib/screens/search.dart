@@ -1,4 +1,5 @@
 import 'package:assignment/api/http/http_user.dart';
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,17 @@ class _SearchState extends State<Search> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 1;
-  String profileUrl = "http://10.0.2.2:4040/profiles/";
+  String profileUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> searchedUsers;
+  late Future<List> searchedUsers; 
+  late Future<Map> getUser;
   String filterOption = "Username";
 
   @override
   void initState() {
     super.initState();
     searchedUsers = HttpConnectUser().getByUsername("@");
+    getUser = HttpConnectUser().getUser();
   }
 
   @override
@@ -289,14 +292,24 @@ class _SearchState extends State<Search> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profileUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

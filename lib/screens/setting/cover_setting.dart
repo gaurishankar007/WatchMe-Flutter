@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _CoverSettingState extends State<CoverSetting> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   File? coverPicture = null;
   String coverPictureName = "";
-  String coverPictureUrl = 'http://10.0.2.2:4040/covers/';
+  String coverPictureUrl = BaseUrl.coverPicUrl;
 
   late Future<Map> getCover;
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/model/post.dart';
@@ -24,6 +25,7 @@ class _CameraState extends State<Camera> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 2;
 
+  late Future<Map> getUser;
   List<File> posts = [];
   int activatedIndex = 0;
   String caption = "", description = "";
@@ -60,6 +62,12 @@ class _CameraState extends State<Camera> {
   Future<List> getUserFollowers() async {
     final res = await HttpConnectWatch().getWatchers();
     return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser = HttpConnectUser().getUser();
   }
 
   @override
@@ -575,8 +583,7 @@ class _CameraState extends State<Camera> {
                                                 icon: Icon(
                                                   Icons.delete,
                                                   size: 20,
-                                                  color: Colors
-                                                      .red,
+                                                  color: Colors.red,
                                                 ),
                                               ),
                                             ),
@@ -730,14 +737,24 @@ class _CameraState extends State<Camera> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profilePicUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

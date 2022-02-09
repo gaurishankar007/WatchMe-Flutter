@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   File? profilePicture = null;
   String profilePictureName = "";
-  String profilePictureUrl = 'http://10.0.2.2:4040/profiles/';
+  String profilePictureUrl = BaseUrl.profilePicUrl;
 
   late Future<Map> getProile;
 

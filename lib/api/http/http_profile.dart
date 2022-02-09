@@ -6,8 +6,10 @@ import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/user.dart';
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectProfile {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
 
   Future<Map> getPersonalInfo() async {

@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectNotification {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
 
-
-   Future<Map> getNotificationNum() async {
+  Future<Map> getNotificationNum() async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };

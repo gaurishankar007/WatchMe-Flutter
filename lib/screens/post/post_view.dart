@@ -1,4 +1,8 @@
+import 'package:assignment/api/base_urls.dart';
+import 'package:assignment/api/http/http_comment.dart';
+import 'package:assignment/api/http/http_like.dart';
 import 'package:assignment/api/http/http_post.dart';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/response/response_post.dart';
 import 'package:assignment/screens/post/comment.dart';
 import 'package:assignment/screens/post/like.dart';
@@ -6,6 +10,8 @@ import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PostView extends StatefulWidget {
@@ -24,17 +30,26 @@ class _PostViewState extends State<PostView> {
   int activeNav = 4;
 
   late Future<GetPost> userPost;
+  late Future<Map> userPostLC;
+  late Future<Map> getUser;
   int totalImages = 0;
   int activatedIndex = 0;
 
-  String postUrl = "http://10.0.2.2:4040/posts/";
-  String profilePicUrl = "http://10.0.2.2:4040/profiles/";
+  String postUrl = BaseUrl.postUrl;
+  String profilePicUrl = BaseUrl.profilePicUrl;
+
+  Future<Map> getComment(String post_id) async {
+    final res = await HttpConnectComment().findComment(post_id);
+    return res;
+  }
 
   @override
   void initState() {
     super.initState();
     activeNav = widget.activeNav!;
     userPost = HttpConnectPost().getSinglePost(widget.post_id);
+    userPostLC = HttpConnectPost().getSinglePostLC(widget.post_id);
+    getUser = HttpConnectUser().getUser();
     userPost.then((value) {
       setState(() {
         totalImages = value.attach_file!.length;
@@ -44,6 +59,7 @@ class _PostViewState extends State<PostView> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
       Color backColor =
           ref.watch(themeController) ? Colors.black : Colors.white;
@@ -89,6 +105,7 @@ class _PostViewState extends State<PostView> {
                           ListTile(
                             minVerticalPadding: 0,
                             contentPadding: EdgeInsets.symmetric(
+                              vertical: 0,
                               horizontal: 10,
                             ),
                             leading: CircleAvatar(
@@ -140,62 +157,96 @@ class _PostViewState extends State<PostView> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (builder) => Likers(
-                                                post_id: widget.post_id,
-                                                activeNav: 4),
+                                Container(
+                                  height: 40,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        padding: EdgeInsets.all(0),
+                                        constraints:
+                                            BoxConstraints(minWidth: 20),
+                                        onPressed: () async {
+                                          await HttpConnectLike()
+                                              .likePost(snapshot.data!.id);
+                                          setState(() {
+                                            userPost = HttpConnectPost()
+                                                .getSinglePost(widget.post_id);
+                                            userPostLC = HttpConnectPost()
+                                                .getSinglePostLC(
+                                                    widget.post_id);
+                                          });
+                                        },
+                                        icon: FutureBuilder<Map>(
+                                            future: userPostLC,
+                                            builder: (context, snapshot1) {
+                                              if (snapshot1.hasData) {
+                                                return Icon(
+                                                  Icons.favorite,
+                                                  color: snapshot1
+                                                          .data!["liked"]
+                                                      ? Colors
+                                                          .deepPurpleAccent[700]
+                                                      : textColor,
+                                                );
+                                              }
+                                              return CircularProgressIndicator();
+                                            }),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) => Likers(
+                                                  post_id: snapshot.data!.id,
+                                                  activeNav: 0),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "${snapshot.data!.like_num.toString()} liker,",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontFamily: "Laila-Bold",
                                           ),
-                                        );
-                                      },
-                                      child: Text(
-                                        "${snapshot.data!.like_num.toString()} likes,",
-                                        style: TextStyle(
-                                          color: textColor,
-                                          fontFamily: "Laila-Bold",
+                                        ),
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
                                         ),
                                       ),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
+                                      SizedBox(
+                                        width: 5,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (builder) => Commenters(
-                                                post_id: widget.post_id,
-                                                activeNav: 4),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) => Commenters(
+                                                  post_id: snapshot.data!.id,
+                                                  activeNav: 0),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "${snapshot.data!.comment_num.toString()} commenter",
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontFamily: "Laila-Bold",
                                           ),
-                                        );
-                                      },
-                                      child: Text(
-                                        "${snapshot.data!.comment_num.toString()} comments",
-                                        style: TextStyle(
-                                          color: textColor,
-                                          fontFamily: "Laila-Bold",
+                                        ),
+                                        style: TextButton.styleFrom(
+                                          padding: EdgeInsets.zero,
                                         ),
                                       ),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                                 RichText(
                                   text: TextSpan(
@@ -215,6 +266,237 @@ class _PostViewState extends State<PostView> {
                                         )
                                       ]),
                                 ),
+                                FutureBuilder<Map>(
+                                    future: userPostLC,
+                                    builder: (context, snapshot1) {
+                                      if (snapshot1.hasData) {
+                                        return !snapshot1.data!["commented"]
+                                            ? ListTile(
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                  horizontal: 0,
+                                                  vertical: 0,
+                                                ),
+                                                onTap: () {
+                                                  String comment = "";
+
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    context: context,
+                                                    builder: (builder) =>
+                                                        Container(
+                                                      padding: EdgeInsets.only(
+                                                        top: 5,
+                                                        left:
+                                                            _screenWidth * .05,
+                                                        right: 5,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: backColor,
+                                                        borderRadius:
+                                                            new BorderRadius
+                                                                .only(
+                                                          topLeft: const Radius
+                                                              .circular(25.0),
+                                                          topRight: const Radius
+                                                              .circular(25.0),
+                                                        ),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: textColor,
+                                                            spreadRadius: 1,
+                                                            blurRadius: 2,
+                                                            offset: Offset(0,
+                                                                1), // changes position of shadow
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      height: 360,
+                                                      child: ListTile(
+                                                        title: TextFormField(
+                                                          autofocus: true,
+                                                          maxLines: 2,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .multiline,
+                                                          onChanged: (value) {
+                                                            comment =
+                                                                value.trim();
+                                                          },
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                          ),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintText:
+                                                                "   Add a comment....",
+                                                            hintStyle:
+                                                                TextStyle(
+                                                              color: textColor,
+                                                            ),
+                                                            isDense: true,
+                                                            contentPadding:
+                                                                EdgeInsets.zero,
+                                                            border: InputBorder
+                                                                .none,
+                                                          ),
+                                                        ),
+                                                        trailing: IconButton(
+                                                          onPressed: () async {
+                                                            if (comment == "") {
+                                                              MotionToast.error(
+                                                                position:
+                                                                    MOTION_TOAST_POSITION
+                                                                        .top,
+                                                                animationType:
+                                                                    ANIMATION
+                                                                        .fromTop,
+                                                                toastDuration:
+                                                                    Duration(
+                                                                        seconds:
+                                                                            2),
+                                                                description:
+                                                                    "Emplty field",
+                                                              ).show(context);
+                                                            } else {
+                                                              await HttpConnectComment()
+                                                                  .postComment(
+                                                                      snapshot
+                                                                          .data!
+                                                                          .id,
+                                                                      comment);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              setState(() {
+                                                                userPost = HttpConnectPost()
+                                                                    .getSinglePost(
+                                                                        widget
+                                                                            .post_id);
+                                                                userPostLC = HttpConnectPost()
+                                                                    .getSinglePostLC(
+                                                                        widget
+                                                                            .post_id);
+                                                              });
+                                                            }
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.send_rounded,
+                                                            size: 35,
+                                                            color: Colors
+                                                                    .deepPurpleAccent[
+                                                                700],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                leading: FutureBuilder<Map>(
+                                                    future: getUser,
+                                                    builder:
+                                                        (context, snapshot1) {
+                                                      if (snapshot1.hasData) {
+                                                        return CircleAvatar(
+                                                          radius: 15,
+                                                          backgroundImage: NetworkImage(
+                                                              profilePicUrl +
+                                                                  snapshot1.data![
+                                                                          "userData"]
+                                                                      [
+                                                                      "profile_pic"]),
+                                                        );
+                                                      }
+                                                      return CircleAvatar(
+                                                        radius: 18,
+                                                      );
+                                                    }),
+                                                title: Text(
+                                                  "Comment on this post.....",
+                                                  style: TextStyle(
+                                                    color: textColor,
+                                                  ),
+                                                ),
+                                              )
+                                            : FutureBuilder<Map>(
+                                                future: getComment(
+                                                    snapshot.data!.id!),
+                                                builder: (context, snapshot1) {
+                                                  if (snapshot1.hasData) {
+                                                    return ListTile(
+                                                      leading:
+                                                          FutureBuilder<Map>(
+                                                              future: getUser,
+                                                              builder: (context,
+                                                                  snapshot2) {
+                                                                if (snapshot2
+                                                                    .hasData) {
+                                                                  return CircleAvatar(
+                                                                    radius: 15,
+                                                                    backgroundImage:
+                                                                        NetworkImage(profilePicUrl +
+                                                                            snapshot2.data!["userData"]["profile_pic"]),
+                                                                  );
+                                                                }
+                                                                return CircleAvatar(
+                                                                  radius: 18,
+                                                                );
+                                                              }),
+                                                      title: Text(
+                                                        snapshot1.data![
+                                                                "commentData"]
+                                                            ["comment"],
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                        ),
+                                                      ),
+                                                      trailing: IconButton(
+                                                        onPressed: () async {
+                                                          final res =
+                                                              await HttpConnectComment()
+                                                                  .deleteComment(
+                                                                      widget
+                                                                          .post_id);
+                                                          setState(() {
+                                                            userPost = HttpConnectPost()
+                                                                .getSinglePost(
+                                                                    widget
+                                                                        .post_id);
+                                                            userPostLC =
+                                                                HttpConnectPost()
+                                                                    .getSinglePostLC(
+                                                                        widget
+                                                                            .post_id);
+                                                          });
+                                                          MotionToast.success(
+                                                            position:
+                                                                MOTION_TOAST_POSITION
+                                                                    .top,
+                                                            animationType:
+                                                                ANIMATION
+                                                                    .fromTop,
+                                                            toastDuration:
+                                                                Duration(
+                                                                    seconds: 2),
+                                                            description:
+                                                                res["message"],
+                                                          ).show(context);
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.delete,
+                                                          size: 20,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                  return CircularProgressIndicator();
+                                                },
+                                              );
+                                      }
+                                      return CircularProgressIndicator();
+                                    }),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -258,7 +540,7 @@ class _PostViewState extends State<PostView> {
                                 ),
                               ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     );
@@ -313,14 +595,24 @@ class _PostViewState extends State<PostView> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profilePicUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

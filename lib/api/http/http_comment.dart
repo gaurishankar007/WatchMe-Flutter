@@ -4,9 +4,24 @@ import 'dart:io';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectComment {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
+
+  Future<Map> postComment(String? post_id, String comment) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "comment/post"),
+        body: {"post_id": post_id, "comment": comment}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body) as Map;
+    return responseData;
+  }
 
   Future<List> getComments(String? post_id) async {
     final bearerToken = {

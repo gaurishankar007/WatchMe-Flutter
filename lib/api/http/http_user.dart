@@ -6,8 +6,10 @@ import 'package:assignment/api/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectUser {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   static String token = "";
 
   Future<Map> registerUser(UserRegister user) async {

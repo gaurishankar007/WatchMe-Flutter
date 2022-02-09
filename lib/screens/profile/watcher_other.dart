@@ -1,3 +1,4 @@
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
@@ -17,18 +18,18 @@ class _WatcherOtherState extends State<WatcherOther> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
-  String profileUrl = "http://10.0.2.2:4040/profiles/";
+  String profileUrl = BaseUrl.profilePicUrl;
 
   late Future<List> userWatchers;
+  late Future<Map> getUser;
   String? myId;
 
   @override
   void initState() {
     super.initState();
     userWatchers = HttpConnectWatch().getWatchersOther(widget.user_id);
-    HttpConnectUser()
-        .getUser()
-        .then((value) => myId = value["userData"]["_id"]);
+    getUser = HttpConnectUser().getUser();
+    getUser.then((value) => myId = value["userData"]["_id"]);
   }
 
   @override
@@ -175,14 +176,24 @@ class _WatcherOtherState extends State<WatcherOther> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profileUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

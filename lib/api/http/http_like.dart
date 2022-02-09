@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectLike {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
 
   Future<List> getLikes(String? post_id) async {

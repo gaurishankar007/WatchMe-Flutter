@@ -57,7 +57,7 @@ class HttpConnectPost {
     return {"message": "Error Occured."};
   }
 
-  Future<List<GetPost>> getFollowedPost() async {
+  Future<GetFollowedPosts> getFollowedPost() async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -67,7 +67,7 @@ class HttpConnectPost {
 
     //json serializing inline
     final responseData = GetFollowedPosts.fromJson(jsonDecode(response.body));
-    return responseData.followedPosts;
+    return responseData;
   }
 
   Future<List> getPosts() async {
@@ -132,6 +132,19 @@ class HttpConnectPost {
 
     //json serializing inline
     final responseData = GetPost.fromJson(jsonDecode(response.body));
+    return responseData;
+  }
+
+   Future<Map> getSinglePostLC(String? post_id) async {
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
+
+    final response = await post(Uri.parse(baseurl + "post/get/single/lc"),
+        body: {"post_id": post_id!}, headers: bearerToken);
+
+    //json serializing inline
+    final responseData = jsonDecode(response.body) as Map;
     return responseData;
   }
 

@@ -1,3 +1,5 @@
+import 'package:assignment/api/base_urls.dart';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
@@ -15,14 +17,16 @@ class _WatcherState extends State<Watcher> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
-  String profileUrl = "http://10.0.2.2:4040/profiles/";
+  String profileUrl = BaseUrl.profilePicUrl;
 
   late Future<List> userWatchers;
+  late Future<Map> getUser;
 
   @override
   void initState() {
     super.initState();
     userWatchers = HttpConnectWatch().getWatchers();
+    getUser = HttpConnectUser().getUser();
   }
 
   @override
@@ -182,14 +186,24 @@ class _WatcherState extends State<Watcher> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profileUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

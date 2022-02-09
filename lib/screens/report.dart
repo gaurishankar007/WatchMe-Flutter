@@ -1,4 +1,6 @@
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/api/http/http_report.dart';
+import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +19,17 @@ class _ReportState extends State<Report> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 0;
+
+  late Future<Map> getUser;
+  String profilePicUrl = BaseUrl.profilePicUrl;
   String report_for = "Nudity or sexual activity";
   List<String> report_for_list = ["Nudity or sexual activity"];
+
+  @override
+  void initState() {
+    super.initState();
+    getUser = HttpConnectUser().getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,14 +264,24 @@ class _ReportState extends State<Report> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundImage: AssetImage("images/defaultProfile.png"),
-                  ),
+                  child: FutureBuilder<Map>(
+                      future: getUser,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(profilePicUrl +
+                                snapshot.data!["userData"]["profile_pic"]),
+                          );
+                        }
+                        return CircleAvatar(
+                          radius: 16,
+                        );
+                      }),
                 ),
                 label: "",
               ),

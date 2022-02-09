@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:http/http.dart';
 
+import '../base_urls.dart';
+
 class HttpConnectReport {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
 
   Future<Map> report(String? post_id, List<String> report_for) async {
@@ -17,9 +19,9 @@ class HttpConnectReport {
       for (int i = 0; i < report_for.length; i++) {
         reportData["report_for[$i]"] = report_for[i];
       }
-        final bearerToken = {
-          HttpHeaders.authorizationHeader: 'Bearer $token',
-        };
+      final bearerToken = {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      };
 
       final response = await post(Uri.parse(baseurl + "report/post"),
           body: reportData, headers: bearerToken);
