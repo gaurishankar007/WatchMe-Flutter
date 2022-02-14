@@ -136,7 +136,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             ),
                                           ),
                                           Text(
-                                            "Waterchs",
+                                            "Watchers",
                                             style: TextStyle(
                                               color: textColor,
                                               fontSize: 15,
@@ -164,7 +164,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             ),
                                           ),
                                           Text(
-                                            "Watchings",
+                                            "Watching",
                                             style: TextStyle(
                                               color: textColor,
                                               fontSize: 15,

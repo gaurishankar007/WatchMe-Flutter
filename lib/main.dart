@@ -23,7 +23,6 @@ import 'package:assignment/screens/setting/user_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-String token = "";
 void main() {
   runApp(ProviderScope(child: WatchMe()));
 }

@@ -55,7 +55,7 @@ class _WatchingState extends State<Watching> {
             ),
             backgroundColor: backColor,
             title: Text(
-              "Watchings",
+              "Watching",
               style: TextStyle(
                 color: textColor,
                 fontSize: 20,

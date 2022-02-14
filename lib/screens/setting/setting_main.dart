@@ -32,6 +32,7 @@ class _SettingState extends State<Setting> {
     };
     _streamSubscription = ProximitySensor.events.listen((int event) {
       if (event > 0) {
+        _streamSubscription.cancel();
         Token().removeToken();
         HttpConnectUser.token = "";
         Navigator.of(context)

@@ -119,7 +119,7 @@ class _SearchState extends State<Search> {
                         onChanged: (value) {
                           if (value.trim() == "") {
                             return;
-                          }else if(filterOption=="Username") {
+                          } else if(filterOption=="Username") {
                             setState(() {
                               searchedUsers =
                                   HttpConnectUser().getByUsername(value);

@@ -195,7 +195,7 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                                   });
                                 },
                                 child: Text(
-                                  "Delete all",
+                                  "Remove all",
                                   style: TextStyle(
                                     color: Colors.deepPurpleAccent[700],
                                     fontSize: 15,
