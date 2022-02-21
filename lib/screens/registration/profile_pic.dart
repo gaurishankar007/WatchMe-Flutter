@@ -90,6 +90,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                 Column(
                   children: [
                     ElevatedButton(
+                      key: ValueKey("ButtonSelectProfile"),
                       onPressed: () async {
                         showModalBottomSheet(
                           isScrollControlled: true,

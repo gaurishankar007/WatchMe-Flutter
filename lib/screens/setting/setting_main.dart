@@ -220,6 +220,7 @@ class _SettingState extends State<Setting> {
                 ),
               ),
               ListTile(
+                key: ValueKey("ListTileTheme"),
                 onTap: () {
                   ref.watch(themeController)
                       ? ref.read(themeController.notifier).lightTheme()

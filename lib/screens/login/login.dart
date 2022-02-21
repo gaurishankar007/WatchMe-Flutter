@@ -89,6 +89,7 @@ class _LoginUserState extends State<LoginUser> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: Key("UsernameEmailLogin"),
                     onSaved: (value) {
                       usernameEmail = value!;
                     },
@@ -138,6 +139,7 @@ class _LoginUserState extends State<LoginUser> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: Key("PasswordLogin"),
                     onSaved: (value) {
                       password = value!.trim();
                     },
@@ -223,6 +225,7 @@ class _LoginUserState extends State<LoginUser> {
                     height: 5,
                   ),
                   ElevatedButton(
+                    key: Key("ButtonLogin"),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
