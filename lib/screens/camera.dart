@@ -39,12 +39,7 @@ class _CameraState extends State<Camera> {
     };
     _streamSubscription = ProximitySensor.events.listen((int event) {
       if (event > 0) {
-        return MotionToast.warning(
-          position: MOTION_TOAST_POSITION.top,
-          animationType: ANIMATION.fromTop,
-          toastDuration: Duration(seconds: 2),
-          description: "Obstacle came infront of the camera.",
-        ).show(context);
+        fromCamera();
       }
     });
   }
@@ -118,7 +113,7 @@ class _CameraState extends State<Camera> {
                     radius: _screenWidth * .5,
                     backgroundColor: Colors.deepPurpleAccent[700],
                     child: CircleAvatar(
-                      radius: _screenWidth * .45,
+                      radius: _screenWidth * .47,
                       backgroundColor: backColor,
                       child: SingleChildScrollView(
                         child: Column(
@@ -229,7 +224,7 @@ class _CameraState extends State<Camera> {
                                   ),
                                 ],
                               ),
-                              width: _screenWidth * .5,
+                              width: _screenWidth * .45,
                               height: 50,
                               child: Center(
                                   child: Container(
@@ -237,8 +232,8 @@ class _CameraState extends State<Camera> {
                                   borderRadius: BorderRadius.circular(20),
                                   color: backColor,
                                 ),
-                                height: 20,
-                                width: _screenWidth * .4,
+                                height: 25,
+                                width: _screenWidth * .40,
                               )),
                             ),
                           ],
@@ -257,15 +252,15 @@ class _CameraState extends State<Camera> {
                         items: posts.map((i) {
                           return Builder(builder: (BuildContext context) {
                             return Image(
+                              width: _screenWidth,
                               image: FileImage(i),
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             );
                           });
                         }).toList(),
                         options: CarouselOptions(
                           initialPage: 0, // shows the first image
                           viewportFraction: 1, // shows one image at a time
-                          height: 250,
                           enableInfiniteScroll:
                               false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                           onPageChanged: ((indexCar, reason) {
@@ -290,7 +285,7 @@ class _CameraState extends State<Camera> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: _screenWidth * .05,
+                          horizontal: _screenWidth * .03,
                         ),
                         child: Column(
                           children: [
@@ -519,8 +514,11 @@ class _CameraState extends State<Camera> {
                                                     ),
                                                   );
                                                 }
-                                                return const CircularProgressIndicator(
-                                                  color: Colors.deepPurple,
+                                                return Center(
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                    color: Colors.deepPurple,
+                                                  ),
                                                 );
                                               },
                                             ),

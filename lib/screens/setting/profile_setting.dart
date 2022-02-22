@@ -60,7 +60,8 @@ class _ProfileSettingState extends State<ProfileSetting> {
               width: .1,
             ),
           ),
-          elevation: 0,
+          elevation: 2,
+          shadowColor: textColor,
         ),
         body: SingleChildScrollView(
           child: Center(
@@ -74,32 +75,22 @@ class _ProfileSettingState extends State<ProfileSetting> {
                           height: 20,
                         ),
                         (profilePicture == null)
-                            ? snapshot.data!["userData"]["profile_pic"] !=
-                                    "defaultProfile.png"
-                                ? CircleAvatar(
-                                    radius: _screenWidth * .48,
-                                    backgroundColor:
-                                        Colors.deepPurpleAccent[700],
-                                    child: CircleAvatar(
-                                      radius: _screenWidth * .45,
-                                      backgroundImage: NetworkImage(
-                                          profilePictureUrl +
-                                              snapshot.data!["userData"]
-                                                  ["profile_pic"]),
-                                    ),
-                                  )
-                                : CircleAvatar(
-                                    radius: _screenWidth * .45,
-                                    backgroundImage: NetworkImage(
-                                        profilePictureUrl +
-                                            snapshot.data!["userData"]
-                                                ["profile_pic"]),
-                                  )
-                            : CircleAvatar(
-                                radius: _screenWidth * .48,
+                            ? CircleAvatar(
+                                radius: _screenWidth * .43,
                                 backgroundColor: Colors.deepPurpleAccent[700],
                                 child: CircleAvatar(
-                                  radius: _screenWidth * .45,
+                                  radius: _screenWidth * .40,
+                                  backgroundImage: NetworkImage(
+                                      profilePictureUrl +
+                                          snapshot.data!["userData"]
+                                              ["profile_pic"]),
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: _screenWidth * .43,
+                                backgroundColor: Colors.deepPurpleAccent[700],
+                                child: CircleAvatar(
+                                  radius: _screenWidth * .40,
                                   backgroundImage: FileImage(profilePicture!),
                                 ),
                               ),
@@ -356,7 +347,10 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       ),
                     );
                   }
-                  return CircularProgressIndicator();
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.deepPurple,
+                  ));
                 }),
           ),
         ),

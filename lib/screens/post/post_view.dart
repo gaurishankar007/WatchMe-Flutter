@@ -106,7 +106,7 @@ class _PostViewState extends State<PostView> {
                             minVerticalPadding: 0,
                             contentPadding: EdgeInsets.symmetric(
                               vertical: 0,
-                              horizontal: 10,
+                              horizontal: _screenWidth*.01,
                             ),
                             leading: CircleAvatar(
                               radius: 20,
@@ -125,15 +125,15 @@ class _PostViewState extends State<PostView> {
                             items: snapshot.data!.attach_file!.map((i) {
                               return Builder(builder: (BuildContext context) {
                                 return Image(
+                                  width: _screenWidth,
                                   image: NetworkImage(postUrl + i),
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 );
                               });
                             }).toList(),
                             options: CarouselOptions(
                               initialPage: 0, // shows the first image
                               viewportFraction: 1, // shows one image at a time
-                              height: 250,
                               enableInfiniteScroll:
                                   false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                               onPageChanged: ((indexCar, reason) {
@@ -157,7 +157,7 @@ class _PostViewState extends State<PostView> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.symmetric(horizontal: _screenWidth*.01),
                             child: Column(
                               children: [
                                 Container(

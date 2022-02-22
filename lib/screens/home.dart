@@ -346,6 +346,7 @@ class _HomeState extends State<Home> {
                                 .map((i) {
                               return Builder(builder: (BuildContext context) {
                                 return Image(
+                                  width: _screenWidth,
                                   image: NetworkImage(postUrl + i),
                                   fit: BoxFit.cover,
                                 );
@@ -354,7 +355,6 @@ class _HomeState extends State<Home> {
                             options: CarouselOptions(
                               initialPage: 0, // shows the first image
                               viewportFraction: 1, // shows one image at a time
-                              height: 400,
                               enableInfiniteScroll:
                                   false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                               onPageChanged: ((indexCar, reason) {
@@ -382,7 +382,8 @@ class _HomeState extends State<Home> {
                             height: 5,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: _screenWidth * .01),
                             child: Column(
                               children: [
                                 Container(
@@ -679,7 +680,10 @@ class _HomeState extends State<Home> {
                                               ),
                                             );
                                           }
-                                          return CircularProgressIndicator();
+                                          return Center(
+                                              child: CircularProgressIndicator(
+                                            color: Colors.deepPurple,
+                                          ));
                                         },
                                       ),
                               ],

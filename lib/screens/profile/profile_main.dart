@@ -32,11 +32,11 @@ class _ProfileMainState extends State<ProfileMain> {
 
   late Future<Map> getUser;
   late Future<Map> userProfile;
-  late Future<Map> userAdddress;
+  late Future<Map> userAddress;
   late Future<List> userPosts;
 
   String watchersNum = "0";
-  String watchingsNum = "0";
+  String watchingNum = "0";
   String postsNum = "0";
   String taggedPostsNum = "0";
   bool postsMy = true;
@@ -45,7 +45,7 @@ class _ProfileMainState extends State<ProfileMain> {
     final res = await HttpConnectWatch().getUserNum();
     setState(() {
       watchersNum = res["followers"];
-      watchingsNum = res["followed_users"];
+      watchingNum = res["followed_users"];
       postsNum = res["postsNum"];
       taggedPostsNum = res["taggedPostsNum"];
     });
@@ -57,7 +57,7 @@ class _ProfileMainState extends State<ProfileMain> {
     getUser = HttpConnectUser().getUser();
     setUserNum();
     userProfile = HttpConnectProfile().getPersonalInfo();
-    userAdddress = HttpConnectAddress().getAddressInfo();
+    userAddress = HttpConnectAddress().getAddressInfo();
     userPosts = HttpConnectPost().getPosts();
 
     _streamSubscriptions.add(
@@ -110,7 +110,7 @@ class _ProfileMainState extends State<ProfileMain> {
                               alignment: Alignment.bottomCenter,
                               children: [
                                 CircleAvatar(
-                                  radius: 80,
+                                  radius: _screenWidth * .20,
                                   backgroundColor: Colors.deepPurpleAccent[700],
                                 ),
                                 Row(
@@ -151,12 +151,12 @@ class _ProfileMainState extends State<ProfileMain> {
                                       onLongPress: () {
                                         Navigator.pop(context);
                                         Navigator.pushNamed(
-                                            context, "/watchings");
+                                            context, "/watching");
                                       },
                                       child: Column(
                                         children: [
                                           Text(
-                                            watchingsNum,
+                                            watchingNum,
                                             style: TextStyle(
                                               color: textColor,
                                               fontSize: 25,
@@ -178,13 +178,13 @@ class _ProfileMainState extends State<ProfileMain> {
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(
-                                    bottom: 80,
+                                    bottom: _screenWidth * .20,
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
                                     child: Image(
                                       width: _screenWidth * .95,
-                                      fit: BoxFit.contain,
+                                      fit: BoxFit.cover,
                                       image: NetworkImage(
                                         coverUrl +
                                             snapshot.data!["userData"]
@@ -195,10 +195,10 @@ class _ProfileMainState extends State<ProfileMain> {
                                 ),
                                 Container(
                                   padding: EdgeInsets.only(
-                                    bottom: 5,
+                                    bottom: _screenWidth * .01,
                                   ),
                                   child: CircleAvatar(
-                                    radius: 75,
+                                    radius: _screenWidth * .19,
                                     backgroundImage: NetworkImage(
                                       profileUrl +
                                           snapshot.data!["userData"]
@@ -245,10 +245,8 @@ class _ProfileMainState extends State<ProfileMain> {
                             context: context,
                             builder: (builder) => SingleChildScrollView(
                               child: Container(
-                                padding: EdgeInsets.only(
-                                  top: 10,
-                                  left: _screenWidth * .05,
-                                  right: 5,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
                                   color: backColor,
@@ -277,7 +275,9 @@ class _ProfileMainState extends State<ProfileMain> {
                                       width: _screenWidth * .20,
                                     ),
                                     Container(
-                                      height: 250,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: _screenWidth * .01),
+                                      height: 200,
                                       child: FutureBuilder<Map>(
                                         future: userProfile,
                                         builder: (context, snapshot) {
@@ -285,105 +285,158 @@ class _ProfileMainState extends State<ProfileMain> {
                                             return SingleChildScrollView(
                                               child: Column(
                                                 children: [
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "First Name: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "First Name: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
                                                       ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["first_name"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userProfile"]
+                                                              ["first_name"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Last Name: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Last Name: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
                                                       ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["last_name"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userProfile"]
+                                                              ["last_name"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Gender: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Gender: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
                                                       ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["gender"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userProfile"]
+                                                              ["gender"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Birthday: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Birthday: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
                                                       ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["birthday"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data!["userProfile"]
+                                                                      [
+                                                                      "birthday"] ==
+                                                                  null
+                                                              ? ""
+                                                              : snapshot.data![
+                                                                      "userProfile"]
+                                                                      [
+                                                                      "birthday"]
+                                                                  .split("T")
+                                                                  .first,
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                  ListTile(
-                                                    leading: Text(
-                                                      "Biography: ",
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
-                                                        fontFamily:
-                                                            "Laila-Bold",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Biography: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
                                                       ),
-                                                    ),
-                                                    title: Text(
-                                                      snapshot.data![
-                                                              "userProfile"]
-                                                          ["biography"],
-                                                      style: TextStyle(
-                                                        color: textColor,
-                                                        fontSize: 15,
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userProfile"]
+                                                              ["biography"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -399,8 +452,11 @@ class _ProfileMainState extends State<ProfileMain> {
                                               ),
                                             );
                                           }
-                                          return const CircularProgressIndicator(
-                                            color: Colors.deepPurple,
+                                          return Center(
+                                            child:
+                                                const CircularProgressIndicator(
+                                              color: Colors.deepPurple,
+                                            ),
                                           );
                                         },
                                       ),
@@ -435,242 +491,335 @@ class _ProfileMainState extends State<ProfileMain> {
                           showModalBottomSheet(
                             backgroundColor: Colors.transparent,
                             context: context,
-                            builder: (builder) => Container(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                left: _screenWidth * .05,
-                                right: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                color: backColor,
-                                borderRadius: new BorderRadius.only(
-                                  topLeft: const Radius.circular(25.0),
-                                  topRight: const Radius.circular(25.0),
+                            builder: (builder) => SingleChildScrollView(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5,
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: textColor,
-                                    spreadRadius: 1,
-                                    blurRadius: 2,
-                                    offset: Offset(
-                                        0, 1), // changes position of shadow
+                                decoration: BoxDecoration(
+                                  color: backColor,
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(25.0),
+                                    topRight: const Radius.circular(25.0),
                                   ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: Colors.deepPurpleAccent[700],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: textColor,
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: Offset(
+                                          0, 1), // changes position of shadow
                                     ),
-                                    height: 5,
-                                    width: _screenWidth * .20,
-                                  ),
-                                  Container(
-                                    height: 350,
-                                    child: FutureBuilder<Map>(
-                                      future: userAdddress,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  "Permanent",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 20,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Country: ",
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.deepPurpleAccent[700],
+                                      ),
+                                      height: 5,
+                                      width: _screenWidth * .20,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: _screenWidth * .01),
+                                      height: 250,
+                                      child: FutureBuilder<Map>(
+                                        future: userAddress,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    "Permanent",
                                                     style: TextStyle(
                                                       color: textColor,
-                                                      fontSize: 15,
+                                                      fontSize: 20,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                       fontFamily: "Laila-Bold",
                                                     ),
                                                   ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                                "userAddress"]
-                                                            ["permanent"]
-                                                        ["country"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
+                                                  SizedBox(height: 5),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Country: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["permanent"]
+                                                              ["country"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "State: ",
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "State: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["permanent"]
+                                                              ["state"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "City: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userAddress"]
+                                                              [
+                                                              "permanent"]["city"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Street: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["permanent"]
+                                                              ["street"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    "Temporary",
                                                     style: TextStyle(
                                                       color: textColor,
-                                                      fontSize: 15,
+                                                      fontSize: 20,
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                       fontFamily: "Laila-Bold",
                                                     ),
                                                   ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["state"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
+                                                  SizedBox(height: 5),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Country: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["temporary"]
+                                                              ["country"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "City: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "State: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["temporary"]
+                                                              ["state"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["city"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "City: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                  "userAddress"]
+                                                              [
+                                                              "temporary"]["city"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Street: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
+                                                  SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Street: ",
+                                                        style: TextStyle(
+                                                          color: textColor,
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              "Laila-Bold",
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 5),
+                                                      Flexible(
+                                                        child: Text(
+                                                          snapshot.data![
+                                                                      "userAddress"]
+                                                                  ["temporary"]
+                                                              ["street"],
+                                                          style: TextStyle(
+                                                            color: textColor,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["permanent"]["street"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Temporary",
-                                                  style: TextStyle(
-                                                    color: textColor,
-                                                    fontSize: 20,
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    fontFamily: "Laila-Bold",
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Country: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                                "userAddress"]
-                                                            ["temporary"]
-                                                        ["country"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "State: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["state"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "City: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["city"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  leading: Text(
-                                                    "Street: ",
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                      fontFamily: "Laila-Bold",
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                    snapshot.data![
-                                                            "userAddress"]
-                                                        ["temporary"]["street"],
-                                                    style: TextStyle(
-                                                      color: textColor,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Center(
-                                            child: Text(
-                                              "${snapshot.error}",
-                                              style: TextStyle(
-                                                color: textColor,
-                                                fontSize: 15,
+                                                ],
                                               ),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text(
+                                                "${snapshot.error}",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return Center(
+                                            child:
+                                                const CircularProgressIndicator(
+                                              color: Colors.deepPurple,
                                             ),
                                           );
-                                        }
-                                        return const CircularProgressIndicator(
-                                          color: Colors.deepPurple,
-                                        );
-                                      },
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );

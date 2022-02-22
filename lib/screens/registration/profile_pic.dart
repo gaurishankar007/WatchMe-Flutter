@@ -57,8 +57,8 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
           child: Padding(
             padding: EdgeInsets.only(
               top: _screenWidth * 0.03,
-              left: _screenWidth * 0.10,
-              right: _screenWidth * 0.10,
+              left: _screenWidth * 0.03,
+              right: _screenWidth * 0.03,
             ),
             child: Column(
               children: [
@@ -76,12 +76,12 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                 ),
                 (profilePicture == null)
                     ? CircleAvatar(
-                        radius: 100,
+                        radius: _screenWidth * .25,
                         backgroundImage:
                             AssetImage("images/defaultProfile.png"),
                       )
                     : CircleAvatar(
-                        radius: 100,
+                        radius: _screenWidth * .25,
                         backgroundImage: FileImage(profilePicture!),
                       ),
                 SizedBox(

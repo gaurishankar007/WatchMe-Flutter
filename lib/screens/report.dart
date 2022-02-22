@@ -64,8 +64,8 @@ class _ReportState extends State<Report> {
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 5,
+            horizontal: _screenWidth * .03,
+            vertical: _screenWidth * .03,
           ),
           child: SingleChildScrollView(
             child: Container(

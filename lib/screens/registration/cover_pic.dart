@@ -56,8 +56,8 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
           child: Padding(
             padding: EdgeInsets.only(
               top: _screenWidth * 0.03,
-              left: _screenWidth * 0.10,
-              right: _screenWidth * 0.10,
+              left: _screenWidth * 0.03,
+              right: _screenWidth * 0.03,
             ),
             child: Column(
               children: [
@@ -77,8 +77,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Image(
-                          height: 150,
-                          width: _screenWidth * .90,
+                          width: _screenWidth * .75,
                           fit: BoxFit.contain,
                           image: AssetImage("images/defaultCover.png"),
                         ),
@@ -86,8 +85,7 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Image(
-                          height: 150,
-                          width: _screenWidth * .90,
+                          width: _screenWidth * .75,
                           fit: BoxFit.cover,
                           image: FileImage(coverPicture!),
                         ),

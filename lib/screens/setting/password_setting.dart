@@ -50,7 +50,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: _screenWidth * 0.05,
+              top: _screenWidth * 0.03,
               left: _screenWidth * 0.03,
               right: _screenWidth * 0.03,
             ),

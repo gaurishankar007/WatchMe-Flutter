@@ -112,15 +112,15 @@ class _PostEditState extends State<PostEdit> {
                         items: snapshot.data!.attach_file!.map((i) {
                           return Builder(builder: (BuildContext context) {
                             return Image(
+                              width: _screenWidth,
                               image: NetworkImage(postUrl + i),
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             );
                           });
                         }).toList(),
                         options: CarouselOptions(
                           initialPage: 0, // shows the first image
                           viewportFraction: 1, // shows one image at a time
-                          height: 250,
                           enableInfiniteScroll:
                               false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                           onPageChanged: ((indexCar, reason) {
@@ -158,7 +158,7 @@ class _PostEditState extends State<PostEdit> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: _screenWidth * .05,
+                  horizontal: _screenWidth * .03,
                 ),
                 child: Column(
                   children: [

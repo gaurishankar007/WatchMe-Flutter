@@ -59,7 +59,8 @@ class _CoverSettingState extends State<CoverSetting> {
               width: .1,
             ),
           ),
-          elevation: 0,
+          elevation: 2,
+          shadowColor: textColor,
         ),
         body: SingleChildScrollView(
           child: FutureBuilder<Map>(
@@ -342,7 +343,10 @@ class _CoverSettingState extends State<CoverSetting> {
                     ),
                   );
                 }
-                return CircularProgressIndicator();
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.deepPurple,
+                ));
               }),
         ),
       );

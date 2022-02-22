@@ -41,6 +41,7 @@ class _WatchMeState extends State<WatchMe> {
       theme: ThemeData(
         fontFamily: "Laila-Medium",
       ),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginUser(),
@@ -57,7 +58,7 @@ class _WatchMeState extends State<WatchMe> {
         '/notification': (context) => NotificationUnseen(),
         '/profile': (context) => ProfileMain(),
         '/watchers': (context) => Watcher(),
-        '/watchings': (context) => Watching(),
+        '/watching': (context) => Watching(),
         '/setting': (context) => Setting(),
         '/profile-setting': (context) => ProfileSetting(),
         '/cover-setting': (context) => CoverSetting(),

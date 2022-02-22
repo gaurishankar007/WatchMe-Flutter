@@ -80,7 +80,7 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: _screenWidth * .05,
+              horizontal: _screenWidth * .03,
             ),
             child: SingleChildScrollView(
               child: Container(
@@ -107,7 +107,9 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
+                            primary: !unSeen
+                                ? Colors.black : Colors.deepPurpleAccent[700]
+                                ,
                             elevation: unSeen ? 25 : 0,
                             shadowColor: Colors.deepPurpleAccent,
                             shape: RoundedRectangleBorder(
@@ -138,7 +140,9 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
+                            primary: !unSeen
+                                ? Colors.deepPurpleAccent[700]
+                                : Colors.black,
                             elevation: !unSeen ? 25 : 0,
                             shadowColor: Colors.deepPurpleAccent,
                             shape: RoundedRectangleBorder(
@@ -311,7 +315,7 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                           }
                           return Center(
                             child: Text(
-                              "Search users by their username or email address or by their profile first_name or last_name.",
+                              "No notifications yet.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: textColor,

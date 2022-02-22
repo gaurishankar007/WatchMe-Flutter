@@ -49,7 +49,7 @@ class _SearchState extends State<Search> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 5,
+                      height: _screenWidth * .02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -106,11 +106,7 @@ class _SearchState extends State<Search> {
                       height: 5,
                     ),
                     Container(
-                      padding: EdgeInsets.only(
-                          top: _screenWidth * .02,
-                          bottom: _screenWidth * .02,
-                          left: _screenWidth * .02,
-                          right: _screenWidth * .02),
+                      padding: EdgeInsets.all(_screenWidth*.01),
                       decoration: BoxDecoration(
                         color: Colors.deepPurpleAccent[700],
                         borderRadius: BorderRadius.circular(8),

@@ -53,7 +53,11 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(_screenWidth * 0.10),
+            padding: EdgeInsets.only(
+              top: _screenWidth * 0.03,
+              left: _screenWidth * 0.03,
+              right: _screenWidth * 0.03,
+            ),
             child: Form(
               key: _formKey,
               child: Column(

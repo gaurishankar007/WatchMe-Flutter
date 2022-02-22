@@ -69,8 +69,8 @@ class _LoginUserState extends State<LoginUser> {
           child: Padding(
             padding: EdgeInsets.only(
               top: _screenWidth * 0.03,
-              left: _screenWidth * 0.10,
-              right: _screenWidth * 0.10,
+              left: _screenWidth * 0.03,
+              right: _screenWidth * 0.03,
             ),
             child: Form(
               key: _formKey,
