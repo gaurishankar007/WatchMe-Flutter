@@ -3,6 +3,7 @@ import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +22,20 @@ class _WatchingState extends State<Watching> {
 
   late Future<List> userWatching;
   late Future<Map> getUser;
+
+  void generateNotification(String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture:
+            'https://storage.googleapis.com/sales.appinst.io/2016/07/When-Push-Comes-to-Shove-Mobile-Marketing-Through-App-Notifications.png',
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -66,7 +81,7 @@ class _WatchingState extends State<Watching> {
             elevation: 0,
           ),
           body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
+            padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
             child: FutureBuilder<List>(
               future: userWatching,
               builder: (context, snapshot) {
@@ -116,6 +131,13 @@ class _WatchingState extends State<Watching> {
                           setState(() {
                             userWatching = HttpConnectWatch().getWatching();
                           });
+                          generateNotification(
+                            "User Watching",
+                            "You have unwatched " +
+                                snapshot.data![index]["followed_user"]
+                                    ["username"] +
+                                ".",
+                          );
                         },
                         child: Text(
                           "UnWatch",

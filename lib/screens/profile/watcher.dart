@@ -3,6 +3,7 @@ import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/http/http_watch.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +22,20 @@ class _WatcherState extends State<Watcher> {
 
   late Future<List> userWatchers;
   late Future<Map> getUser;
+
+  void generateNotification(String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture:
+            'https://storage.googleapis.com/sales.appinst.io/2016/07/When-Push-Comes-to-Shove-Mobile-Marketing-Through-App-Notifications.png',
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -113,6 +128,13 @@ class _WatcherState extends State<Watcher> {
                         setState(() {
                           userWatchers = HttpConnectWatch().getWatchers();
                         });
+
+                        generateNotification(
+                          "User Watching",
+                          "You have removed " +
+                              snapshot.data![index]["follower"]["username"] +
+                              " from watching you.",
+                        );
                       },
                       child: Text(
                         "Remove",

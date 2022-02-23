@@ -5,6 +5,7 @@ import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -33,6 +34,20 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
   String unSeenNum = '0';
   String seenNum = '0';
   bool unSeen = true;
+
+  void generateNotification(String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture:
+            'https://storage.googleapis.com/sales.appinst.io/2016/07/When-Push-Comes-to-Shove-Mobile-Marketing-Through-App-Notifications.png',
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -177,6 +192,10 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                                       seenNum = res["seenNum"];
                                     });
                                   });
+                                  generateNotification(
+                                    'Notifications Seen',
+                                    'You have seen all of your WatchMe notifications.',
+                                  );
                                 },
                                 child: Text(
                                   "Mark as seen",
@@ -205,6 +224,10 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                                       seenNum = res["seenNum"];
                                     });
                                   });
+                                  generateNotification(
+                                    'Notifications Removed',
+                                    'You have removed all of your WatchMe notifications.',
+                                  );
                                 },
                                 child: Text(
                                   "Remove all",

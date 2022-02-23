@@ -9,6 +9,7 @@ import 'package:assignment/screens/post/post_view.dart';
 import 'package:assignment/screens/profile/watcher_other.dart';
 import 'package:assignment/screens/profile/watching_other.dart';
 import 'package:assignment/screens/riverpod/theme.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -45,6 +46,21 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
   String taggedPostsNum = "0";
   bool postsMy = true;
   bool watched = false;
+
+  void generateNotification(
+      String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 1,
+        channelKey: 'key1',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture:
+            'https://storage.googleapis.com/sales.appinst.io/2016/07/When-Push-Comes-to-Shove-Mobile-Marketing-Through-App-Notifications.png',
+      ),
+    );
+  }
 
   Future setUserNum() async {
     final res = await HttpConnectWatch().getOtherNum(widget.user_id);
@@ -164,7 +180,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                           watchersNum,
                                           style: TextStyle(
                                             color: textColor,
-                                            fontSize: _screenWidth > 250 ? 25 : 15,
+                                            fontSize:
+                                                _screenWidth > 250 ? 25 : 15,
                                             fontFamily: "Laila-Bold",
                                           ),
                                         ),
@@ -172,7 +189,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                           "Watchers",
                                           style: TextStyle(
                                             color: textColor,
-                                            fontSize: _screenWidth > 250 ? 15 : 8,
+                                            fontSize:
+                                                _screenWidth > 250 ? 15 : 8,
                                             fontFamily: "Laila-Bold",
                                           ),
                                         ),
@@ -197,7 +215,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                           watchingNum,
                                           style: TextStyle(
                                             color: textColor,
-                                            fontSize: _screenWidth > 250 ? 25 : 15,
+                                            fontSize:
+                                                _screenWidth > 250 ? 25 : 15,
                                             fontFamily: "Laila-Bold",
                                           ),
                                         ),
@@ -205,7 +224,8 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                           "Watching",
                                           style: TextStyle(
                                             color: textColor,
-                                            fontSize: _screenWidth > 250 ? 15 : 8,
+                                            fontSize:
+                                                _screenWidth > 250 ? 15 : 8,
                                             fontFamily: "Laila-Bold",
                                           ),
                                         ),
@@ -260,6 +280,13 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                     await HttpConnectWatch().unWatch(
                                         snapshot.data!["userData"]["_id"]);
                                     setUserNum();
+                                    generateNotification(
+                                      "User Watching",
+                                      "You have unwatched " +
+                                          snapshot.data!["userData"]
+                                              ["username"] +
+                                          ".",
+                                    );
                                   },
                                   child: Text(
                                     "UnWatch",
@@ -281,6 +308,13 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
                                     await HttpConnectWatch().watch(
                                         snapshot.data!["userData"]["_id"]);
                                     setUserNum();
+                                    generateNotification(
+                                      "User Watching",
+                                      "You have watched " +
+                                          snapshot.data!["userData"]
+                                              ["username"] +
+                                          ".",
+                                    );
                                   },
                                   child: Text(
                                     "Watch",
