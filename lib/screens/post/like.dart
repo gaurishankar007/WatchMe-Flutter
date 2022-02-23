@@ -37,6 +37,7 @@ class _LikersState extends State<Likers> {
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(builder: (context, ref, child) {
       Color backColor =
           ref.watch(themeController) ? Colors.black : Colors.white;
@@ -65,88 +66,92 @@ class _LikersState extends State<Likers> {
           ),
           elevation: 0,
         ),
-        body: FutureBuilder<List>(
-          future: postLikers,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => ListTile(
-                  horizontalTitleGap: 15,
-                  minVerticalPadding: 20,
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(profilePicUrl +
-                        snapshot.data![index]["user_id"]["profile_pic"]),
-                  ),
-                  title: Text(
-                    snapshot.data![index]["user_id"]["username"],
-                    style: TextStyle(
-                        fontSize: 20,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
+          child: FutureBuilder<List>(
+            future: postLikers,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    horizontalTitleGap: 15,
+                    minVerticalPadding: 20,
+                    leading: CircleAvatar(
+                      radius: _screenWidth > 250 ? 25 : 15,
+                      backgroundImage: NetworkImage(profilePicUrl +
+                          snapshot.data![index]["user_id"]["profile_pic"]),
+                    ),
+                    title: Text(
+                      snapshot.data![index]["user_id"]["username"],
+                      style: TextStyle(
+                          fontSize: _screenWidth > 250 ? 20 : 10,
+                          color: textColor,
+                          fontFamily: "Laila-bold"),
+                    ),
+                    subtitle: Text(
+                      snapshot.data![index]["user_id"]["email"],
+                      style: TextStyle(
+                        fontSize: _screenWidth > 250 ? 15 : 8,
                         color: textColor,
-                        fontFamily: "Laila-bold"),
+                      ),
+                    ),
+                    trailing: myId != snapshot.data![index]["user_id"]["_id"]
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (builder) => ProfileMainOther(
+                                    user_id: snapshot.data![index]["user_id"]
+                                        ["_id"],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "View Profile",
+                              style: TextStyle(
+                                fontSize: _screenWidth > 250 ? 15 : 8,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepPurpleAccent[700],
+                              elevation: 10,
+                              shadowColor: Colors.deepPurpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: 0,
+                          ),
                   ),
-                  subtitle: Text(
-                    snapshot.data![index]["user_id"]["email"],
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    "${snapshot.error}",
                     style: TextStyle(
-                      fontSize: 15,
                       color: textColor,
+                      fontSize: 15,
                     ),
                   ),
-                  trailing: myId != snapshot.data![index]["user_id"]["_id"]
-                      ? ElevatedButton(
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => ProfileMainOther(
-                                  user_id: snapshot.data![index]["user_id"]
-                                      ["_id"],
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "View Profile",
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
-                            elevation: 10,
-                            shadowColor: Colors.deepPurpleAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        )
-                      : SizedBox(
-                          height: 0,
-                        ),
-                ),
-              );
-            } else if (snapshot.hasError) {
+                );
+              }
               return Center(
                 child: Text(
-                  "${snapshot.error}",
+                  "No one has liked this post yet.",
                   style: TextStyle(
                     color: textColor,
                     fontSize: 15,
                   ),
                 ),
               );
-            }
-            return Center(
-              child: Text(
-                "No one has liked this post yet.",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 15,
-                ),
-              ),
-            );
-          },
+            },
+          ),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

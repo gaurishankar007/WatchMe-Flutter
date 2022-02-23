@@ -103,14 +103,18 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                           child: Text(
                             "Unseen",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: _screenWidth > 250 ? 20 : 10,
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
                             primary: !unSeen
-                                ? Colors.black : Colors.deepPurpleAccent[700]
-                                ,
-                            elevation: unSeen ? 25 : 0,
+                                ? Colors.black
+                                : Colors.deepPurpleAccent[700],
+                            elevation: unSeen
+                                ? _screenWidth > 250
+                                    ? 25
+                                    : 10
+                                : 0,
                             shadowColor: Colors.deepPurpleAccent,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -121,7 +125,7 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                           unSeen ? unSeenNum : seenNum,
                           style: TextStyle(
                             color: textColor,
-                            fontSize: 25,
+                            fontSize: _screenWidth > 250 ? 25 : 15,
                             fontFamily: "Laila-Bold",
                           ),
                         ),
@@ -136,14 +140,18 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                           child: Text(
                             "Seen",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: _screenWidth > 250 ? 20 : 10,
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
                             primary: !unSeen
                                 ? Colors.deepPurpleAccent[700]
                                 : Colors.black,
-                            elevation: !unSeen ? 25 : 0,
+                            elevation: !unSeen
+                                ? _screenWidth > 250
+                                    ? 25
+                                    : 10
+                                : 0,
                             shadowColor: Colors.deepPurpleAccent,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -221,10 +229,12 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                             return ListView.builder(
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) => ListTile(
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 0),
                                 horizontalTitleGap: 15,
                                 minVerticalPadding: 10,
                                 leading: CircleAvatar(
-                                  radius: 25,
+                                  radius: _screenWidth > 250 ? 25 : 15,
                                   backgroundImage: NetworkImage(profileUrl +
                                       snapshot.data![index]
                                               ["notification_generator"]
@@ -233,14 +243,14 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                                 title: Text(
                                   snapshot.data![index]["notification_for"],
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: _screenWidth > 250 ? 20 : 10,
                                       color: textColor,
                                       fontFamily: "Laila-bold"),
                                 ),
                                 subtitle: Text(
                                   snapshot.data![index]["notification"],
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: _screenWidth > 250 ? 15 : 8,
                                     color: textColor,
                                   ),
                                 ),

@@ -20,10 +20,29 @@ import 'package:assignment/screens/setting/personal_setting.dart';
 import 'package:assignment/screens/setting/profile_setting.dart';
 import 'package:assignment/screens/setting/setting_main.dart';
 import 'package:assignment/screens/setting/user_setting.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AwesomeNotifications().initialize(
+    null, // icon for your app notification
+    [
+      NotificationChannel(
+        channelKey: 'key1',
+        channelName: 'WatchMe',
+        channelDescription: "You have got notification from WatchMe.",
+        defaultColor: Colors.deepPurpleAccent[700],
+        ledColor: Colors.white,
+        playSound: true,
+        enableLights: true,
+        importance: NotificationImportance.High,
+        enableVibration: true,
+      )
+    ],
+  );
+
   runApp(ProviderScope(child: WatchMe()));
 }
 

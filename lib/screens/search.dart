@@ -18,7 +18,7 @@ class _SearchState extends State<Search> {
   int activeNav = 1;
   String profileUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> searchedUsers; 
+  late Future<List> searchedUsers;
   late Future<Map> getUser;
   String filterOption = "Username";
 
@@ -58,7 +58,7 @@ class _SearchState extends State<Search> {
                           "Filter Option: ",
                           style: TextStyle(
                               color: textColor,
-                              fontSize: 18,
+                              fontSize: _screenWidth > 250 ? 18 : 10,
                               fontFamily: "Laila-Bold"),
                         ),
                         Container(
@@ -93,7 +93,7 @@ class _SearchState extends State<Search> {
                                   value,
                                   style: TextStyle(
                                     color: textColor,
-                                    fontSize: 15,
+                                    fontSize: _screenWidth > 250 ? 15 : 8,
                                   ),
                                 ),
                               );
@@ -106,7 +106,7 @@ class _SearchState extends State<Search> {
                       height: 5,
                     ),
                     Container(
-                      padding: EdgeInsets.all(_screenWidth*.01),
+                      padding: EdgeInsets.all(_screenWidth * .01),
                       decoration: BoxDecoration(
                         color: Colors.deepPurpleAccent[700],
                         borderRadius: BorderRadius.circular(8),
@@ -115,17 +115,17 @@ class _SearchState extends State<Search> {
                         onChanged: (value) {
                           if (value.trim() == "") {
                             return;
-                          } else if(filterOption=="Username") {
+                          } else if (filterOption == "Username") {
                             setState(() {
                               searchedUsers =
                                   HttpConnectUser().getByUsername(value);
                             });
-                          } else if(filterOption=="Email") {
+                          } else if (filterOption == "Email") {
                             setState(() {
                               searchedUsers =
                                   HttpConnectUser().getByEmail(value);
                             });
-                          } 
+                          }
                         },
                         textCapitalization: TextCapitalization.words,
                         style: TextStyle(
@@ -178,24 +178,26 @@ class _SearchState extends State<Search> {
                             return ListView.builder(
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) => ListTile(
-                                horizontalTitleGap: 15,
-                                minVerticalPadding: 20,
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 0),
+                                horizontalTitleGap: _screenWidth > 250 ? 15 : 0,
+                                minVerticalPadding: _screenWidth > 250 ? 20 : 8,
                                 leading: CircleAvatar(
-                                  radius: 25,
+                                  radius: _screenWidth > 250 ? 25 : 15,
                                   backgroundImage: NetworkImage(profileUrl +
                                       snapshot.data![index]["profile_pic"]),
                                 ),
                                 title: Text(
                                   snapshot.data![index]["username"],
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: _screenWidth > 250 ? 20 : 12,
                                       color: textColor,
                                       fontFamily: "Laila-bold"),
                                 ),
                                 subtitle: Text(
                                   snapshot.data![index]["email"],
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: _screenWidth > 250 ? 15 : 8,
                                     color: textColor,
                                   ),
                                 ),
@@ -213,7 +215,7 @@ class _SearchState extends State<Search> {
                                   child: Text(
                                     "View Profile",
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: _screenWidth > 250 ? 15 : 8,
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(

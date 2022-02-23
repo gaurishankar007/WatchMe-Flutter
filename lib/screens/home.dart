@@ -298,7 +298,7 @@ class _HomeState extends State<Home> {
                                                 color: Colors
                                                     .deepPurpleAccent[700],
                                                 fontFamily: "Laila-Bold",
-                                                fontSize: 20,
+                                                fontSize: _screenWidth > 250 ? 20 : 10,
                                               ),
                                             ),
                                           ),
@@ -324,7 +324,7 @@ class _HomeState extends State<Home> {
                                               style: TextStyle(
                                                 color: Colors.deepOrange,
                                                 fontFamily: "Laila-Bold",
-                                                fontSize: 20,
+                                                fontSize: _screenWidth > 250 ? 20 : 10,
                                               ),
                                             ),
                                           ),

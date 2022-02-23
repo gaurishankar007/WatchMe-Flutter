@@ -130,7 +130,7 @@ class _CameraState extends State<Camera> {
                                     children: [
                                       Icon(
                                         Icons.camera,
-                                        size: 35,
+                                        size: _screenWidth > 250 ? 35 : 10,
                                         color: Colors.white,
                                       ),
                                       SizedBox(
@@ -140,7 +140,7 @@ class _CameraState extends State<Camera> {
                                         "Camera",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 15,
+                                          fontSize: _screenWidth > 250 ? 15 : 7,
                                         ),
                                       )
                                     ],
@@ -169,8 +169,8 @@ class _CameraState extends State<Camera> {
                                       ),
                                     ],
                                   ),
-                                  height: 100,
-                                  width: 20,
+                                  height: _screenWidth > 250 ? 100 : 60,
+                                  width: _screenWidth > 250 ? 20 : 10,
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
@@ -180,7 +180,7 @@ class _CameraState extends State<Camera> {
                                     children: [
                                       Icon(
                                         Icons.photo_album,
-                                        size: 35,
+                                        size: _screenWidth > 250 ? 35 : 10,
                                         color: Colors.white,
                                       ),
                                       SizedBox(
@@ -190,7 +190,7 @@ class _CameraState extends State<Camera> {
                                         "Gallery",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 15,
+                                          fontSize: _screenWidth > 250 ? 15 : 7,
                                         ),
                                       )
                                     ],
@@ -225,14 +225,14 @@ class _CameraState extends State<Camera> {
                                 ],
                               ),
                               width: _screenWidth * .45,
-                              height: 50,
+                              height: _screenWidth > 250 ? 50 : 30,
                               child: Center(
                                   child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: backColor,
                                 ),
-                                height: 25,
+                                height: _screenWidth > 250 ? 25 : 15,
                                 width: _screenWidth * .40,
                               )),
                             ),

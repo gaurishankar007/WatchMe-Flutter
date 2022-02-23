@@ -131,7 +131,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             watchersNum,
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: 25,
+                                              fontSize: _screenWidth > 250 ? 25 : 15,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -139,7 +139,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             "Watchers",
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: 15,
+                                              fontSize: _screenWidth > 250 ? 15 : 8,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -159,7 +159,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             watchingNum,
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: 25,
+                                              fontSize: _screenWidth > 250 ? 25 : 15,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -167,7 +167,7 @@ class _ProfileMainState extends State<ProfileMain> {
                                             "Watching",
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: 15,
+                                              fontSize: _screenWidth > 250 ? 15 : 8,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -212,7 +212,7 @@ class _ProfileMainState extends State<ProfileMain> {
                               snapshot.data!["userData"]["username"],
                               style: TextStyle(
                                 color: textColor,
-                                fontSize: 20,
+                                fontSize: _screenWidth > 250 ? 20 : 10,
                                 fontFamily: "Laila-Bold",
                               ),
                             ),
@@ -474,7 +474,7 @@ class _ProfileMainState extends State<ProfileMain> {
                         label: Text(
                           "Profile",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: _screenWidth > 250 ? 15 : 8,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -831,7 +831,7 @@ class _ProfileMainState extends State<ProfileMain> {
                         label: Text(
                           "Address",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: _screenWidth > 250 ? 15 : 8,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(

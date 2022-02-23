@@ -106,7 +106,7 @@ class _PostViewState extends State<PostView> {
                             minVerticalPadding: 0,
                             contentPadding: EdgeInsets.symmetric(
                               vertical: 0,
-                              horizontal: _screenWidth*.01,
+                              horizontal: _screenWidth * .01,
                             ),
                             leading: CircleAvatar(
                               radius: 20,
@@ -157,7 +157,8 @@ class _PostViewState extends State<PostView> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: _screenWidth*.01),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: _screenWidth * .01),
                             child: Column(
                               children: [
                                 Container(
@@ -192,7 +193,12 @@ class _PostViewState extends State<PostView> {
                                                       : textColor,
                                                 );
                                               }
-                                              return CircularProgressIndicator();
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                color: Colors
+                                                    .deepPurpleAccent[700],
+                                              ));
                                             }),
                                       ),
                                       SizedBox(
@@ -491,11 +497,19 @@ class _PostViewState extends State<PostView> {
                                                       ),
                                                     );
                                                   }
-                                                  return CircularProgressIndicator();
+                                                  return Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                    color: Colors
+                                                        .deepPurpleAccent[700],
+                                                  ));
                                                 },
                                               );
                                       }
-                                      return CircularProgressIndicator();
+                                      return Center(
+                                          child: CircularProgressIndicator(
+                                        color: Colors.deepPurpleAccent[700],
+                                      ));
                                     }),
                                 SizedBox(
                                   height: 10,
@@ -555,7 +569,10 @@ class _PostViewState extends State<PostView> {
                       ),
                     );
                   }
-                  return CircularProgressIndicator();
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.deepPurpleAccent[700],
+                  ));
                 },
               ),
               SizedBox(

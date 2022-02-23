@@ -68,211 +68,218 @@ class _CommentersState extends State<Commenters> {
           ),
           elevation: 0,
         ),
-        body: FutureBuilder<List>(
-          future: postCommenters,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => ListTile(
-                  horizontalTitleGap: 15,
-                  minVerticalPadding: 20,
-                  leading: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(profilePicUrl +
-                        snapshot.data![index]["user_id"]["profile_pic"]),
-                  ),
-                  title: Text(
-                    snapshot.data![index]["user_id"]["username"],
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: textColor,
-                        fontFamily: "Laila-bold"),
-                  ),
-                  subtitle: Text(
-                    snapshot.data![index]["comment"],
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: textColor,
-                        fontFamily: "Laila-Regulor"),
-                  ),
-                  trailing: myId != snapshot.data![index]["user_id"]["_id"]
-                      ? ElevatedButton(
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => ProfileMainOther(
-                                  user_id: snapshot.data![index]["user_id"]
-                                      ["_id"],
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "View Profile",
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.deepPurpleAccent[700],
-                            elevation: 10,
-                            shadowColor: Colors.deepPurpleAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        )
-                      : IconButton(
-                          onPressed: () async {
-                            final uComment = TextEditingController();
-                            final res = await HttpConnectComment()
-                                .findComment(widget.post_id);
-                            uComment.text = res["commentData"]["comment"];
-                            String newComment = res["commentData"]["comment"];
-                            showModalBottomSheet(
-                              backgroundColor: Colors.transparent,
-                              context: context,
-                              builder: (builder) => Container(
-                                padding: EdgeInsets.only(
-                                  top: 5,
-                                  left: _screenWidth * .05,
-                                  right: 5,
-                                ),
-                                height: 370,
-                                decoration: BoxDecoration(
-                                  color: backColor,
-                                  borderRadius: new BorderRadius.only(
-                                    topLeft: const Radius.circular(25.0),
-                                    topRight: const Radius.circular(25.0),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
+          child: FutureBuilder<List>(
+            future: postCommenters,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    horizontalTitleGap: 15,
+                    minVerticalPadding: 20,
+                    leading: CircleAvatar(
+                      radius: _screenWidth > 250 ? 25 : 15,
+                      backgroundImage: NetworkImage(profilePicUrl +
+                          snapshot.data![index]["user_id"]["profile_pic"]),
+                    ),
+                    title: Text(
+                      snapshot.data![index]["user_id"]["username"],
+                      style: TextStyle(
+                          fontSize: _screenWidth > 250 ? 20 : 10,
+                          color: textColor,
+                          fontFamily: "Laila-bold"),
+                    ),
+                    subtitle: Text(
+                      snapshot.data![index]["comment"],
+                      style: TextStyle(
+                          fontSize: _screenWidth > 250 ? 15 : 8,
+                          color: textColor,
+                          fontFamily: "Laila-Regulor"),
+                    ),
+                    trailing: myId != snapshot.data![index]["user_id"]["_id"]
+                        ? ElevatedButton(
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (builder) => ProfileMainOther(
+                                    user_id: snapshot.data![index]["user_id"]
+                                        ["_id"],
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: textColor,
-                                      spreadRadius: 1,
-                                      blurRadius: 2,
-                                      offset: Offset(
-                                          0, 1), // changes position of shadow
-                                    ),
-                                  ],
                                 ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.deepPurpleAccent[700],
+                              );
+                            },
+                            child: Text(
+                              "View Profile",
+                              style: TextStyle(
+                                fontSize: _screenWidth > 250 ? 15 : 8,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepPurpleAccent[700],
+                              elevation: 10,
+                              shadowColor: Colors.deepPurpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () async {
+                              final uComment = TextEditingController();
+                              final res = await HttpConnectComment()
+                                  .findComment(widget.post_id);
+                              uComment.text = res["commentData"]["comment"];
+                              String newComment = res["commentData"]["comment"];
+                              showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (builder) => Container(
+                                  padding: EdgeInsets.only(
+                                    top: 5,
+                                    left: _screenWidth * .05,
+                                    right: 5,
+                                  ),
+                                  height: 370,
+                                  decoration: BoxDecoration(
+                                    color: backColor,
+                                    borderRadius: new BorderRadius.only(
+                                      topLeft: const Radius.circular(25.0),
+                                      topRight: const Radius.circular(25.0),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: textColor,
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: Offset(
+                                            0, 1), // changes position of shadow
                                       ),
-                                      height: 5,
-                                      width: _screenWidth * .20,
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Container(
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 2,
+                                    ],
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.deepPurpleAccent[700],
                                         ),
-                                        title: TextFormField(
-                                          controller: uComment,
-                                          autofocus: true,
-                                          maxLines: 2,
-                                          keyboardType: TextInputType.multiline,
-                                          onChanged: (value) {
-                                            newComment = value.trim();
-                                          },
-                                          style: TextStyle(
-                                            color: textColor,
+                                        height: 5,
+                                        width: _screenWidth * .20,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        child: ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 2,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Add a comment....",
-                                            hintStyle: TextStyle(
+                                          title: TextFormField(
+                                            controller: uComment,
+                                            autofocus: true,
+                                            maxLines: 2,
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            onChanged: (value) {
+                                              newComment = value.trim();
+                                            },
+                                            style: TextStyle(
                                               color: textColor,
                                             ),
-                                            isDense: true,
-                                            contentPadding: EdgeInsets.zero,
-                                            border: InputBorder.none,
+                                            decoration: InputDecoration(
+                                              hintText: "Add a comment....",
+                                              hintStyle: TextStyle(
+                                                color: textColor,
+                                              ),
+                                              isDense: true,
+                                              contentPadding: EdgeInsets.zero,
+                                              border: InputBorder.none,
+                                            ),
                                           ),
-                                        ),
-                                        trailing: IconButton(
-                                          onPressed: () async {
-                                            if (newComment == "") {
-                                              MotionToast.error(
-                                                position:
-                                                    MOTION_TOAST_POSITION.top,
-                                                animationType:
-                                                    ANIMATION.fromTop,
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                description: "Emplty field",
-                                              ).show(context);
-                                            } else {
-                                              final res =
-                                                  await HttpConnectComment()
-                                                      .editComment(
-                                                          widget.post_id,
-                                                          newComment);
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                postCommenters =
-                                                    HttpConnectComment()
-                                                        .getComments(
-                                                            widget.post_id);
-                                              });
-                                              MotionToast.success(
-                                                position:
-                                                    MOTION_TOAST_POSITION.top,
-                                                animationType:
-                                                    ANIMATION.fromTop,
-                                                toastDuration:
-                                                    Duration(seconds: 2),
-                                                description: res["message"],
-                                              ).show(context);
-                                            }
-                                          },
-                                          icon: Icon(
-                                            Icons.send_rounded,
-                                            size: 35,
-                                            color: Colors.deepPurpleAccent[700],
+                                          trailing: IconButton(
+                                            onPressed: () async {
+                                              if (newComment == "") {
+                                                MotionToast.error(
+                                                  position:
+                                                      MOTION_TOAST_POSITION.top,
+                                                  animationType:
+                                                      ANIMATION.fromTop,
+                                                  toastDuration:
+                                                      Duration(seconds: 2),
+                                                  description: "Emplty field",
+                                                ).show(context);
+                                              } else {
+                                                final res =
+                                                    await HttpConnectComment()
+                                                        .editComment(
+                                                            widget.post_id,
+                                                            newComment);
+                                                Navigator.pop(context);
+                                                setState(() {
+                                                  postCommenters =
+                                                      HttpConnectComment()
+                                                          .getComments(
+                                                              widget.post_id);
+                                                });
+                                                MotionToast.success(
+                                                  position:
+                                                      MOTION_TOAST_POSITION.top,
+                                                  animationType:
+                                                      ANIMATION.fromTop,
+                                                  toastDuration:
+                                                      Duration(seconds: 2),
+                                                  description: res["message"],
+                                                ).show(context);
+                                              }
+                                            },
+                                            icon: Icon(
+                                              Icons.send_rounded,
+                                              size: 35,
+                                              color:
+                                                  Colors.deepPurpleAccent[700],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.deepPurpleAccent[700],
+                              );
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.deepPurpleAccent[700],
+                            ),
                           ),
-                        ),
-                ),
-              );
-            } else if (snapshot.hasError) {
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    "${snapshot.error}",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 15,
+                    ),
+                  ),
+                );
+              }
               return Center(
                 child: Text(
-                  "${snapshot.error}",
+                  "No one has liked this post yet.",
                   style: TextStyle(
                     color: textColor,
                     fontSize: 15,
                   ),
                 ),
               );
-            }
-            return Center(
-              child: Text(
-                "No one has liked this post yet.",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 15,
-                ),
-              ),
-            );
-          },
+            },
+          ),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

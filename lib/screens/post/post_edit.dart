@@ -141,7 +141,10 @@ class _PostEditState extends State<PostEdit> {
                         ),
                       );
                     }
-                    return CircularProgressIndicator();
+                    return Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.deepPurpleAccent[700],
+                    ));
                   }),
               SizedBox(
                 height: 5,
@@ -367,8 +370,10 @@ class _PostEditState extends State<PostEdit> {
                                             ),
                                           );
                                         }
-                                        return const CircularProgressIndicator(
-                                          color: Colors.deepPurple,
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                              color:
+                                                  Colors.deepPurpleAccent[700]),
                                         );
                                       },
                                     ),

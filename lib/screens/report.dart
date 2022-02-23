@@ -126,7 +126,7 @@ class _ReportState extends State<Report> {
                             value,
                             style: TextStyle(
                               color: textColor,
-                              fontSize: 15,
+                              fontSize: _screenWidth > 250 ? 15 : 8,
                             ),
                           ),
                         );

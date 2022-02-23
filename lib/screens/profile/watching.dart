@@ -19,18 +19,19 @@ class _WatchingState extends State<Watching> {
   int activeNav = 4;
   String profileUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> userWatchings;
+  late Future<List> userWatching;
   late Future<Map> getUser;
 
   @override
   void initState() {
     super.initState();
-    userWatchings = HttpConnectWatch().getWatchings();
+    userWatching = HttpConnectWatch().getWatching();
     getUser = HttpConnectUser().getUser();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(
       builder: (context, ref, child) {
         Color backColor =
@@ -62,101 +63,99 @@ class _WatchingState extends State<Watching> {
               ),
             ),
             centerTitle: true,
-            shape: Border(
-              bottom: BorderSide(
-                color: textColor,
-                width: .1,
-              ),
-            ),
             elevation: 0,
           ),
-          body: FutureBuilder<List>(
-            future: userWatchings,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) => ListTile(
-                    onLongPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => ProfileMainOther(
-                            user_id: snapshot.data![index]["followed_user"]
-                                ["_id"],
+          body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
+            child: FutureBuilder<List>(
+              future: userWatching,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                      horizontalTitleGap: 15,
+                      minVerticalPadding: 20,
+                      onLongPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => ProfileMainOther(
+                              user_id: snapshot.data![index]["followed_user"]
+                                  ["_id"],
+                            ),
+                          ),
+                        );
+                      },
+                      leading: CircleAvatar(
+                        radius: _screenWidth > 250 ? 25 : 15,
+                        backgroundImage: NetworkImage(profileUrl +
+                            snapshot.data![index]["followed_user"]
+                                ["profile_pic"]),
+                      ),
+                      title: Text(
+                        snapshot.data![index]["followed_user"]["username"],
+                        style: TextStyle(
+                            fontSize: _screenWidth > 250 ? 20 : 10,
+                            color: textColor,
+                            fontFamily: "Laila-bold"),
+                      ),
+                      subtitle: Text(
+                        snapshot.data![index]["followed_user"]["email"],
+                        style: TextStyle(
+                          fontSize: _screenWidth > 250 ? 15 : 8,
+                          color: textColor,
+                        ),
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () async {
+                          await HttpConnectWatch().unWatch(
+                              snapshot.data![index]["followed_user"]["_id"]);
+
+                          setState(() {
+                            userWatching = HttpConnectWatch().getWatching();
+                          });
+                        },
+                        child: Text(
+                          "UnWatch",
+                          style: TextStyle(
+                            fontSize: _screenWidth > 250 ? 15 : 8,
                           ),
                         ),
-                      );
-                    },
-                    horizontalTitleGap: 15,
-                    minVerticalPadding: 20,
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(profileUrl +
-                          snapshot.data![index]["followed_user"]
-                              ["profile_pic"]),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurpleAccent[700],
+                          elevation: 10,
+                          shadowColor: Colors.deepPurpleAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
                     ),
-                    title: Text(
-                      snapshot.data![index]["followed_user"]["username"],
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "${snapshot.error}",
                       style: TextStyle(
-                          fontSize: 20,
-                          color: textColor,
-                          fontFamily: "Laila-bold"),
-                    ),
-                    subtitle: Text(
-                      snapshot.data![index]["followed_user"]["email"],
-                      style: TextStyle(
-                        fontSize: 15,
                         color: textColor,
+                        fontSize: 15,
                       ),
                     ),
-                    trailing: ElevatedButton(
-                      onPressed: () async {
-                        await HttpConnectWatch().unWatch(
-                            snapshot.data![index]["followed_user"]["_id"]);
-
-                        setState(() {
-                          userWatchings = HttpConnectWatch().getWatchings();
-                        });
-                      },
-                      child: Text(
-                        "UnWatch",
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurpleAccent[700],
-                        elevation: 10,
-                        shadowColor: Colors.deepPurpleAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              } else if (snapshot.hasError) {
+                  );
+                }
                 return Center(
                   child: Text(
-                    "${snapshot.error}",
+                    "You have not watched anybody yet.",
                     style: TextStyle(
                       color: textColor,
                       fontSize: 15,
                     ),
                   ),
                 );
-              }
-              return Center(
-                child: Text(
-                  "You have not watched anybody yet.",
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 15,
-                  ),
-                ),
-              );
-            },
+              },
+            ),
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(

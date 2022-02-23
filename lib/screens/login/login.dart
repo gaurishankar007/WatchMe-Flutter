@@ -36,6 +36,7 @@ class _LoginUserState extends State<LoginUser> {
   @override
   Widget build(BuildContext context) {
     final _screenWidth = MediaQuery.of(context).size.width;
+    print(_screenWidth);
     return Consumer(builder: (context, ref, child) {
       Color backColor =
           ref.watch(themeController) ? Colors.black : Colors.white;
@@ -196,7 +197,7 @@ class _LoginUserState extends State<LoginUser> {
                           "Forgot password?",
                           style: TextStyle(
                             color: Colors.deepPurpleAccent[700],
-                            fontSize: 15,
+                            fontSize: _screenWidth > 250 ? 15 : 10,
                             fontFamily: "Laila-Bold",
                             shadows: const [
                               Shadow(
@@ -210,7 +211,7 @@ class _LoginUserState extends State<LoginUser> {
                       ),
                       IconButton(
                         padding: EdgeInsets.zero,
-                        iconSize: 25,
+                        iconSize: _screenWidth > 250 ? 25 : 15,
                         onPressed: () {
                           setState(() {
                             passVisibility = !passVisibility;

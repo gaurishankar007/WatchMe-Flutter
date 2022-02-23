@@ -20,20 +20,21 @@ class _WatchingOtherState extends State<WatchingOther> {
   int activeNav = 4;
   String profileUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> userWatchings;
+  late Future<List> userWatching;
   late Future<Map> getUser;
   String? myId;
 
   @override
   void initState() {
     super.initState();
-    userWatchings = HttpConnectWatch().getWatchingsOther(widget.user_id);
+    userWatching = HttpConnectWatch().getWatchingOther(widget.user_id);
     getUser = HttpConnectUser().getUser();
     getUser.then((value) => myId = value["userData"]["_id"]);
   }
 
   @override
   Widget build(BuildContext context) {
+    final _screenWidth = MediaQuery.of(context).size.width;
     return Consumer(
       builder: (context, ref, child) {
         Color backColor =
@@ -55,98 +56,96 @@ class _WatchingOtherState extends State<WatchingOther> {
               ),
             ),
             centerTitle: true,
-            shape: Border(
-              bottom: BorderSide(
-                color: textColor,
-                width: .1,
-              ),
-            ),
             elevation: 0,
           ),
-          body: FutureBuilder<List>(
-            future: userWatchings,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) => ListTile(
-                    horizontalTitleGap: 15,
-                    minVerticalPadding: 20,
-                    leading: CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage(profileUrl +
-                          snapshot.data![index]["followed_user"]
-                              ["profile_pic"]),
-                    ),
-                    title: Text(
-                      snapshot.data![index]["followed_user"]["username"],
-                      style: TextStyle(
-                          fontSize: 20,
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
+            child: FutureBuilder<List>(
+              future: userWatching,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) => ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                      horizontalTitleGap: 15,
+                      minVerticalPadding: 20,
+                      leading: CircleAvatar(
+                        radius: _screenWidth > 250 ? 25 : 15,
+                        backgroundImage: NetworkImage(profileUrl +
+                            snapshot.data![index]["followed_user"]
+                                ["profile_pic"]),
+                      ),
+                      title: Text(
+                        snapshot.data![index]["followed_user"]["username"],
+                        style: TextStyle(
+                            fontSize: _screenWidth > 250 ? 20 : 10,
+                            color: textColor,
+                            fontFamily: "Laila-bold"),
+                      ),
+                      subtitle: Text(
+                        snapshot.data![index]["followed_user"]["email"],
+                        style: TextStyle(
+                          fontSize: _screenWidth > 250 ? 15 : 8,
                           color: textColor,
-                          fontFamily: "Laila-bold"),
+                        ),
+                      ),
+                      trailing:
+                          myId != snapshot.data![index]["followed_user"]["_id"]
+                              ? ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (builder) => ProfileMainOther(
+                                          user_id: snapshot.data![index]
+                                              ["followed_user"]["_id"],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "View Profile",
+                                    style: TextStyle(
+                                      fontSize: _screenWidth > 250 ? 15 : 8,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurpleAccent[700],
+                                    elevation: 10,
+                                    shadowColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  height: 0,
+                                ),
                     ),
-                    subtitle: Text(
-                      snapshot.data![index]["followed_user"]["email"],
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "${snapshot.error}",
                       style: TextStyle(
-                        fontSize: 15,
                         color: textColor,
+                        fontSize: 15,
                       ),
                     ),
-                    trailing:
-                        myId != snapshot.data![index]["followed_user"]["_id"]
-                            ? ElevatedButton(
-                                onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (builder) => ProfileMainOther(
-                                        user_id: snapshot.data![index]
-                                            ["followed_user"]["_id"],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  "View Profile",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.deepPurpleAccent[700],
-                                  elevation: 10,
-                                  shadowColor: Colors.deepPurpleAccent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                height: 0,
-                              ),
-                  ),
-                );
-              } else if (snapshot.hasError) {
+                  );
+                }
                 return Center(
                   child: Text(
-                    "${snapshot.error}",
+                    "This user has not watched anybody yet.",
                     style: TextStyle(
                       color: textColor,
                       fontSize: 15,
                     ),
                   ),
                 );
-              }
-              return Center(
-                child: Text(
-                  "This user has not watched anybody yet.",
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 15,
-                  ),
-                ),
-              );
-            },
+              },
+            ),
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
@@ -184,19 +183,19 @@ class _WatchingOtherState extends State<WatchingOther> {
                         ? Colors.deepPurpleAccent[700]
                         : textColor,
                     child: FutureBuilder<Map>(
-                      future: getUser,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+                        future: getUser,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return CircleAvatar(
+                              radius: 16,
+                              backgroundImage: NetworkImage(profileUrl +
+                                  snapshot.data!["userData"]["profile_pic"]),
+                            );
+                          }
                           return CircleAvatar(
                             radius: 16,
-                            backgroundImage: NetworkImage(profileUrl +
-                                snapshot.data!["userData"]["profile_pic"]),
                           );
-                        }
-                        return CircleAvatar(
-                          radius: 16,
-                        );
-                      }),
+                        }),
                   ),
                   label: "",
                 ),

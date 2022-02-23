@@ -114,7 +114,7 @@ class HttpConnectWatch {
     return responseData;
   }
 
-  Future<List> getWatchings() async {
+  Future<List> getWatching() async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -127,7 +127,7 @@ class HttpConnectWatch {
     return responseData;
   }
 
-  Future<List> getWatchingsOther(String? user_id) async {
+  Future<List> getWatchingOther(String? user_id) async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
