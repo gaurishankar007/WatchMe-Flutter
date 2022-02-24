@@ -254,23 +254,27 @@ class _PostViewState extends State<PostView> {
                                     ],
                                   ),
                                 ),
-                                RichText(
-                                  text: TextSpan(
-                                      text: "${snapshot.data!.caption} ",
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontFamily: "Laila-Bold",
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              " ${snapshot.data!.description}",
-                                          style: TextStyle(
-                                            color: textColor,
-                                            fontFamily: "Laila-Regular",
-                                          ),
-                                        )
-                                      ]),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.symmetric(horizontal: _screenWidth*.01),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        text: "${snapshot.data!.caption} ",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontFamily: "Laila-Bold",
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                " ${snapshot.data!.description}",
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontFamily: "Laila-Regular",
+                                            ),
+                                          )
+                                        ]),
+                                  ),
                                 ),
                                 FutureBuilder<Map>(
                                     future: userPostLC,

@@ -298,7 +298,9 @@ class _HomeState extends State<Home> {
                                                 color: Colors
                                                     .deepPurpleAccent[700],
                                                 fontFamily: "Laila-Bold",
-                                                fontSize: _screenWidth > 250 ? 20 : 10,
+                                                fontSize: _screenWidth > 250
+                                                    ? 20
+                                                    : 10,
                                               ),
                                             ),
                                           ),
@@ -324,7 +326,9 @@ class _HomeState extends State<Home> {
                                               style: TextStyle(
                                                 color: Colors.deepOrange,
                                                 fontFamily: "Laila-Bold",
-                                                fontSize: _screenWidth > 250 ? 20 : 10,
+                                                fontSize: _screenWidth > 250
+                                                    ? 20
+                                                    : 10,
                                               ),
                                             ),
                                           ),
@@ -465,24 +469,29 @@ class _HomeState extends State<Home> {
                                     ],
                                   ),
                                 ),
-                                RichText(
-                                  text: TextSpan(
-                                      text:
-                                          "${snapshot.data!.followedPosts[index].caption} ",
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontFamily: "Laila-Bold",
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              " ${snapshot.data!.followedPosts[index].description}",
-                                          style: TextStyle(
-                                            color: textColor,
-                                            fontFamily: "Laila-Regular",
-                                          ),
-                                        )
-                                      ]),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: _screenWidth * .01),
+                                  child: RichText(
+                                    text: TextSpan(
+                                        text:
+                                            "${snapshot.data!.followedPosts[index].caption} ",
+                                        style: TextStyle(
+                                          color: textColor,
+                                          fontFamily: "Laila-Bold",
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                " ${snapshot.data!.followedPosts[index].description}",
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontFamily: "Laila-Regular",
+                                            ),
+                                          )
+                                        ]),
+                                  ),
                                 ),
                                 !snapshot.data!.commented[index]
                                     ? ListTile(
@@ -561,7 +570,7 @@ class _HomeState extends State<Home> {
                                                         toastDuration: Duration(
                                                             seconds: 2),
                                                         description:
-                                                            "Emplty field",
+                                                            "Empty field",
                                                       ).show(context);
                                                     } else {
                                                       await HttpConnectComment()
@@ -683,7 +692,7 @@ class _HomeState extends State<Home> {
                                           return Center(
                                               child: CircularProgressIndicator(
                                             color: Colors.deepPurple,
-                                          ));
+                                          ),);
                                         },
                                       ),
                               ],

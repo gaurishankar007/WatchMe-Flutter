@@ -13,21 +13,16 @@ class HttpConnectAddress {
   String token = HttpConnectUser.token;
 
   Future<Map> getAddressInfo() async {
-    try {
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
 
-      final response = await get(Uri.parse(baseurl + "address/get/my"),
-          headers: bearerToken);
+    final response =
+        await get(Uri.parse(baseurl + "address/get/my"), headers: bearerToken);
 
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
+    //json serializing inline
+    final responseData = jsonDecode(response.body) as Map;
+    return responseData;
   }
 
   Future<Map> getAddressOther(String? user_id) async {
@@ -36,8 +31,8 @@ class HttpConnectAddress {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       };
 
-      final response = await post(Uri.parse(baseurl + "address/get/other"), body: {"user_id": user_id},
-          headers: bearerToken);
+      final response = await post(Uri.parse(baseurl + "address/get/other"),
+          body: {"user_id": user_id}, headers: bearerToken);
 
       //json serializing inline
       final responseData = jsonDecode(response.body) as Map;
@@ -45,7 +40,7 @@ class HttpConnectAddress {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> addAddress(AddressRegister address) async {
@@ -75,6 +70,6 @@ class HttpConnectAddress {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 }

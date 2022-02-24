@@ -13,21 +13,16 @@ class HttpConnectProfile {
   String token = HttpConnectUser.token;
 
   Future<Map> getPersonalInfo() async {
-    try {
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
 
-      final response = await get(Uri.parse(baseurl + "profile/get/my"),
-          headers: bearerToken);
+    final response =
+        await get(Uri.parse(baseurl + "profile/get/my"), headers: bearerToken);
 
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
+    //json serializing inline
+    final responseData = jsonDecode(response.body) as Map;
+    return responseData;
   }
 
   Future<Map> getPersonalOther(String? user_id) async {
@@ -45,16 +40,16 @@ class HttpConnectProfile {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> addPersonalInfo(PersonalInfoRegister pInfo) async {
     try {
       Map<String, dynamic> userData = {
-        "first_name": pInfo.firstname,
-        "last_name": pInfo.lastname,
+        "first_name": pInfo.firstName,
+        "last_name": pInfo.lastName,
         "gender": pInfo.gender,
-        "birthday": pInfo.birthdate,
+        "birthday": pInfo.birthDate,
         "biography": pInfo.biography,
       };
 
@@ -72,6 +67,6 @@ class HttpConnectProfile {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 }

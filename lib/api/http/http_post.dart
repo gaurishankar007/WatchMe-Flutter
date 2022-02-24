@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:assignment/api/base_urls.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/post.dart';
 import 'package:assignment/api/response/response_f_post.dart';
@@ -10,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class HttpConnectPost {
-  String baseurl = 'http://10.0.2.2:4040/';
+  String baseurl = BaseUrl.baseUrl;
   String token = HttpConnectUser.token;
 
   Future<Map> postImage(AddPost postData) async {
@@ -135,7 +136,7 @@ class HttpConnectPost {
     return responseData;
   }
 
-   Future<Map> getSinglePostLC(String? post_id) async {
+  Future<Map> getSinglePostLC(String? post_id) async {
     final bearerToken = {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };

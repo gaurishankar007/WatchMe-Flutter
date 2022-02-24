@@ -30,7 +30,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> loginUser(UserLogin user) async {
@@ -49,7 +49,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> addProfile(File? profilePicture) async {
@@ -66,7 +66,7 @@ class HttpConnectUser {
         'Authorization': 'Bearer $token',
       });
 
-      // Open a bytestream
+      // Open a byte stream
       var stream = profilePicture.readAsBytes().asStream();
 
       // Get the file length
@@ -92,7 +92,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error occured. Something went wrong."};
+    return {"message": "Error occurred. Something went wrong."};
   }
 
   Future<Map> addCover(File? coverPicture) async {
@@ -128,7 +128,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured. Something went wrong."};
+    return {"message": "Error Occurred. Something went wrong."};
   }
 
   Future<Map> generateResetToken(passResetToken user) async {
@@ -149,7 +149,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> resetPassword(String resetToken) async {
@@ -164,25 +164,20 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> getUser() async {
-    try {
-      final bearerToken = {
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      };
+    final bearerToken = {
+      HttpHeaders.authorizationHeader: 'Bearer $token',
+    };
 
-      final response = await get(Uri.parse(baseurl + "user/checkType"),
-          headers: bearerToken);
+    final response =
+        await get(Uri.parse(baseurl + "user/checkType"), headers: bearerToken);
 
-      //json serializing inline
-      final responseData = jsonDecode(response.body) as Map;
-      return responseData;
-    } catch (err) {
-      log('$err');
-    }
-    return {"message": "Error Occured."};
+    //json serializing inline
+    final responseData = jsonDecode(response.body) as Map;
+    return responseData;
   }
 
   Future<Map> getUserOther(String? user_id) async {
@@ -200,7 +195,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> changePassword(ChangePassword passwordData) async {
@@ -223,7 +218,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> changeUsername(String username) async {
@@ -245,7 +240,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> changeEmail(String email) async {
@@ -267,7 +262,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<Map> changePhone(String phone) async {
@@ -289,7 +284,7 @@ class HttpConnectUser {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<List> getByUsername(String parameter) async {

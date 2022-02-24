@@ -15,17 +15,17 @@ class UserLogin {
 }
 
 class PersonalInfoRegister {
-  final String? firstname;
-  final String? lastname;
+  final String? firstName;
+  final String? lastName;
   final String? gender;
-  final String? birthdate;
+  final String? birthDate;
   final String? biography;
 
   PersonalInfoRegister(
-      {this.firstname,
-      this.lastname,
+      {this.firstName,
+      this.lastName,
       this.gender,
-      this.birthdate,
+      this.birthDate,
       this.biography});
 }
 

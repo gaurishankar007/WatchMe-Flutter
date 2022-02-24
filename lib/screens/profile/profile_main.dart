@@ -65,7 +65,13 @@ class _ProfileMainState extends State<ProfileMain> {
         (AccelerometerEvent event) {
           setState(() {
             if (event.x > 10) {
-              postsMy = !postsMy;
+              if (postsMy) {
+                postsMy = false;
+                userPosts = HttpConnectPost().getTaggedPosts();
+              } else {
+                postsMy = true;
+                userPosts = HttpConnectPost().getPosts();
+              }
             }
           });
         },
@@ -131,7 +137,8 @@ class _ProfileMainState extends State<ProfileMain> {
                                             watchersNum,
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: _screenWidth > 250 ? 25 : 15,
+                                              fontSize:
+                                                  _screenWidth > 250 ? 25 : 15,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -139,7 +146,8 @@ class _ProfileMainState extends State<ProfileMain> {
                                             "Watchers",
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: _screenWidth > 250 ? 15 : 8,
+                                              fontSize:
+                                                  _screenWidth > 250 ? 15 : 8,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -159,7 +167,8 @@ class _ProfileMainState extends State<ProfileMain> {
                                             watchingNum,
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: _screenWidth > 250 ? 25 : 15,
+                                              fontSize:
+                                                  _screenWidth > 250 ? 25 : 15,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),
@@ -167,7 +176,8 @@ class _ProfileMainState extends State<ProfileMain> {
                                             "Watching",
                                             style: TextStyle(
                                               color: textColor,
-                                              fontSize: _screenWidth > 250 ? 15 : 8,
+                                              fontSize:
+                                                  _screenWidth > 250 ? 15 : 8,
                                               fontFamily: "Laila-Bold",
                                             ),
                                           ),

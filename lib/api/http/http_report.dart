@@ -32,6 +32,6 @@ class HttpConnectReport {
     } catch (error) {
       log("$error");
     }
-    return {"message": "Error occured! something went wrong."};
+    return {"message": "Error occurred! something went wrong."};
   }
 }

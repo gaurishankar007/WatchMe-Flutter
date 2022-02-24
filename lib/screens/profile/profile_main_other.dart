@@ -47,8 +47,7 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
   bool postsMy = true;
   bool watched = false;
 
-  void generateNotification(
-      String title, String body) async {
+  void generateNotification(String title, String body) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 1,
@@ -89,7 +88,14 @@ class _ProfileMainOtherState extends State<ProfileMainOther> {
         (AccelerometerEvent event) {
           setState(() {
             if (event.x > 10) {
-              postsMy = !postsMy;
+              if (postsMy) {
+                postsMy = false;
+                userPosts =
+                    HttpConnectPost().getOtherTaggedPosts(widget.user_id);
+              } else {
+                postsMy = true;
+                userPosts = HttpConnectPost().getOtherPosts(widget.user_id);
+              }
             }
           });
         },

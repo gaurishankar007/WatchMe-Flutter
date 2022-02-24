@@ -18,7 +18,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String firstName = "", lastName = "", birthdate = "", biography = "";
+  String firstName = "", lastName = "", birthDate = "", biography = "";
   String? gender = "";
 
   @override
@@ -281,7 +281,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                           if (int.parse(newDate.day.toString()) < 10) {
                             day = "0${newDate.day}";
                           }
-                          birthdate = "${newDate.year}-$month-$day";
+                          birthDate = "${newDate.year}-$month-$day";
                         },
                       ),
                     ],
@@ -375,22 +375,22 @@ class _PersonalInformationState extends State<PersonalInformation> {
                                 toastDuration: Duration(seconds: 2),
                                 description: "Gender not selected.",
                               ).show(context);
-                            } else if (birthdate == "") {
+                            } else if (birthDate == "") {
                               return MotionToast.error(
                                 position: MOTION_TOAST_POSITION.top,
                                 animationType: ANIMATION.fromTop,
                                 toastDuration: Duration(seconds: 2),
-                                description: "Birthdate not selected.",
+                                description: "BirthDate not selected.",
                               ).show(context);
                             }
 
                             final responseData =
                                 await HttpConnectProfile().addPersonalInfo(
                               PersonalInfoRegister(
-                                  firstname: firstName,
-                                  lastname: lastName,
+                                  firstName: firstName,
+                                  lastName: lastName,
                                   gender: gender,
-                                  birthdate: birthdate,
+                                  birthDate: birthDate,
                                   biography: biography),
                             );
 

@@ -18,7 +18,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   final _formKey = GlobalKey<FormState>();
-  String firstName = "", lastName = "", birthdate = "", biography = "";
+  String firstName = "", lastName = "", birthDate = "", biography = "";
   String? gender = "";
 
   var uFirstName = TextEditingController();
@@ -33,7 +33,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
       uFirstName.text = responseData["userProfile"]["first_name"];
       uLastName.text = responseData["userProfile"]["last_name"];
       gender = responseData["userProfile"]["gender"];
-      birthdate = responseData["userProfile"]["birthday"] != null
+      birthDate = responseData["userProfile"]["birthday"] != null
           ? responseData["userProfile"]["birthday"].split("T").first
           : "";
       uBiography.text = responseData["userProfile"]["biography"];
@@ -322,7 +322,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
                                   if (int.parse(newDate.day.toString()) < 10) {
                                     day = "0${newDate.day}";
                                   }
-                                  birthdate = "${newDate.year}-$month-$day";
+                                  birthDate = "${newDate.year}-$month-$day";
                                 },
                               );
                             } else if (snapshot.hasError) {
@@ -410,22 +410,22 @@ class _PersonalSettingState extends State<PersonalSetting> {
                             toastDuration: Duration(seconds: 2),
                             description: "Gender not selected.",
                           ).show(context);
-                        } else if (birthdate == "") {
+                        } else if (birthDate == "") {
                           return MotionToast.error(
                             position: MOTION_TOAST_POSITION.top,
                             animationType: ANIMATION.fromTop,
                             toastDuration: Duration(seconds: 2),
-                            description: "Birthdate not selected.",
+                            description: "BirthDate not selected.",
                           ).show(context);
                         }
 
                         final responseData =
                             await HttpConnectProfile().addPersonalInfo(
                           PersonalInfoRegister(
-                              firstname: firstName,
-                              lastname: lastName,
+                              firstName: firstName,
+                              lastName: lastName,
                               gender: gender,
-                              birthdate: birthdate,
+                              birthDate: birthDate,
                               biography: biography),
                         );
 
