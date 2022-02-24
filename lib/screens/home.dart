@@ -363,7 +363,7 @@ class _HomeState extends State<Home> {
                                   false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                               onPageChanged: ((indexCar, reason) {
                                 setState(() {
-                                  activeIndexField.insert(index, indexCar);
+                                  activeIndexField[index] =  indexCar;
                                 });
                               }),
                             ),
