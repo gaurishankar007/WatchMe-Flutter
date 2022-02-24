@@ -132,8 +132,11 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                         final image = await ImagePicker()
                                             .pickImage(
                                                 source: ImageSource.camera);
+                                        if (image == null) {
+                                          return;
+                                        }
                                         setState(() {
-                                          coverPicture = File(image!.path);
+                                          coverPicture = File(image.path);
                                           coverPictureName =
                                               image.path.split("/").last;
                                         });
@@ -182,8 +185,11 @@ class _AddCoverPictureState extends State<AddCoverPicture> {
                                         final image = await ImagePicker()
                                             .pickImage(
                                                 source: ImageSource.gallery);
+                                        if (image == null) {
+                                          return;
+                                        }
                                         setState(() {
-                                          coverPicture = File(image!.path);
+                                          coverPicture = File(image.path);
                                           coverPictureName =
                                               image.path.split("/").last;
                                         });

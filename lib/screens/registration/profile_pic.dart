@@ -127,8 +127,11 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                         final image = await ImagePicker()
                                             .pickImage(
                                                 source: ImageSource.camera);
+                                        if (image == null) {
+                                          return;
+                                        }
                                         setState(() {
-                                          profilePicture = File(image!.path);
+                                          profilePicture = File(image.path);
                                           profilePictureName =
                                               image.path.split("/").last;
                                         });
@@ -178,8 +181,11 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                                         final image = await ImagePicker()
                                             .pickImage(
                                                 source: ImageSource.gallery);
+                                        if (image == null) {
+                                          return;
+                                        }
                                         setState(() {
-                                          profilePicture = File(image!.path);
+                                          profilePicture = File(image.path);
                                           profilePictureName =
                                               image.path.split("/").last;
                                         });

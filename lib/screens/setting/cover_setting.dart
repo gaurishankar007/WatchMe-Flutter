@@ -135,9 +135,12 @@ class _CoverSettingState extends State<CoverSetting> {
                                                         .pickImage(
                                                             source: ImageSource
                                                                 .camera);
+                                                if (image == null) {
+                                                  return;
+                                                }
                                                 setState(() {
                                                   coverPicture =
-                                                      File(image!.path);
+                                                      File(image.path);
                                                   coverPictureName = image.path
                                                       .split("/")
                                                       .last;
@@ -195,9 +198,12 @@ class _CoverSettingState extends State<CoverSetting> {
                                                         .pickImage(
                                                             source: ImageSource
                                                                 .gallery);
+                                                if (image == null) {
+                                                  return;
+                                                }
                                                 setState(() {
                                                   coverPicture =
-                                                      File(image!.path);
+                                                      File(image.path);
                                                   coverPictureName = image.path
                                                       .split("/")
                                                       .last;

@@ -56,14 +56,20 @@ class _CameraState extends State<Camera> {
 
   void fromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
     setState(() {
-      posts.add(File(image!.path));
+      posts.add(File(image.path));
     });
   }
 
   void fromGallery() async {
     final images = await ImagePicker().pickMultiImage();
-    if (images!.length > 12) {
+    if (images == null) {
+      return;
+    }
+    if (images.length > 12) {
       return MotionToast.error(
         position: MOTION_TOAST_POSITION.top,
         animationType: ANIMATION.fromTop,

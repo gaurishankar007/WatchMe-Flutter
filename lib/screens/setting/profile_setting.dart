@@ -23,12 +23,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
   String profilePictureName = "";
   String profilePictureUrl = BaseUrl.profilePicUrl;
 
-  late Future<Map> getProile;
+  late Future<Map> getProfile;
 
   @override
   void initState() {
     super.initState();
-    getProile = HttpConnectUser().getUser();
+    getProfile = HttpConnectUser().getUser();
   }
 
   @override
@@ -66,7 +66,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
         body: SingleChildScrollView(
           child: Center(
             child: FutureBuilder<Map>(
-                future: getProile,
+                future: getProfile,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
@@ -138,9 +138,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                         .pickImage(
                                                             source: ImageSource
                                                                 .camera);
+                                                if (image == null) {
+                                                  return;
+                                                }
                                                 setState(() {
                                                   profilePicture =
-                                                      File(image!.path);
+                                                      File(image.path);
                                                   profilePictureName = image
                                                       .path
                                                       .split("/")
@@ -199,9 +202,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                         .pickImage(
                                                             source: ImageSource
                                                                 .gallery);
+                                                if (image == null) {
+                                                  return;
+                                                }
                                                 setState(() {
                                                   profilePicture =
-                                                      File(image!.path);
+                                                      File(image.path);
                                                   profilePictureName = image
                                                       .path
                                                       .split("/")
