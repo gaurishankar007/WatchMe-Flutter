@@ -433,8 +433,6 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
                 Navigator.pushNamed(context, "/search");
               } else if (navIndex == 2 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/camera");
-              } else if (navIndex == 3 && activeNav != navIndex) {
-                Navigator.pushNamed(context, "/notification");
               } else if (navIndex == 4 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/profile");
               }

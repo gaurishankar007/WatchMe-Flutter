@@ -27,7 +27,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
 
   late Future<Map> getBirthDate;
 
-  void getPersonalInformaion() async {
+  void getPersonalInformation() async {
     final responseData = await HttpConnectProfile().getPersonalInfo();
     if (responseData.containsKey("userProfile")) {
       uFirstName.text = responseData["userProfile"]["first_name"];
@@ -44,7 +44,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
   @override
   void initState() {
     super.initState();
-    getPersonalInformaion();
+    getPersonalInformation();
     getBirthDate = HttpConnectProfile().getPersonalInfo();
   }
 

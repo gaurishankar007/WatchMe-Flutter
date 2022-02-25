@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:assignment/api/base_urls.dart';
+import 'package:assignment/api/http/http_comment.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/model/post.dart';
 import 'package:assignment/api/response/response_f_post.dart';
 import 'package:assignment/api/response/response_post.dart';
+import 'package:assignment/floor/database/database_instance.dart';
+import 'package:assignment/floor/entity/offline_posts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
@@ -55,7 +58,7 @@ class HttpConnectPost {
     } catch (err) {
       log('$err');
     }
-    return {"message": "Error Occured."};
+    return {"message": "Error Occurred."};
   }
 
   Future<GetFollowedPosts> getFollowedPost() async {
@@ -68,6 +71,41 @@ class HttpConnectPost {
 
     //json serializing inline
     final responseData = GetFollowedPosts.fromJson(jsonDecode(response.body));
+
+    // Deleting offline saved data
+    final database = await DatabaseInstance.instance.getDatabaseInstance();
+    await database.offlinePostDao.deletePosts();
+
+    // Offline Saving
+    if (responseData.followedPosts.length > 0) {
+      List<OfflinePost> offlinePosts = [];
+
+      for (int i = 0; i < responseData.followedPosts.length; i++) {
+        String comment = "";
+
+        if (responseData.commented[i]) {
+          final res = await HttpConnectComment()
+              .findComment(responseData.followedPosts[i].id!);
+          comment = res["commentData"]["comment"];
+        }
+
+        offlinePosts.add(OfflinePost(
+          id: responseData.followedPosts[i].id!,
+          postUser: responseData.followedPosts[i].user_id!["username"]!,
+          liked: responseData.liked[i],
+          liker: responseData.followedPosts[i].like_num!,
+          commenter: responseData.followedPosts[i].comment_num!,
+          caption: responseData.followedPosts[i].caption!,
+          description: responseData.followedPosts[i].description!,
+          commented: responseData.commented[i],
+          comment: comment,
+        ));
+      }
+
+      await database.offlinePostDao.savePosts(offlinePosts);
+    }
+
+    // Return data received from the Api
     return responseData;
   }
 

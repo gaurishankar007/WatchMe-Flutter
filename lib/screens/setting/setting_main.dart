@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:assignment/floor/database/database_instance.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
 import 'package:assignment/api/http/http_user.dart';
@@ -87,7 +88,7 @@ class _SettingState extends State<Setting> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: _screenWidth*.01),
+            padding: EdgeInsets.symmetric(horizontal: _screenWidth * .01),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -278,9 +279,14 @@ class _SettingState extends State<Setting> {
                         ),
                 ),
                 ListTile(
-                  onTap: () {
+                  onTap: () async {
                     Token().removeToken();
                     HttpConnectUser.token = "";
+
+                    final database =
+                        await DatabaseInstance.instance.getDatabaseInstance();
+                    await database.offlinePostDao.deletePosts();
+
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/login', (Route<dynamic> route) => false);
                   },

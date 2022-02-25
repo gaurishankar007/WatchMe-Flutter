@@ -8,30 +8,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 
-class Commenters extends StatefulWidget {
+class Commenter extends StatefulWidget {
   final String? post_id;
   final int? activeNav;
-  const Commenters({Key? key, @required this.post_id, @required this.activeNav})
+  const Commenter({Key? key, @required this.post_id, @required this.activeNav})
       : super(key: key);
 
   @override
-  _CommentersState createState() => _CommentersState();
+  _CommenterState createState() => _CommenterState();
 }
 
-class _CommentersState extends State<Commenters> {
+class _CommenterState extends State<Commenter> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
   String profilePicUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> postCommenters;
+  late Future<List> postCommenter;
   late Future<Map> getUser;
   String? myId;
 
   @override
   void initState() {
     super.initState();
-    postCommenters = HttpConnectComment().getComments(widget.post_id);
+    postCommenter = HttpConnectComment().getComments(widget.post_id);
     getUser = HttpConnectUser().getUser();
     getUser.then((value) => myId = value["userData"]["_id"]);
     activeNav = widget.activeNav!;
@@ -53,7 +53,7 @@ class _CommentersState extends State<Commenters> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "Commenters",
+            "Commenter",
             style: TextStyle(
               color: textColor,
               fontSize: 20,
@@ -71,7 +71,7 @@ class _CommentersState extends State<Commenters> {
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
           child: FutureBuilder<List>(
-            future: postCommenters,
+            future: postCommenter,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -221,7 +221,7 @@ class _CommentersState extends State<Commenters> {
                                                             newComment);
                                                 Navigator.pop(context);
                                                 setState(() {
-                                                  postCommenters =
+                                                  postCommenter =
                                                       HttpConnectComment()
                                                           .getComments(
                                                               widget.post_id);

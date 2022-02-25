@@ -5,6 +5,8 @@ import 'package:assignment/api/http/http_post.dart';
 import 'package:assignment/api/http/http_user.dart';
 import 'package:assignment/api/response/response_f_post.dart';
 import 'package:assignment/api/token.dart';
+import 'package:assignment/floor/database/database_instance.dart';
+import 'package:assignment/floor/entity/offline_posts.dart';
 import 'package:assignment/screens/post/comment.dart';
 import 'package:assignment/screens/post/like.dart';
 import 'package:assignment/screens/profile/profile_main_other.dart';
@@ -36,6 +38,12 @@ class _HomeState extends State<Home> {
   String profilePicUrl = BaseUrl.profilePicUrl;
 
   List activeIndexField = [];
+
+  Future<List<OfflinePost>> getOfflinePosts() async {
+    final database = await DatabaseInstance.instance.getDatabaseInstance();
+    final response = database.offlinePostDao.getPosts();
+    return response;
+  }
 
   Future<Map> getComment(String post_id) async {
     final res = await HttpConnectComment().findComment(post_id);
@@ -110,6 +118,227 @@ class _HomeState extends State<Home> {
         body: FutureBuilder<GetFollowedPosts>(
             future: followedPosts,
             builder: (context, snapshot) {
+              if (snapshot.hasData == false) {
+                return FutureBuilder<List<OfflinePost>>(
+                  future: getOfflinePosts(),
+                  builder: (context, snapshot1) {
+                    if (snapshot1.hasData) {
+                      return ListView.builder(
+                        itemCount: snapshot1.data!.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0,
+                                      vertical: 0,
+                                    ),
+                                    leading: CircleAvatar(
+                                      radius: 20,
+                                    ),
+                                    title: Text(
+                                      snapshot1.data![index].postUser,
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontFamily: "Laila-Bold",
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.more_vert,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                CarouselSlider(
+                                  items: [1].map((i) {
+                                    return Builder(
+                                        builder: (BuildContext context) {
+                                      return Container(
+                                        width: _screenWidth,
+                                        height: 350,
+                                        color: Colors.blue[800],
+                                      );
+                                    });
+                                  }).toList(),
+                                  options: CarouselOptions(
+                                    initialPage: 0,
+                                    viewportFraction: 1,
+                                    enableInfiniteScroll: false,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                AnimatedSmoothIndicator(
+                                  activeIndex: 0,
+                                  count: 1,
+                                  effect: WormEffect(
+                                    dotColor: textColor,
+                                    activeDotColor: Colors.deepPurpleAccent,
+                                    dotHeight: 9,
+                                    dotWidth: 9,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: _screenWidth * .01),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 40,
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              padding: EdgeInsets.all(0),
+                                              constraints:
+                                                  BoxConstraints(minWidth: 20),
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.favorite,
+                                                color: snapshot1
+                                                        .data![index].liked
+                                                    ? Colors
+                                                        .deepPurpleAccent[700]
+                                                    : textColor,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                "${snapshot1.data![index].liker} liker,",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontFamily: "Laila-Bold",
+                                                ),
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                "${snapshot1.data![index].commenter} commenter",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontFamily: "Laila-Bold",
+                                                ),
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.topLeft,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: _screenWidth * .01),
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text:
+                                                "${snapshot1.data![index].caption} ",
+                                            style: TextStyle(
+                                              color: textColor,
+                                              fontFamily: "Laila-Bold",
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    " ${snapshot1.data![index].description}",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                  fontFamily: "Laila-Regular",
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      snapshot1.data![index].commented
+                                          ? ListTile(
+                                              leading: CircleAvatar(
+                                                radius: 15,
+                                              ),
+                                              title: Text(
+                                                snapshot1.data![index].comment,
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                ),
+                                              ),
+                                              trailing: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            )
+                                          : ListTile(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                horizontal: 0,
+                                                vertical: 0,
+                                              ),
+                                              onTap: () {},
+                                              leading: CircleAvatar(
+                                                radius: 15,
+                                              ),
+                                              title: Text(
+                                                "Comment on this post.....",
+                                                style: TextStyle(
+                                                  color: textColor,
+                                                ),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          "${snapshot.error}",
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 15,
+                          ),
+                        ),
+                      );
+                    }
+                    return Center(
+                      child: Text(
+                        "No posts yet.",
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 15,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
               if (snapshot.hasData) {
                 return ListView.builder(
                   itemCount: snapshot.data!.followedPosts.length,
@@ -363,7 +592,7 @@ class _HomeState extends State<Home> {
                                   false, // makes carousel scrolling only from first image to last image, disables loop scrolling
                               onPageChanged: ((indexCar, reason) {
                                 setState(() {
-                                  activeIndexField[index] =  indexCar;
+                                  activeIndexField[index] = indexCar;
                                 });
                               }),
                             ),
@@ -422,7 +651,7 @@ class _HomeState extends State<Home> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (builder) => Likers(
+                                              builder: (builder) => Liker(
                                                   post_id: snapshot.data!
                                                       .followedPosts[index].id,
                                                   activeNav: 0),
@@ -448,7 +677,7 @@ class _HomeState extends State<Home> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (builder) => Commenters(
+                                              builder: (builder) => Commenter(
                                                   post_id: snapshot.data!
                                                       .followedPosts[index].id,
                                                   activeNav: 0),
@@ -690,9 +919,10 @@ class _HomeState extends State<Home> {
                                             );
                                           }
                                           return Center(
-                                              child: CircularProgressIndicator(
-                                            color: Colors.deepPurple,
-                                          ),);
+                                            child: CircularProgressIndicator(
+                                              color: Colors.deepPurple,
+                                            ),
+                                          );
                                         },
                                       ),
                               ],
@@ -723,7 +953,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               );
-              ;
             }),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -787,9 +1016,7 @@ class _HomeState extends State<Home> {
             selectedItemColor: Colors.deepPurpleAccent[700],
             unselectedItemColor: textColor,
             onTap: (int navIndex) {
-              if (navIndex == 0 && activeNav != navIndex) {
-                Navigator.pushNamed(context, "/home");
-              } else if (navIndex == 1 && activeNav != navIndex) {
+              if (navIndex == 1 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/search");
               } else if (navIndex == 2 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/camera");

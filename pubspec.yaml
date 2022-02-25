@@ -50,6 +50,8 @@ dependencies:
   sensors_plus: ^1.2.1
   mockito: ^5.1.0
   awesome_notifications: ^0.6.21
+  floor: ^1.2.0
+  floor_generator: ^1.2.0
 
 dev_dependencies:
   flutter_test:

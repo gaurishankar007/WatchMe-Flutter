@@ -209,9 +209,9 @@ class _PostViewState extends State<PostView> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (builder) => Likers(
+                                              builder: (builder) => Liker(
                                                   post_id: snapshot.data!.id,
-                                                  activeNav: 0),
+                                                  activeNav: 4),
                                             ),
                                           );
                                         },
@@ -234,9 +234,9 @@ class _PostViewState extends State<PostView> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (builder) => Commenters(
+                                              builder: (builder) => Commenter(
                                                   post_id: snapshot.data!.id,
-                                                  activeNav: 0),
+                                                  activeNav: 4),
                                             ),
                                           );
                                         },

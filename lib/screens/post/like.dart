@@ -6,30 +6,30 @@ import 'package:assignment/screens/riverpod/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Likers extends StatefulWidget {
+class Liker extends StatefulWidget {
   final String? post_id;
   final int? activeNav;
-  const Likers({Key? key, @required this.post_id, @required this.activeNav})
+  const Liker({Key? key, @required this.post_id, @required this.activeNav})
       : super(key: key);
 
   @override
-  _LikersState createState() => _LikersState();
+  _LikerState createState() => _LikerState();
 }
 
-class _LikersState extends State<Likers> {
+class _LikerState extends State<Liker> {
   final themeController =
       StateNotifierProvider<ThemeNotifier, bool>((_) => ThemeNotifier());
   int activeNav = 4;
   String profilePicUrl = BaseUrl.profilePicUrl;
 
-  late Future<List> postLikers;
+  late Future<List> postLiker;
   late Future<Map> getUser;
   String? myId;
 
   @override
   void initState() {
     super.initState();
-    postLikers = HttpConnectLike().getLikes(widget.post_id);
+    postLiker = HttpConnectLike().getLikes(widget.post_id);
     getUser = HttpConnectUser().getUser();
     getUser.then((value) => myId = value["userData"]["_id"]);
     activeNav = widget.activeNav!;
@@ -51,7 +51,7 @@ class _LikersState extends State<Likers> {
           ),
           backgroundColor: backColor,
           title: Text(
-            "Likers",
+            "Liker",
             style: TextStyle(
               color: textColor,
               fontSize: 20,
@@ -69,7 +69,7 @@ class _LikersState extends State<Likers> {
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: _screenWidth * .03),
           child: FutureBuilder<List>(
-            future: postLikers,
+            future: postLiker,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -184,7 +184,7 @@ class _LikersState extends State<Likers> {
               ),
               BottomNavigationBarItem(
                 icon: CircleAvatar(
-                  radius: 16,
+                  radius: 18,
                   backgroundColor: (activeNav == 4)
                       ? Colors.deepPurpleAccent[700]
                       : textColor,

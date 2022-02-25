@@ -323,8 +323,6 @@ class _SearchState extends State<Search> {
             onTap: (int navIndex) {
               if (navIndex == 0 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/home");
-              } else if (navIndex == 1 && activeNav != navIndex) {
-                Navigator.pushNamed(context, "/search");
               } else if (navIndex == 2 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/camera");
               } else if (navIndex == 3 && activeNav != navIndex) {

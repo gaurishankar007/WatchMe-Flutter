@@ -807,8 +807,6 @@ class _CameraState extends State<Camera> {
                 Navigator.pushNamed(context, "/home");
               } else if (navIndex == 1 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/search");
-              } else if (navIndex == 2 && activeNav != navIndex) {
-                Navigator.pushNamed(context, "/camera");
               } else if (navIndex == 3 && activeNav != navIndex) {
                 Navigator.pushNamed(context, "/notification");
               } else if (navIndex == 4 && activeNav != navIndex) {
