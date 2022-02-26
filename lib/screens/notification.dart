@@ -66,7 +66,13 @@ class _NotificationUnseenState extends State<NotificationUnseen> {
         (AccelerometerEvent event) {
           setState(() {
             if (event.x > 10) {
-              unSeen = !unSeen;
+              if (unSeen) {
+                unSeen = false;
+                notifications = HttpConnectNotification().getSeen();
+              } else {
+                unSeen = true;
+                notifications = HttpConnectNotification().getUnSeen();
+              }
             }
           });
         },
