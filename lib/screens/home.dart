@@ -879,8 +879,13 @@ class _HomeState extends State<Home> {
                                                     );
                                                   }),
                                               title: Text(
-                                                snapshot1.data!["commentData"]
-                                                    ["comment"],
+                                                snapshot1.data![
+                                                            "commentData"] ==
+                                                        null
+                                                    ? ""
+                                                    : snapshot1.data![
+                                                            "commentData"]
+                                                        ["comment"],
                                                 style: TextStyle(
                                                   color: textColor,
                                                 ),
