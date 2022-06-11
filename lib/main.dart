@@ -24,7 +24,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
+import 'api/http/http_user.dart';
 import 'api/token.dart';
 
 void main() {
@@ -48,6 +48,8 @@ void main() {
 
   Token().getToken().then((value) {
     if (value.isNotEmpty) {
+      Token().setToken(value);
+      HttpConnectUser.token = value;
       runApp(ProviderScope(
           child: WatchMe(
         initialPage: "/home",
