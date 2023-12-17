@@ -1,16 +1,45 @@
-# assignment
+Watch Me is a simple social media mobile app like instragram.
+# Note
+The backend for this flutter project is made in Node.js and the bakcend is in the github reopository named "Memento-WatchMe-Backend".
 
-A new Flutter project.
+# Features
+1. Upload post (1-12 images)
+2. Wach and unwatch users
+3. Tag watchers while uploading post
+4. Get posts from watched users
+5. Like post
+6. Comment post
+7. Report post
+8. View the users who liked the post
+9. View the users who commented on the post
+10. View tagged users on the post
+11. Search users according to username and email
+12. Get Notifications of new posts, tagging, watching, like, comment, and report on the post
+13. View user profile
+14. View wathers
+15. View watched users
+16. view upload and tagged posts
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Screenshots
+![My Image](screenshots/Login.png)
+![My Image](screenshots/Registration.png)
+![My Image](screenshots/ForgotPassword.png)
+![My Image](screenshots/HomePage1.png)
+![My Image](screenshots/HomePage2.png)
+![My Image](screenshots/HomePage3.png)
+![My Image](screenshots/HomePageDarkTheme.png)
+![My Image](screenshots/AddComment.png)
+![My Image](screenshots/PostLiker.png)
+![My Image](screenshots/PostCommenter.png)
+![My Image](screenshots/Report.png)
+![My Image](screenshots/Setting.png)
+![My Image](screenshots/SearchUsers.png)
+![My Image](screenshots/PostUploadPage.png)
+![My Image](screenshots/PostUploadPage1.png)
+![My Image](screenshots/Notifications.png)
+![My Image](screenshots/Profil.png)
+![My Image](screenshots/Profile1.png)
+![My Image](screenshots/ProflePageDarkTheme.png)
+![My Image](screenshots/ProflePageDarkTheme1.png)
+![My Image](screenshots/Watcher.png)
+![My Image](screenshots/Watching.png)
